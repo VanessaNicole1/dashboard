@@ -1,0 +1,12 @@
+export const HOST_API_KEY = process.env.REACT_APP_HOST_API_KEY || '';
+
+export const NAV = {
+  W_BASE: 260,
+  W_DASHBOARD: 280,
+  W_DASHBOARD_MINI: 88,
+  //
+  H_DASHBOARD_ITEM: 48,
+  H_DASHBOARD_ITEM_SUB: 36,
+  //
+  H_DASHBOARD_ITEM_HORIZONTAL: 32,
+};
