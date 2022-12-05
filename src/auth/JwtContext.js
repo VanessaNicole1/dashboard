@@ -56,9 +56,8 @@ export function AuthProvider({ children }) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const response = await axios.get('/api/account/my-account');
-
-        const { user } = response.data;
+        const response = await axios.get('/users/my-account');
+        const user = response.data;
 
         dispatch({
           type: 'INITIAL',
@@ -93,11 +92,11 @@ export function AuthProvider({ children }) {
 
   // LOGIN
   const login = useCallback(async (email, password) => {
-    console.log(password);
-    const response = await axios.post('/api/account/login', {
+    const response = await axios.post('/auth', {
       email,
       password,
     });
+    
     const { accessToken, user } = response.data;
 
     setSession(accessToken);

@@ -41,6 +41,16 @@ export const PATH_DASHBOARD = {
   fileManager: path(ROOTS_DASHBOARD, '/files-manager'),
   permissionDenied: path(ROOTS_DASHBOARD, '/permission-denied'),
   blank: path(ROOTS_DASHBOARD, '/blank'),
+  lessonPlan: {
+    root: path(ROOTS_DASHBOARD, '/lesson-plan'),
+    purpose: path(ROOTS_DASHBOARD, '/lesson-plan/about'),
+    startProcess: path(ROOTS_DASHBOARD, '/lesson-plan/start-process'),
+    create: path(ROOTS_DASHBOARD, '/lesson-plan/create'),
+    listAllPlans: path(ROOTS_DASHBOARD, '/lesson-plan/all'),
+    listTeacherPlans: path(ROOTS_DASHBOARD, '/lesson-plan/teacher/list'),
+    listStudentPlans: path(ROOTS_DASHBOARD, '/lesson-plan/student/list'),
+    listStudentPendings: path(ROOTS_DASHBOARD, '/lesson-plan/student/pendings'),
+  },
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
     ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
