@@ -12,8 +12,10 @@ function jwtDecode(token) {
       .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
       .join('')
   );
-
-  return JSON.parse(jsonPayload);
+  
+  const jwtDecoded = JSON.parse(jsonPayload);
+  console.log(jwtDecoded);
+  return jwtDecoded;
 }
 
 export const isValidToken = (accessToken) => {
