@@ -51,6 +51,51 @@ export const PATH_DASHBOARD = {
     listStudentPlans: path(ROOTS_DASHBOARD, '/lesson-plan/student/list'),
     listStudentPendings: path(ROOTS_DASHBOARD, '/lesson-plan/student/pendings'),
   },
+  roles: {
+    root: path(ROOTS_DASHBOARD, '/roles'),
+    listRoles: path(ROOTS_DASHBOARD, '/roles/list'),
+    create: path(ROOTS_DASHBOARD, '/roles/create')
+  },
+  teachers: {
+    root: path(ROOTS_DASHBOARD, '/teachers'),
+    listTeachers: path(ROOTS_DASHBOARD, '/teachers/list'),
+    create: path(ROOTS_DASHBOARD, '/teachers/create')
+  },
+  students: {
+    root: path(ROOTS_DASHBOARD, '/students'),
+    listStudents: path(ROOTS_DASHBOARD, '/students/list'),
+    create: path(ROOTS_DASHBOARD, '/students/create')
+  },
+  grades: {
+    root: path(ROOTS_DASHBOARD, '/grades'),
+    listGrades: path(ROOTS_DASHBOARD, '/grades/list'),
+    create: path(ROOTS_DASHBOARD, '/grades/create')
+  },
+  degree: {
+    root: path(ROOTS_DASHBOARD, '/degree'),
+    view: path(ROOTS_DASHBOARD, '/degree/view')
+
+  },
+  subjects: {
+    root: path(ROOTS_DASHBOARD, '/subjects'),
+    listSubjects: path(ROOTS_DASHBOARD, '/subjects/list'),
+    create: path(ROOTS_DASHBOARD, '/subjects/create')
+
+  },
+  schedule: {
+    root: path(ROOTS_DASHBOARD, '/schedule'),
+    view: path(ROOTS_DASHBOARD, '/schedule/view'),
+    create: path(ROOTS_DASHBOARD, '/schedule/create')
+  },
+  settings: {
+    root: path(ROOTS_DASHBOARD, '/settings'),
+    settings: path(ROOTS_DASHBOARD, 'settings/'),
+
+  },
+  updatePassword: {
+    root: path(ROOTS_DASHBOARD, '/update-password'),
+    update: path(ROOTS_DASHBOARD, '/update-password/update')
+  },
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
     ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
