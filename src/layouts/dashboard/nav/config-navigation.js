@@ -43,7 +43,7 @@ const navConfig = [
     subheader: 'general',
     items: [
       { 
-        title: 'Lesson Plan', 
+        title: 'Lesson Plan',
         path: PATH_DASHBOARD.lessonPlan.root,
         icon: ICONS.file,
         roles: [ROLES.manager, ROLES.teacher, ROLES.student],
@@ -57,7 +57,94 @@ const navConfig = [
           { title: 'Pending', path: PATH_DASHBOARD.lessonPlan.listStudentPendings, roles: [ROLES.student] },
         ]
       },
+      {
+        title: 'Roles',
+        path: PATH_DASHBOARD.roles.root,
+        icon: ICONS.lock,
+        roles: [ROLES.manager],
+        children: [
+          { title: 'List', path: PATH_DASHBOARD.roles.listRoles, roles: [ROLES.manager] },
+          { title: 'Create', path: PATH_DASHBOARD.roles.create, roles: [ROLES.manager] },
+          
+        ]
+      },
+      {
+        title: 'Teachers',
+        path: PATH_DASHBOARD.teachers.root,
+        icon: ICONS.user,
+        roles: [ROLES.manager],
+        children: [
+          { title: 'List', path: PATH_DASHBOARD.teachers.listTeachers, roles: [ROLES.manager] },
+          { title: 'Create', path: PATH_DASHBOARD.teachers.create, roles: [ROLES.manager] },
+          
+        ]
+      },
+      {
+        title: 'Students',
+        path: PATH_DASHBOARD.students.root,
+        icon: ICONS.user,
+        roles: [ROLES.manager],
+        children: [
+          { title: 'List', path: PATH_DASHBOARD.students.listStudents, roles: [ROLES.manager] },
+          { title: 'Create', path: PATH_DASHBOARD.students.create, roles: [ROLES.manager] },
+          
+        ]
+      },
+      {
+        title: 'Grades',
+        path: PATH_DASHBOARD.grades.root,
+        icon: ICONS.user,
+        roles: [ROLES.manager, ROLES.teacher],
+        children: [
+          { title: 'List', path: PATH_DASHBOARD.grades.listGrades, roles: [ROLES.manager, ROLES.teacher] },
+          { title: 'Create', path: PATH_DASHBOARD.grades.create, roles: [ROLES.manager] },
+          
+        ]
+      },
+      {
+        title: 'Degree',
+        path: PATH_DASHBOARD.grades.root,
+        icon: ICONS.user,
+        roles: [ROLES.manager],
+        children: [
+          { title: 'View', path: PATH_DASHBOARD.degree.view, roles: [ROLES.manager] },
+        ]
+      },
+      {
+        title: 'Subjects',
+        path: PATH_DASHBOARD.subjects.root,
+        icon: ICONS.folder,
+        roles: [ROLES.manager, ROLES.teacher],
+        children: [
+          { title: 'List', path: PATH_DASHBOARD.subjects.listSubjects, roles: [ROLES.manager, ROLES.teacher] },
+          { title: 'Create', path: PATH_DASHBOARD.subjects.create, roles: [ROLES.manager] },
+        ]
+      },
+      {
+        title: 'Schedule',
+        path: PATH_DASHBOARD.schedule.root,
+        icon: ICONS.calendar,
+        roles: [ROLES.teacher],
+        children: [
+          { title: 'View', path: PATH_DASHBOARD.schedule.view, roles: [ROLES.teacher] },
+          { title: 'Create', path: PATH_DASHBOARD.schedule.create, roles: [ROLES.teacher] },
+        ]
+      }
     ] 
+  },
+  {
+    subheader: 'settings',
+    items: [
+      {
+        title: 'Update password',
+        path: PATH_DASHBOARD.schedule.root,
+        icon: ICONS.calendar,
+        roles: [ROLES.manager, ROLES.teacher, ROLES.student],
+        children: [
+          { title: 'Update', path: PATH_DASHBOARD.updatePassword.update, roles: [ROLES.manager, ROLES.teacher, ROLES.student] },
+        ]
+      }
+    ]
   }
 ]
 
