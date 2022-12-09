@@ -61,7 +61,8 @@ export default function Router () {
         path: 'lesson-plan',
         children: [
           { element: <Navigate to='/dashboard/lesson-plan/about' replace />, index: true },
-          { path: 'about', element: <LessonPlanAboutPage />},
+          { path: 'about', 
+            element: <LessonPlanAboutPage />},
           { 
             path: 'start-process', 
             element: (
@@ -72,14 +73,39 @@ export default function Router () {
           },
           { path: 'create', 
             element: (
-              <RoleBasedGuard hasContent roles={[ROLES.manager]}>
+              <RoleBasedGuard hasContent roles={[ROLES.teacher]}>
                 <LessonPlanCreatePage />
               </RoleBasedGuard>
-            )},
-          { path: 'all', element: <LessonPlanListPage />},
-          { path: 'teacher/list', element: <LessonPlanListTeacherPage />},
-          { path: 'student/list', element: <LessonPlanListStudentPage />},
-          { path: 'student/pendings', element: <LessonPlanListStudentPendingsPage />},
+            )
+          },
+          { path: 'all',
+             element: (
+              <RoleBasedGuard hasContent roles={[ROLES.manager]}>
+                <LessonPlanListPage />
+              </RoleBasedGuard>
+            )
+          },
+          { path: 'teacher/list', 
+            element: (
+              <RoleBasedGuard hasContent roles={[ROLES.teacher]}>
+                <LessonPlanListTeacherPage />
+              </RoleBasedGuard>
+            ) 
+          },
+          { path: 'student/list',
+            element: (
+              <RoleBasedGuard hasContent roles={[ROLES.manager]}>
+                <LessonPlanListStudentPage />
+              </RoleBasedGuard>
+            )
+          },
+          { path: 'student/pendings',
+            element: (
+              <RoleBasedGuard hasContent roles={[ROLES.teacher, ROLES.student]}>
+                <LessonPlanListStudentPendingsPage />
+              </RoleBasedGuard>
+            )
+          },
         ]
       },
       { 
@@ -177,7 +203,7 @@ export default function Router () {
         path: 'subjects',
         children: [
           { element: <Navigate to='/dashboard/subjects/list' replace />, index: true },
-          { path: 'list', 
+          { path: 'list',
             element: (
               <RoleBasedGuard hasContent roles={[ROLES.manager, ROLES.teacher]}>
                 <SubjectsListPage />
@@ -186,7 +212,7 @@ export default function Router () {
           {
             path: 'create',
             element: (
-              <RoleBasedGuard hasContent roles={[ROLES.manager, ROLES.teacher]}>
+              <RoleBasedGuard hasContent roles={[ROLES.manager]}>
                 <SubjectsCreatePage />
               </RoleBasedGuard>
             )
