@@ -43,18 +43,18 @@ const navConfig = [
     subheader: 'general',
     items: [
       { 
-        title: 'Lesson Plan',
+        title: 'lesson_plan',
         path: PATH_DASHBOARD.lessonPlan.root,
         icon: ICONS.file,
         roles: [ROLES.manager, ROLES.teacher, ROLES.student],
         children: [
-          { title: 'About', path: PATH_DASHBOARD.lessonPlan.purpose, roles: [ROLES.manager, ROLES.teacher, ROLES.student] },
-          { title: 'Start Process', path: PATH_DASHBOARD.lessonPlan.startProcess, roles: [ROLES.manager] },
-          { title: 'All Plans', path: PATH_DASHBOARD.lessonPlan.listAllPlans, roles: [ROLES.manager] }, 
-          { title: 'Teacher Plans', path: PATH_DASHBOARD.lessonPlan.listTeacherPlans, roles: [ROLES.teacher] },
-          { title: 'Create', path: PATH_DASHBOARD.lessonPlan.create, roles: [ROLES.teacher] },
-          { title: 'List', path: PATH_DASHBOARD.lessonPlan.listStudentPlans, roles: [ROLES.student] },
-          { title: 'Pending', path: PATH_DASHBOARD.lessonPlan.listStudentPendings, roles: [ROLES.student] },
+          { title: 'about', path: PATH_DASHBOARD.lessonPlan.purpose, roles: [ROLES.manager, ROLES.teacher, ROLES.student] },
+          { title: 'start_process', path: PATH_DASHBOARD.lessonPlan.startProcess, roles: [ROLES.manager] },
+          { title: 'all_plans', path: PATH_DASHBOARD.lessonPlan.listAllPlans, roles: [ROLES.manager] }, 
+          { title: 'teacher_plans', path: PATH_DASHBOARD.lessonPlan.listTeacherPlans, roles: [ROLES.teacher] },
+          { title: 'create', path: PATH_DASHBOARD.lessonPlan.create, roles: [ROLES.teacher] },
+          { title: 'list', path: PATH_DASHBOARD.lessonPlan.listStudentPlans, roles: [ROLES.student] },
+          { title: 'pending', path: PATH_DASHBOARD.lessonPlan.listStudentPendings, roles: [ROLES.student] },
         ]
       },
       {
