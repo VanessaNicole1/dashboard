@@ -16,41 +16,41 @@ const en = {
     documentation: `documentation`,
   },
   lesson_plan_list_page: {
-    helmet: 'Lesson Plan: List',
-    heading: 'Lesson Plans List',
+    helmet: 'Plan de Clases | Lista',
+    heading: 'Listado de Plan de Clases',
     dashboard: 'Dashboard',
-    lesson_plan: 'Lesson Plan',
-    list: 'List',
+    lesson_plan: 'Plan de Clases',
+    list: 'Listado',
     table: {
-      created_date: 'Created Date',
-      grade: 'Grade',
-      teacher: 'Teacher',
-      subject: 'Subject',
-      actions: 'Actions'
+      created_date: 'Fecha de Creación',
+      grade: 'Curso',
+      teacher: 'Docente',
+      subject: 'Materia',
+      actions: 'Acciones'
     }
   },
   components: {
     table_pagination_custom: {
       form_control: {
-        label: 'Dense'
+        label: 'Densidad'
       }
     }
   },
   sections: {
     lesson_plan_toolbar: {
-      grade: 'Grade',
-      search: 'Search...',
-      all_option: 'All'
+      grade: 'Curso',
+      search: 'Buscar...',
+      all_option: 'Todos'
     }
   },
-  lesson_plan: 'lesson plan',
-  about: 'about',
-  start_process: 'start process',
-  all_plans: 'all plans',
-  teacher_plans: `teacher's plans`,
-  create: 'create',
-  list: 'list',
-  pending: 'pending',
+  lesson_plan: 'plan de clases',
+  about: 'información',
+  start_process: 'iniciar proceso',
+  all_plans: 'planes de clase',
+  teacher_plans: 'planes de clase por docentes',
+  create: 'crear',
+  list: 'listar',
+  pending: 'pendientes',
   app: `app`,
   user: `user`,
   edit: `edit`,
