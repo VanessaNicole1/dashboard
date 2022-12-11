@@ -26,11 +26,8 @@ const OPTIONS = [
 
 export default function AccountPopover() {
   const navigate = useNavigate();
-
   const { user, logout } = useAuthContext();
-
   const { enqueueSnackbar } = useSnackbar();
-
   const [openPopover, setOpenPopover] = useState(null);
 
   const handleOpenPopover = (event) => {
@@ -76,7 +73,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <CustomAvatar src={user?.photoURL} alt={user?.displayName} name={user?.displayName} />
+        <CustomAvatar src={user?.photoURL} alt={user?.name} name={user?.name} />
       </IconButtonAnimate>
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 200, p: 0 }}>
