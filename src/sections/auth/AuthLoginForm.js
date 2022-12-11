@@ -23,7 +23,7 @@ export default function AuthLoginForm() {
 
   const defaultValues = {
     email: 'vane@gmail.com',
-    password: 'gjLPBg0VwU',
+    password: '123456',
   };
 
   const methods = useForm({
