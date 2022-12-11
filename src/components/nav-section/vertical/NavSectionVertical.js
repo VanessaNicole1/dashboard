@@ -12,6 +12,7 @@ NavSectionVertical.propTypes = {
 export default function NavSectionVertical({ data, sx, ...other }) {
   const { translate } = useLocales();
 
+
   return (
     <Stack sx={sx} {...other}>
       {data.map((group) => {
