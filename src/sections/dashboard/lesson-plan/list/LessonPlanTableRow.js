@@ -26,7 +26,7 @@ LessonPlanTableRow.propTypes = {
 };
 
 export default function LessonPlanTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { date, grade, teacher, subject } = row;
+  const { date, schedule } = row;
 
   const [openPopover, setOpenPopover] = useState(null);
 
@@ -44,15 +44,15 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onSelectR
         <TableCell align="center">{date}</TableCell>
 
         <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {grade}
+          {schedule.grade.displayName}
         </TableCell>
 
         <TableCell align="center">
-          {teacher.user.name} {teacher.user.lastName}
+          {schedule.teacher.user.name} {schedule.teacher.user.lastName}
         </TableCell>
 
         <TableCell align="center">
-          {subject || 'N/A'}
+          {schedule.subject.name}
         </TableCell>
 
         {/* <TableCell align="left">
