@@ -270,7 +270,6 @@ function applyFilter({ inputData, comparator, filterContent, filterStatus, filte
 
   if (filterContent) {
     inputData = inputData.filter((lessonPlan) => {
-      console.log('lessonPlan', lessonPlan);
       const { schedule } = lessonPlan;
       const teacherDisplayName = schedule.teacher.user.displayName;
       const subjectName = schedule.subject.name;

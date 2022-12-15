@@ -7,10 +7,10 @@ import {
   IconButton,
 } from '@mui/material';
 
-import Iconify from '../../../../components/iconify';
-import MenuPopover from '../../../../components/menu-popover';
+import MenuPopover from '../../../components/menu-popover';
+import Iconify from '../../../components/iconify';
 
-LessonPlanTableRow.propTypes = {
+RoleTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
@@ -18,8 +18,8 @@ LessonPlanTableRow.propTypes = {
   onSelectRow: PropTypes.func,
 };
 
-export default function LessonPlanTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { date, schedule } = row;
+export default function RoleTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
+  const { id, type } = row;
 
   const [openPopover, setOpenPopover] = useState(null);
 
@@ -34,18 +34,10 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onSelectR
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell align="center">{date}</TableCell>
+        <TableCell align="center">{id}</TableCell>
 
         <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {schedule.grade.displayName}
-        </TableCell>
-
-        <TableCell align="center">
-          {schedule.teacher.user.name} {schedule.teacher.user.lastName}
-        </TableCell>
-
-        <TableCell align="center">
-          {schedule.subject.name}
+          {type}
         </TableCell>
 
         {/* <TableCell align="left">
