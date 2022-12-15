@@ -82,7 +82,7 @@ export default function LessonPlanListPage () {
 
     const fetchGrades = async () => {
       const grades = await getGrades();
-      const simpleGrades = grades.map(grade => `${grade.numberParallel} "${grade.parallel}"`);
+      const simpleGrades = grades.map(grade => grade.displayName);
       simpleGrades.unshift('all');
       setSimpleGrades(simpleGrades);
     }
@@ -270,9 +270,11 @@ function applyFilter({ inputData, comparator, filterContent, filterStatus, filte
 
   if (filterContent) {
     inputData = inputData.filter((lessonPlan) => {
-      const { teacher: { user }, subject } = lessonPlan;
-      const teacherDisplayName = `${user.name} ${user.lastName}`;
-      return teacherDisplayName.toLowerCase().includes(filterContent.toLowerCase()) || subject.toLowerCase().includes(filterContent.toLowerCase());
+      console.log('lessonPlan', lessonPlan);
+      const { schedule } = lessonPlan;
+      const teacherDisplayName = schedule.teacher.user.displayName;
+      const subjectName = schedule.subject.name;
+      return teacherDisplayName.toLowerCase().includes(filterContent.toLowerCase()) || subjectName.toLowerCase().includes(filterContent.toLowerCase());
     });
   }
 
@@ -281,7 +283,7 @@ function applyFilter({ inputData, comparator, filterContent, filterStatus, filte
   // }
 
   if (filterGrade !== 'all') {
-    inputData = inputData.filter((lessonPlan) => lessonPlan.grade === filterGrade);
+    inputData = inputData.filter((lessonPlan) => lessonPlan.schedule.grade.displayName === filterGrade);
   }
 
   return inputData;
