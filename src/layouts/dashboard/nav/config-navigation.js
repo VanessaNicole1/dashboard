@@ -63,8 +63,8 @@ const navConfig = [
         icon: ICONS.lock,
         roles: [ROLES.manager],
         children: [
-          { title: 'List', path: PATH_DASHBOARD.roles.listRoles, roles: [ROLES.manager] },
-          { title: 'Create', path: PATH_DASHBOARD.roles.create, roles: [ROLES.manager] },
+          { title: 'list', path: PATH_DASHBOARD.roles.listRoles, roles: [ROLES.manager] },
+          { title: 'create', path: PATH_DASHBOARD.roles.create, roles: [ROLES.manager] },
           
         ]
       },

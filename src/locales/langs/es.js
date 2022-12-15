@@ -51,6 +51,18 @@ const en = {
   create: 'crear',
   list: 'listar',
   pending: 'pendientes',
+  roles_list_page: {
+    helmet: 'Roles | Lista',
+    heading: 'Listado de Roles',
+    dashboard: 'Dashboard',
+    roles: 'Roles',
+    list: 'Listado',
+    table: {
+      id: 'ID',
+      type: 'Tipo',
+      actions: 'Acciones'
+    }
+  },
   app: `app`,
   user: `user`,
   edit: `edit`,
