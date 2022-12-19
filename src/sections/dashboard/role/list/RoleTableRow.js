@@ -6,9 +6,8 @@ import {
   TableCell,
   IconButton,
 } from '@mui/material';
-
-import MenuPopover from '../../../components/menu-popover';
-import Iconify from '../../../components/iconify';
+import Iconify from '../../../../components/iconify';
+import MenuPopover from '../../../../components/menu-popover/MenuPopover';
 
 RoleTableRow.propTypes = {
   row: PropTypes.object,

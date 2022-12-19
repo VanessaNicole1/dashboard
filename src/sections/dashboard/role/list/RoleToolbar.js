@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/material';
-import { useLocales } from '../../../locales';
-import Iconify from '../../../components/iconify';
+import { useLocales } from '../../../../locales';
+import Iconify from '../../../../components/iconify';
 
 RoleToobar.propTypes = {
   isFiltered: PropTypes.bool,
@@ -37,7 +37,7 @@ export default function RoleToobar({
       <TextField
         fullWidth
         select
-        label={translate('sections.lesson_plan_toolbar.grade')}
+        label={translate('sections.role_toolbar.type')}
         value={filterRole}
         onChange={onFilterRole}
         SelectProps={{
@@ -65,7 +65,7 @@ export default function RoleToobar({
               textTransform: 'capitalize',
             }}
           >
-            { option === 'all' ? translate('sections.lesson_plan_toolbar.all_option'): option}
+            { option === 'all' ? translate('sections.toolbar_custom.all_option'): option}
           </MenuItem>
         ))}
       </TextField>
@@ -74,7 +74,7 @@ export default function RoleToobar({
         fullWidth
         value={filterContent}
         onChange={onFilterContent}
-        placeholder={translate('sections.lesson_plan_toolbar.search')}
+        placeholder={translate('sections.toolbar_custom.search')}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
