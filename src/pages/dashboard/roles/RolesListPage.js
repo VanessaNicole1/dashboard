@@ -28,7 +28,7 @@ import {
 } from '../../../components/table';
 
 import { useLocales } from '../../../locales';
-import { RoleTableRow, RoleToolbar } from '../../../sections/dashboard/role';
+import { RoleTableRow, RoleToolbar } from '../../../sections/dashboard/role/list';
 import { getRoles } from '../../../services/role';
 
 export default function RolesListPage () {
@@ -57,23 +57,6 @@ export default function RolesListPage () {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
-
-  // useEffect(() => {
-  //   const fetchLessonPlans = async () => {
-  //     const lessonPlans = await getLessonPlans();
-  //     setTableData(lessonPlans);
-  //   };
-
-  //   const fetchGrades = async () => {
-  //     const grades = await getGrades();
-  //     const simpleGrades = grades.map(grade => grade.displayName);
-  //     simpleGrades.unshift('all');
-  //     setSimpleGrades(simpleGrades);
-  //   }
-
-  //   fetchLessonPlans();
-  //   fetchGrades(); 
-  // }, []);
 
   useEffect(() => {
     const fetchRoles = async () => {
