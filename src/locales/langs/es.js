@@ -37,10 +37,24 @@ const en = {
     }
   },
   sections: {
-    lesson_plan_toolbar: {
-      grade: 'Curso',
+    toolbar_custom: {
       search: 'Buscar...',
       all_option: 'Todos'
+    },
+    role_toolbar: {
+      type: 'Tipo'
+    },
+    lesson_plan_toolbar: {
+      grade: 'Curso',
+    },
+    teacher_toolbar: {
+      teacher: 'Docente',
+    },
+    student_toolbar: {
+      grade: 'Curso',
+    },
+    grade_toolbar: {
+      degree: 'Carrera',
     }
   },
   lesson_plan: 'plan de clases',
@@ -61,6 +75,58 @@ const en = {
       id: 'ID',
       type: 'Tipo',
       actions: 'Acciones'
+    }
+  },
+  students_list_page: {
+    helmet: 'Estudiantes | Lista',
+    heading: 'Listado de Estudiantes',
+    dashboard: 'Dashboard',
+    roles: 'Estudiantes',
+    list: 'Listado',
+    table: {
+      name: 'Nombre',
+      last: 'Apellido',
+      email: 'Correo Electrónico',
+      actions: 'Acciones',
+      grade: 'Curso'
+    }
+  },
+  teachers_list_page: {
+    helmet: 'Docentes | Lista',
+    heading: 'Lista de Docentes',
+    dashboard: 'Dashboard',
+    roles: 'Docentes',
+    list: 'Lista',
+    table: {
+      name: 'Nombre',
+      last: 'Apellido',
+      email: 'Correo Electrónico',
+      actions: 'Acciones',
+    }
+  },
+  grades_list_page: {
+    helmet: 'Cursos | Lista',
+    heading: 'Lista de Cursos',
+    dashboard: 'Dashboard',
+    grades: 'Cursos',
+    list: 'Lista',
+    table: {
+      grade: 'Curso',
+      parallel: 'Paralelo',
+      degree: 'Carrera',
+      actions: 'Acciones',
+    }
+  },
+  degrees_list_page: {
+    helmet: 'Carreras | Lista',
+    heading: 'Lista de Carreras',
+    dashboard: 'Dashboard',
+    degrees: 'Carreras',
+    list: 'Lista',
+    table: {
+      period: 'Periodo',
+      name: 'Nombre',
+      actions: 'Acciones',
     }
   },
   app: `app`,
