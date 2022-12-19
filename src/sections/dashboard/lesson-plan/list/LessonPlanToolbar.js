@@ -65,7 +65,7 @@ export default function LessonPlanToobar({
               textTransform: 'capitalize',
             }}
           >
-            { option === 'all' ? translate('sections.lesson_plan_toolbar.all_option'): option}
+            { option === 'all' ? translate('sections.toolbar_custom.all_option'): option}
           </MenuItem>
         ))}
       </TextField>
@@ -74,7 +74,7 @@ export default function LessonPlanToobar({
         fullWidth
         value={filterContent}
         onChange={onFilterContent}
-        placeholder={translate('sections.lesson_plan_toolbar.search')}
+        placeholder={translate('sections.toolbar_custom.search')}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
