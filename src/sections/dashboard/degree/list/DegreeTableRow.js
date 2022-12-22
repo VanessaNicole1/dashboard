@@ -6,11 +6,10 @@ import {
   TableCell,
   IconButton,
 } from '@mui/material';
+import MenuPopover from '../../../../components/menu-popover/MenuPopover';
+import Iconify from '../../../../components/iconify/Iconify';
 
-import MenuPopover from '../../../components/menu-popover';
-import Iconify from '../../../components/iconify';
-
-RoleTableRow.propTypes = {
+DegreeTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
@@ -18,8 +17,8 @@ RoleTableRow.propTypes = {
   onSelectRow: PropTypes.func,
 };
 
-export default function RoleTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { id, type } = row;
+export default function DegreeTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
+  const { name, period } = row;
 
   const [openPopover, setOpenPopover] = useState(null);
 
@@ -34,10 +33,10 @@ export default function RoleTableRow({ row, selected, onEditRow, onSelectRow, on
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell align="center">{id}</TableCell>
+        <TableCell align="center">{name}</TableCell>
 
         <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {type}
+          {period}
         </TableCell>
 
         {/* <TableCell align="left">

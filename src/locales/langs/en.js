@@ -37,11 +37,28 @@ const en = {
     }
   },
   sections: {
-    lesson_plan_toolbar: {
-      grade: 'Grade',
+    toolbar_custom: {
       search: 'Search...',
       all_option: 'All'
-    }
+    },
+    lesson_plan_toolbar: {
+      grade: 'Grade',
+    },
+    role_toolbar: {
+      type: 'Type'
+    },
+    teacher_toolbar: {
+      teacher: 'Teacher',
+    },
+    student_toolbar: {
+      grade: 'Grade',
+    },
+    grade_toolbar: {
+      degree: 'Degree',
+    },
+    degree_toolbar: {
+      degree: 'Degree'
+    },
   },
   lesson_plan: 'lesson plan',
   about: 'about',
@@ -61,6 +78,70 @@ const en = {
       id: 'ID',
       type: 'Type',
       actions: 'Actions'
+    }
+  },
+  students_list_page: {
+    helmet: 'Students | Lis',
+    heading: 'Students List',
+    dashboard: 'Dashboard',
+    roles: 'Students',
+    list: 'List',
+    table: {
+      name: 'Name',
+      last: 'Last Name',
+      email: 'Email',
+      actions: 'Actions',
+      grade: 'Grade'
+    }
+  },
+  teachers_list_page: {
+    helmet: 'Teachers | List',
+    heading: 'Teachers List',
+    dashboard: 'Dashboard',
+    teachers: 'Teachers',
+    list: 'List',
+    table: {
+      name: 'Name',
+      last: 'Last Name',
+      email: 'Email',
+      actions: 'Actions',
+    }
+  },
+  grades_list_page: {
+    helmet: 'Grades | List',
+    heading: 'Grades List',
+    dashboard: 'Dashboard',
+    grades: 'Grades',
+    list: 'List',
+    table: {
+      grade: 'Grade',
+      parallel: 'Parallel',
+      degree: 'Degree',
+      actions: 'Actions',
+    }
+  },
+  subjects_list_page: {
+    helmet: 'Subjects | List',
+    heading: 'Subjects List',
+    dashboard: 'Dashboard',
+    subjects: 'Subjects',
+    list: 'List',
+    table: {
+      id: 'ID',
+      name: 'Name',
+      actions: 'Actions',
+    }
+  },
+  degrees_list_page: {
+    helmet: 'Degrees | List',
+    heading: 'Degrees List',
+    dashboard: 'Dashboard',
+    degrees: 'Degrees',
+    list: 'List',
+    table: {
+      period: 'Period',
+      name: 'Name',
+      actions: 'Actions',
     }
   },
   app: `app`,

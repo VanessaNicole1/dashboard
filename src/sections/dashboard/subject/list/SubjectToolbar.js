@@ -1,28 +1,28 @@
 import PropTypes from 'prop-types';
 import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/material';
-import Iconify from '../../../../components/iconify';
 import { useLocales } from '../../../../locales';
+import Iconify from '../../../../components/iconify';
 
-LessonPlanToobar.propTypes = {
+SubjectToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterContent: PropTypes.string,
-  filterGrade: PropTypes.string,
+  filterRole: PropTypes.string,
   onFilterContent: PropTypes.func,
-  onFilterGrade: PropTypes.func,
+  onFilterRole: PropTypes.func,
   onResetFilter: PropTypes.func,
-  optionsGrade: PropTypes.arrayOf(PropTypes.string),
+  optionsRole: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default function LessonPlanToobar({
+export default function SubjectToolbar({
   isFiltered,
   filterContent,
-  filterGrade,
-  optionsGrade,
+  filterRole,
+  optionsRole,
   onFilterContent,
-  onFilterGrade,
+  onFilterRole,
   onResetFilter,
 }) {
-  const { translate } = useLocales(); 
+  const { translate } = useLocales();
 
   return (
     <Stack
@@ -37,9 +37,9 @@ export default function LessonPlanToobar({
       <TextField
         fullWidth
         select
-        label={translate('sections.lesson_plan_toolbar.grade')}
-        value={filterGrade}
-        onChange={onFilterGrade}
+        label={translate('sections.role_toolbar.type')}
+        value={filterRole}
+        onChange={onFilterRole}
         SelectProps={{
           MenuProps: {
             PaperProps: {
@@ -54,7 +54,7 @@ export default function LessonPlanToobar({
           textTransform: 'capitalize',
         }}
       >
-        {optionsGrade.map((option) => (
+        {optionsRole.map((option) => (
           <MenuItem
             key={option}
             value={option}
