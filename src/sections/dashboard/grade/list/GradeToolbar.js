@@ -1,28 +1,28 @@
 import PropTypes from 'prop-types';
 import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/material';
-import { useLocales } from '../../../locales';
-import Iconify from '../../../components/iconify';
+import useLocales from '../../../../locales/useLocales';
+import Iconify from '../../../../components/iconify';
 
-RoleToobar.propTypes = {
+GradeToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterContent: PropTypes.string,
   filterRole: PropTypes.string,
   onFilterContent: PropTypes.func,
   onFilterRole: PropTypes.func,
   onResetFilter: PropTypes.func,
-  optionsRole: PropTypes.arrayOf(PropTypes.string),
+  optionsDegree: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default function RoleToobar({
+export default function GradeToolbar({
   isFiltered,
   filterContent,
   filterRole,
-  optionsRole,
+  optionsDegree,
   onFilterContent,
   onFilterRole,
   onResetFilter,
 }) {
-  const { translate } = useLocales(); 
+  const { translate } = useLocales();
 
   return (
     <Stack
@@ -37,7 +37,7 @@ export default function RoleToobar({
       <TextField
         fullWidth
         select
-        label={translate('sections.lesson_plan_toolbar.grade')}
+        label={translate('sections.grade_toolbar.degree')}
         value={filterRole}
         onChange={onFilterRole}
         SelectProps={{
@@ -54,7 +54,7 @@ export default function RoleToobar({
           textTransform: 'capitalize',
         }}
       >
-        {optionsRole.map((option) => (
+        {optionsDegree.map((option) => (
           <MenuItem
             key={option}
             value={option}
@@ -65,7 +65,7 @@ export default function RoleToobar({
               textTransform: 'capitalize',
             }}
           >
-            { option === 'all' ? translate('sections.lesson_plan_toolbar.all_option'): option}
+            { option === 'all' ? translate('sections.toolbar_custom.all_option'): option}
           </MenuItem>
         ))}
       </TextField>
@@ -74,7 +74,7 @@ export default function RoleToobar({
         fullWidth
         value={filterContent}
         onChange={onFilterContent}
-        placeholder={translate('sections.lesson_plan_toolbar.search')}
+        placeholder={translate('sections.toolbar_custom.search')}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

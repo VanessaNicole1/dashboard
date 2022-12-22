@@ -3,21 +3,21 @@ import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/materia
 import Iconify from '../../../../components/iconify';
 import { useLocales } from '../../../../locales';
 
-LessonPlanToobar.propTypes = {
+TeacherToobar.propTypes = {
   isFiltered: PropTypes.bool,
   filterContent: PropTypes.string,
   filterGrade: PropTypes.string,
   onFilterContent: PropTypes.func,
   onFilterGrade: PropTypes.func,
   onResetFilter: PropTypes.func,
-  optionsGrade: PropTypes.arrayOf(PropTypes.string),
+  optionsRole: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default function LessonPlanToobar({
+export default function TeacherToobar({
   isFiltered,
   filterContent,
   filterGrade,
-  optionsGrade,
+  optionsRole,
   onFilterContent,
   onFilterGrade,
   onResetFilter,
@@ -37,7 +37,7 @@ export default function LessonPlanToobar({
       <TextField
         fullWidth
         select
-        label={translate('sections.lesson_plan_toolbar.grade')}
+        label={translate('sections.teacher_toolbar.teacher')}
         value={filterGrade}
         onChange={onFilterGrade}
         SelectProps={{
@@ -54,7 +54,7 @@ export default function LessonPlanToobar({
           textTransform: 'capitalize',
         }}
       >
-        {optionsGrade.map((option) => (
+        {optionsRole.map((option) => (
           <MenuItem
             key={option}
             value={option}
