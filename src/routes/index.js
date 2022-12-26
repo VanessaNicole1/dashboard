@@ -32,6 +32,7 @@ import SubjectsListPage from "../pages/dashboard/subjects/SubjectsListPage";
 import SubjectsCreatePage from "../pages/dashboard/subjects/SubjectsCreatePage";
 import ScheduleViewPage from "../pages/dashboard/schedule/ScheduleViewPage";
 import ScheduleCreatePage from "../pages/dashboard/schedule/ScheduleCreatePage";
+import DegreesCreatePage from "../pages/dashboard/degree/DegreesCreatePage";
 
 export default function Router () {
 
@@ -194,6 +195,14 @@ export default function Router () {
             element: (
               <RoleBasedGuard hasContent roles={[ROLES.manager]}>
                 <DegreeViewPage />
+              </RoleBasedGuard>
+            )
+          },
+          {
+            path: 'create',
+            element: (
+              <RoleBasedGuard hasContent roles={[ROLES.manager]}>
+                <DegreesCreatePage />
               </RoleBasedGuard>
             )
           },
