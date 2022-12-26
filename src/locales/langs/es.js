@@ -29,6 +29,34 @@ const en = {
       actions: 'Acciones'
     }
   },
+  degree_create_page: {
+    helmet: 'Carrera: Crear una nueva carrera',
+    heading: 'Crear una nueva carrera',
+    link_degree: 'Carrera',
+    link_create_degree: 'Nueva Carrera'
+
+  },
+  role_create_page: {
+    helmet: 'Rol: Crear una nuevo rol',
+    heading: 'Crear un nuevo rol',
+    link_degree: 'Rol',
+    link_create_degree: 'Nuevo rol'
+
+  },
+  student_create_page: {
+    helmet: 'Estudiante: Crear un nuevo estudiante',
+    heading: 'Crear un nuevo estudiante',
+    link_student: 'Estudiante',
+    link_create_student: 'Nuevo estudiante'
+
+  },
+  teacher_create_page: {
+    helmet: 'Docente: Crear nuevo docente',
+    heading: 'Crear un nuevo docente',
+    link_teacher: 'Docente',
+    link_create_teacher: 'Docente nuevo'
+
+  },
   components: {
     table_pagination_custom: {
       form_control: {
@@ -55,6 +83,11 @@ const en = {
     },
     grade_toolbar: {
       degree: 'Carrera',
+    },
+    students: {
+      schema: {
+        name: 'El nombre es requerido'
+      }
     }
   },
   lesson_plan: 'plan de clases',
@@ -128,6 +161,36 @@ const en = {
       name: 'Nombre',
       actions: 'Acciones',
     }
+  },
+  degree_create_form: {
+    button_create: 'Crear Carrera',
+    input_name: 'Nombre de la carrera',
+    name_schema: 'El nombre es requerido'
+  },
+  role_create_form: {
+    button_create: 'Crear rol',
+    input_name: 'Tipo de rol',
+    role_schema: 'El rol es requerido'
+  },
+  student_create_form: {
+    button_create: 'Crear estudiante',
+    name_schema: 'El nombre es requerido',
+    last_name_schema: 'El apellido es requerido',
+    email_schema: 'El correo es requerido',
+    grade_schema: 'El curso es requerido',
+    input_name: 'Nombre',
+    last_name_input: 'Apellido',
+    email_input: 'Correo',
+    grade_input: 'Curso'
+  },
+  teacher_create_form: {
+    button_create: 'Crear docente',
+    name_schema: 'El nombre es requerido',
+    last_name_schema: 'El apellido es requerido',
+    email_schema: 'El correo es requerido',
+    input_name: 'Nombre',
+    last_name_input: 'Apellido',
+    email_input: 'Correo',
   },
   app: `app`,
   user: `user`,

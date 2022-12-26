@@ -29,6 +29,34 @@ const en = {
       actions: 'Actions'
     }
   },
+  degree_create_page: {
+    helmet: 'Degree: Create a new degree',
+    heading: 'Create a new degree',
+    link_degree: 'Degree',
+    link_create_degree: 'New degree'
+
+  },
+  role_create_page: {
+    helmet: 'Role: Create a new role',
+    heading: 'Create a new role',
+    link_degree: 'Role',
+    link_create_degree: 'New role'
+
+  },
+  student_create_page: {
+    helmet: 'Student: Create a new estudent',
+    heading: 'Create a new student',
+    link_student: 'Student',
+    link_create_student: 'New student'
+
+  },
+  teacher_create_page: {
+    helmet: 'Teacher: Create a new teacher',
+    heading: 'Create a new teacher',
+    link_teacher: 'Teacher',
+    link_create_teacher: 'New teacher'
+
+  },
   components: {
     table_pagination_custom: {
       form_control: {
@@ -59,6 +87,11 @@ const en = {
     degree_toolbar: {
       degree: 'Degree'
     },
+    students: {
+      schema: {
+        name: 'Name is required'
+      }
+    }
   },
   lesson_plan: 'lesson plan',
   about: 'about',
@@ -143,6 +176,36 @@ const en = {
       name: 'Name',
       actions: 'Actions',
     }
+  },
+  degree_create_form: {
+    button_create: 'Create degree',
+    input_name: 'Degree name',
+    name_schema: 'Name is required'
+  },
+  role_create_form: {
+    button_create: 'Create role',
+    input_name: 'Role type',
+    role_schema: 'Type is required'
+  },
+  student_create_form: {
+    button_create: 'Create student',
+    name_schema: 'Name is required',
+    last_name_schema: 'Last Name is required',
+    email_schema: 'Email is required',
+    grade_schema: 'Grade is required',
+    input_name: 'Name',
+    last_name_input: 'Last Name',
+    email_input: 'Email',
+    grade_input: 'Grade'
+  },
+  teacher_create_form: {
+    button_create: 'Create teacher',
+    name_schema: 'Name is required',
+    last_name_schema: 'Last Name is required',
+    email_schema: 'Email is required',
+    input_name: 'Name',
+    last_name_input: 'Last Name',
+    email_input: 'Email',
   },
   app: `app`,
   user: `user`,
