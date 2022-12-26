@@ -73,7 +73,8 @@ export const PATH_DASHBOARD = {
   },
   degree: {
     root: path(ROOTS_DASHBOARD, '/degree'),
-    view: path(ROOTS_DASHBOARD, '/degree/view')
+    view: path(ROOTS_DASHBOARD, '/degree/view'),
+    create: path(ROOTS_DASHBOARD, '/degree/create')
 
   },
   subjects: {
