@@ -1,18 +1,18 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
+import { Box, Card, Grid, Stack } from '@mui/material';
 import { useSnackbar } from '../../../../components/snackbar';
 import FormProvider, {
   RHFTextField,
 } from '../../../../components/hook-form';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-import Label from '../../../../components/label';
 import { createRole } from '../../../../services/role';
+import { useLocales } from '../../../../locales';
 
 // ----------------------------------------------------------------------
 
@@ -23,11 +23,13 @@ RoleNewForm.propTypes = {
 
 export default function RoleNewForm({ isEdit = false, currentUser }) {
   const navigate = useNavigate();
+  const { translate } = useLocales();
+
 
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    role: Yup.string().required('Role is required'),
+    role: Yup.string().required(translate('role_create_form.role_schema')),
   });
 
   const defaultValues = useMemo(
@@ -45,14 +47,10 @@ export default function RoleNewForm({ isEdit = false, currentUser }) {
 
   const {
     reset,
-    watch,
-    control,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
 
   useEffect(() => {
     if (isEdit && currentUser) {
@@ -66,13 +64,11 @@ export default function RoleNewForm({ isEdit = false, currentUser }) {
 
   const onSubmit = async (data) => {
     try {
-      const Newrole = await createRole(data);
-      console.log(Newrole);
+      await createRole(data);
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       navigate(PATH_DASHBOARD.roles.listRoles);
-      console.log('DATAAAAAA', data);
     } catch (error) {
       console.error(error);
     }
@@ -93,12 +89,12 @@ export default function RoleNewForm({ isEdit = false, currentUser }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="role" label="Role" />
+              <RHFTextField name="role" label={translate('role_create_form.input_name')} />
             </Box>
 
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+            <Stack direction="row" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!isEdit ? 'Create Role' : 'Save Changes'}
+                {!isEdit ? translate('role_create_form.button_create') : 'Save Changes'}
               </LoadingButton>
             </Stack>
           </Card>
