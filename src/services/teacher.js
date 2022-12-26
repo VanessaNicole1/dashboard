@@ -10,3 +10,16 @@ export const getTeachers = async () => {
     }
   }
 };
+
+export const createTeacher = async (data) => {
+  try {
+    const {name, lastName, email} = data;
+    const post = { name, lastName, email }
+    const res = await axios.post('/teacher', post);
+    return res.data;
+  } catch (error) {
+    return {
+      message: "Couldn't create a new teacher"
+    }
+  }
+}
