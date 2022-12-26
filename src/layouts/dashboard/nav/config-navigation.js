@@ -108,6 +108,7 @@ const navConfig = [
         roles: [ROLES.manager],
         children: [
           { title: 'View', path: PATH_DASHBOARD.degree.view, roles: [ROLES.manager] },
+          { title: 'Create', path: PATH_DASHBOARD.degree.create, roles: [ROLES.manager] },
         ]
       },
       {

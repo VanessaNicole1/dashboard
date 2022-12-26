@@ -1,40 +1,49 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+// @mui
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, Stack } from '@mui/material';
+// utils
 import { useSnackbar } from '../../../../components/snackbar';
 import FormProvider, {
+    RHFSelect,
   RHFTextField,
 } from '../../../../components/hook-form';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-import { createRole } from '../../../../services/role';
+import { createStudent } from '../../../../services/student';
+import { getGrades } from '../../../../services/grade';
 import { useLocales } from '../../../../locales';
 
-// ----------------------------------------------------------------------
 
-RoleNewForm.propTypes = {
+LessonPlanNewEditForm.propTypes = {
   isEdit: PropTypes.bool,
   currentUser: PropTypes.object,
 };
 
-export default function RoleNewForm({ isEdit = false, currentUser }) {
-  const navigate = useNavigate();
+export default function LessonPlanNewEditForm({ isEdit = false, currentUser }) {
   const { translate } = useLocales();
-
+  const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    role: Yup.string().required(translate('role_create_form.role_schema')),
+    topic: Yup.string().required(translate('sections.students.schema.name')),
+    content: Yup.string().required('Name is required'),
+    comment: Yup.string().required('Email is required').email('Email must be a valid email address'),
+    grade: Yup.string().required('Grade is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
-      role: currentUser?.role || '',
+      topic: currentUser?.topic || '',
+      lastName: currentUser?.lastname || '',
+      email: currentUser?.email || '',
+      grade: currentUser?.grade || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -47,10 +56,13 @@ export default function RoleNewForm({ isEdit = false, currentUser }) {
 
   const {
     reset,
+    watch,
+    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
+  const values = watch();
 
   useEffect(() => {
     if (isEdit && currentUser) {
@@ -62,13 +74,28 @@ export default function RoleNewForm({ isEdit = false, currentUser }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentUser]);
 
+  useEffect(() => {
+    const fetchGrades = async () => {
+      const grades = await getGrades();
+      console.log('grades', grades);
+      setGrades(grades);
+    };
+    fetchGrades();
+  },[]);
+
+
+  const [grades, setGrades] = useState([]);
+
+  console.log('GRADES', grades);
+
   const onSubmit = async (data) => {
     try {
-      await createRole(data);
+      const message = await createStudent(data);
+      console.log('message', message);
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-      navigate(PATH_DASHBOARD.roles.listRoles);
+      navigate(PATH_DASHBOARD.students.listStudents);
     } catch (error) {
       console.error(error);
     }
@@ -77,7 +104,6 @@ export default function RoleNewForm({ isEdit = false, currentUser }) {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
-
         <Grid item xs={12} md={8}>
           <Card sx={{ p: 3 }}>
             <Box
@@ -89,12 +115,22 @@ export default function RoleNewForm({ isEdit = false, currentUser }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="role" label={translate('role_create_form.input_name')} />
+              <RHFTextField name="topic" label="Nombre" />
+              <RHFTextField name="lastName" label="Apellido" />
+              <RHFTextField name="email" label="Correo Electrónico" />
+              <RHFSelect native name="grade" label="Grado" placeholder="Grado">
+                <option value="" />
+                {grades.map((grade) => (
+                  <option key={grade.id} value={grade.id}>
+                    {grade.displayName}
+                  </option>
+                ))}
+              </RHFSelect>
             </Box>
 
-            <Stack direction="row" sx={{ mt: 3 }}>
+            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!isEdit ? translate('role_create_form.button_create') : 'Save Changes'}
+                {!isEdit ? 'Crear Estudiante' : 'Save Changes'}
               </LoadingButton>
             </Stack>
           </Card>
