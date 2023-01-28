@@ -114,7 +114,7 @@ const en = {
     }
   },
   students_list_page: {
-    helmet: 'Students | Lis',
+    helmet: 'Students | List',
     heading: 'Students List',
     dashboard: 'Dashboard',
     roles: 'Students',
