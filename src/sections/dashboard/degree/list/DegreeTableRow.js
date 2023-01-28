@@ -34,21 +34,10 @@ export default function DegreeTableRow({ row, selected, onEditRow, onSelectRow, 
     <>
       <TableRow hover selected={selected}>
         <TableCell align="center">{name}</TableCell>
-
         <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
           {period}
         </TableCell>
-
-        {/* <TableCell align="left">
-          <Label
-            variant="soft"
-            color={(status === 'banned' && 'error') || 'success'}
-            sx={{ textTransform: 'capitalize' }}
-          >
-            {status}
-          </Label>
-        </TableCell> */}
-
+        
         <TableCell align="center">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />

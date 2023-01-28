@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
 import { useEffect, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Card,
   Table,
@@ -28,8 +28,6 @@ import {
 } from '../../../components/table';
 
 import { LessonPlanTableRow, LessonPlanTableToolbar } from '../../../sections/dashboard/lesson-plan/list';
-import { getLessonPlans } from '../../../services/lesson-plan';
-import { getGrades } from '../../../services/grade';
 import { useLocales } from '../../../locales';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import { getSchedule } from '../../../services/schedule';
@@ -38,9 +36,6 @@ import { getSchedule } from '../../../services/schedule';
 export default function LessonPlanListTeacherPage () {
   const { translate } = useLocales();
   const { user } = useAuthContext();
-
-
-  const allOption = translate('')
 
   const TABLE_HEAD = [
     { id: 'date', label: translate('lesson_plan_list_page.table.created_date'), align: 'center' },
@@ -75,7 +70,6 @@ export default function LessonPlanListTeacherPage () {
     // };
     const fetchSchedule = async () => {
       const schedule = await getSchedule(user.id);
-      console.log('GRADES', schedule);
       // const simpleGrades = grades.map(grade => grade.displayName);
       // simpleGrades.unshift('all');
       // setSimpleGrades(simpleGrades);

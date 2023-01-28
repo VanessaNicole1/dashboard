@@ -1,26 +1,19 @@
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
 import { useEffect, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
-  Tab,
-  Tabs,
   Card,
   Table,
-  Button,
-  Tooltip,
   Divider,
   TableBody,
   Container,
-  IconButton,
   TableContainer,
 } from '@mui/material';
 
 import { PATH_DASHBOARD } from '../../../routes/paths';
 
-import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
-import ConfirmDialog from '../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
 
@@ -31,7 +24,6 @@ import {
   TableNoData,
   TableEmptyRows,
   TableHeadCustom,
-  TableSelectedAction,
   TablePaginationCustom,
 } from '../../../components/table';
 
@@ -40,12 +32,10 @@ import { getLessonPlans } from '../../../services/lesson-plan';
 import { getGrades } from '../../../services/grade';
 import { useLocales } from '../../../locales';
 
-const STATUS_OPTIONS = ['all', 'active', 'banned'];
 
 export default function LessonPlanListPage () {
   const { translate } = useLocales();
 
-  const allOption = translate('')
 
   const TABLE_HEAD = [
     { id: 'date', label: translate('lesson_plan_list_page.table.created_date'), align: 'center' },
@@ -66,7 +56,6 @@ export default function LessonPlanListPage () {
     selected,
     setSelected,
     onSelectRow,
-    onSelectAllRows,
     //
     onSort,
     onChangeDense,
