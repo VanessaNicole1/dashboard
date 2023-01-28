@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,7 +13,6 @@ import { createStudent } from '../../../../services/student';
 import { useLocales } from '../../../../locales';
 import { useAuthContext } from '../../../../auth/useAuthContext';
 
-
 DegreeNewEditForm.propTypes = {
   isEdit: PropTypes.bool,
   currentUser: PropTypes.object,
@@ -21,8 +20,6 @@ DegreeNewEditForm.propTypes = {
 
 export default function DegreeNewEditForm({ isEdit = false, currentUser }) {
   const { user } = useAuthContext();
-
-  console.log('USER USER', user);
 
   const { translate } = useLocales();
   const navigate = useNavigate();
@@ -48,13 +45,10 @@ export default function DegreeNewEditForm({ isEdit = false, currentUser }) {
 
   const {
     reset,
-    watch,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
 
   useEffect(() => {
     if (isEdit && currentUser) {
@@ -68,8 +62,7 @@ export default function DegreeNewEditForm({ isEdit = false, currentUser }) {
 
   const onSubmit = async (data) => {
     try {
-      const message = await createStudent(data);
-      console.log('message', message);
+      await createStudent(data);
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
@@ -106,4 +99,3 @@ export default function DegreeNewEditForm({ isEdit = false, currentUser }) {
     </FormProvider>
   );
 }
-// {translate('degree_create_page.helmet')}

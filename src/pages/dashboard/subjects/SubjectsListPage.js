@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
 import { useEffect, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Card,
   Table,
@@ -62,7 +62,6 @@ export default function SubjectsListPage () {
   useEffect(() => {
     const fetchSubjects = async () => {
       const subjects = await getSubjects();
-      console.log('subjects', subjects);
       setTableData(subjects);
     };
 
