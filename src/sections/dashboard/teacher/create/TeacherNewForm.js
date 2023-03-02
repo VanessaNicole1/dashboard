@@ -1,22 +1,18 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 // form
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
+import { Box, Card, Grid, Stack } from '@mui/material';
 // utils
 import { useSnackbar } from '../../../../components/snackbar';
 import FormProvider, {
-  RHFSelect,
-  RHFSwitch,
   RHFTextField,
-  RHFUploadAvatar,
 } from '../../../../components/hook-form';
-import Label from '../../../../components/label';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { createTeacher } from '../../../../services/teacher';
 import { useLocales } from '../../../../locales';
@@ -56,14 +52,10 @@ export default function TeacherNewEditForm({ isEdit = false, currentUser }) {
 
   const {
     reset,
-    watch,
-    control,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
 
   useEffect(() => {
     if (isEdit && currentUser) {
@@ -86,21 +78,6 @@ export default function TeacherNewEditForm({ isEdit = false, currentUser }) {
       console.error(error);
     }
   };
-
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-
-      if (file) {
-        setValue('avatarUrl', newFile, { shouldValidate: true });
-      }
-    },
-    [setValue]
-  );
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

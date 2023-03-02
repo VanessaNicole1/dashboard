@@ -16,7 +16,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
 export default function NavAccount() {
   const { user } = useAuthContext();
 
-  const roles = user.roles.map(role => role.type.toLowerCase()).join(' | ');
+  const roles = user.roles.map(role => role.name.toLowerCase()).join(' | ');
 
   return (
     <Link component={RouterLink} to={PATH_DASHBOARD.user.account} underline="none" color="inherit">

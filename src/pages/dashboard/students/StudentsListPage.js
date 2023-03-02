@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
 import { useEffect, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Card,
   Table,
@@ -50,11 +50,9 @@ export default function StudentsListPage () {
     orderBy,
     rowsPerPage,
     setPage,
-    //
     selected,
     setSelected,
     onSelectRow,
-    //
     onSort,
     onChangeDense,
     onChangePage,
@@ -64,13 +62,11 @@ export default function StudentsListPage () {
   useEffect(() => {
     const fetchStudents = async () => {
       const students = await getStudents();
-      console.log('students', students);
       setTableData(students);
     };
 
     const fetchGrades = async () => {
       const grades = await getGrades();
-      console.log('grades', grades);
       const simpleGrades = grades.map(grade => grade.displayName);
       simpleGrades.unshift('all');
       setSimpleGrades(simpleGrades);

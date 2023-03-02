@@ -1,17 +1,14 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-// @mui
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, Stack } from '@mui/material';
-// utils
 import { useSnackbar } from '../../../../components/snackbar';
 import FormProvider, {
-    RHFSelect,
+  RHFSelect,
   RHFTextField,
 } from '../../../../components/hook-form';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
@@ -56,13 +53,10 @@ export default function LessonPlanNewEditForm({ isEdit = false, currentUser }) {
 
   const {
     reset,
-    watch,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
 
   useEffect(() => {
     if (isEdit && currentUser) {
@@ -77,7 +71,6 @@ export default function LessonPlanNewEditForm({ isEdit = false, currentUser }) {
   useEffect(() => {
     const fetchGrades = async () => {
       const grades = await getGrades();
-      console.log('grades', grades);
       setGrades(grades);
     };
     fetchGrades();
@@ -85,13 +78,10 @@ export default function LessonPlanNewEditForm({ isEdit = false, currentUser }) {
 
 
   const [grades, setGrades] = useState([]);
-
-  console.log('GRADES', grades);
-
+  
   const onSubmit = async (data) => {
     try {
-      const message = await createStudent(data);
-      console.log('message', message);
+      await createStudent(data);
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');

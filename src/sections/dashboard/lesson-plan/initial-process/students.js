@@ -1,38 +1,28 @@
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
-import { Button, Container } from '@mui/material';
-//
+import { Button, Container, Grid } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import Iconify from '../../../../components/iconify';
 import { useSettingsContext } from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
+import FileNewFolderDialog from '../../upload-file/FileNewFolderDialog';
+import StudentsCSVTable from '../../file/view/students-csv';
 
 CreateNewStudents.propTypes = {
   checkout: PropTypes.object,
   onNextStep: PropTypes.func,
-  onDeleteCart: PropTypes.func,
-  onApplyDiscount: PropTypes.func,
-  onDecreaseQuantity: PropTypes.func,
-  onIncreaseQuantity: PropTypes.func,
 };
 
 export default function CreateNewStudents({
   checkout,
   onNextStep,
-  onApplyDiscount,
-  onDeleteCart,
-  onIncreaseQuantity,
-  onDecreaseQuantity,
 }) {
 
   const [openUploadFile, setOpenUploadFile] = useState(false);
-//   const { cart, total, discount, subtotal } = checkout;
-
-//   const totalItems = sum(cart.map((item) => item.quantity));
-
-//   const isEmptyCart = !cart.length;
+  const [view, setView] = useState('list');
+  const [data, setData] = useState([]);
+  // const { cart, total, discount, subtotal } = checkout;
 
   const { themeStretch } = useSettingsContext();
 
@@ -40,35 +30,42 @@ export default function CreateNewStudents({
     setOpenUploadFile(true);
   };
 
+  const handleCloseUploadFile = () => {
+    setOpenUploadFile(false);
+  };
 
   return (
-    <>
+    <Grid container spacing={3}>
       <h1>Students</h1>
       <Helmet>
-        <title> File Manager | Minimal UI</title>
+        <title> File Manager</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="File Manager"
+          heading="File Students"
           links={[
             {
               name: 'Dashboard',
               href: PATH_DASHBOARD.root,
             },
-            { name: 'File Manager' },
+            { name: 'File Students' },
           ]}
           action={
             <Button
               variant="contained"
               startIcon={<Iconify icon="eva:cloud-upload-fill" />}
-              onClick={() => {}}
+              onClick={handleOpenUploadFile}
             >
               Upload
             </Button>
           }
         />
-
+        <FileNewFolderDialog open={openUploadFile} onClose={handleCloseUploadFile} inputData={data} onInputDataChange={setData} />
+        {view === 'list' && (
+            <StudentsCSVTable data={data} />
+        )}
+      </Container>
       <Button
         fullWidth
         size="large"
@@ -78,7 +75,6 @@ export default function CreateNewStudents({
       >
       Check Out
       </Button>
-      </Container>
-    </>
+    </Grid>
   );
 }
