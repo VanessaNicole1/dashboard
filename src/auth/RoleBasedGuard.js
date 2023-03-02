@@ -14,7 +14,7 @@ RoleBasedGuard.propTypes = {
 export default function RoleBasedGuard({ hasContent, roles, children }) {
   const { user } = useAuthContext();
 
-  const currentRoles = user?.roles?.map(role => role.type.toUpperCase()) || [];
+  const currentRoles = user?.roles?.map(role => role.name.toUpperCase()) || [];
 
   if (typeof roles !== 'undefined' && !roles.some(role => currentRoles.includes(role))) {
     return hasContent ? (
