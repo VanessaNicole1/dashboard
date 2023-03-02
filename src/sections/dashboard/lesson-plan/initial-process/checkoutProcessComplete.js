@@ -1,35 +1,10 @@
 import PropTypes from 'prop-types';
-// @mui
-import { styled } from '@mui/material/styles';
 import {
   Box,
-  Step,
   Stack,
-  Stepper,
-  StepLabel,
-  StepConnector as MUIStepConnector,
 } from '@mui/material';
 // components
 import Iconify from '../../../../components/iconify';
-
-// ----------------------------------------------------------------------
-
-const StepConnector = styled(MUIStepConnector)(({ theme }) => ({
-  top: 10,
-  left: 'calc(-50% + 20px)',
-  right: 'calc(50% + 20px)',
-  '& .MuiStepConnector-line': {
-    borderTopWidth: 2,
-    borderColor: theme.palette.divider,
-  },
-  '&.Mui-active, &.Mui-completed': {
-    '& .MuiStepConnector-line': {
-      borderColor: theme.palette.primary.main,
-    },
-  },
-}));
-
-// ----------------------------------------------------------------------
 
 CheckoutSteps.propTypes = {
   sx: PropTypes.object,
@@ -39,11 +14,9 @@ CheckoutSteps.propTypes = {
 
 export default function CheckoutSteps({ steps, activeStep, sx, ...other }) {
   return (
-   <h1>Hola</h1>
+   <h1>Hello Word</h1>
   );
 }
-
-// ----------------------------------------------------------------------
 
 StepIcon.propTypes = {
   active: PropTypes.bool,

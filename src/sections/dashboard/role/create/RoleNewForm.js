@@ -7,14 +7,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, Stack } from '@mui/material';
 import { useSnackbar } from '../../../../components/snackbar';
-import FormProvider, {
-  RHFTextField,
-} from '../../../../components/hook-form';
+import FormProvider, { RHFTextField } from '../../../../components/hook-form';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { createRole } from '../../../../services/role';
 import { useLocales } from '../../../../locales';
-
-// ----------------------------------------------------------------------
 
 RoleNewForm.propTypes = {
   isEdit: PropTypes.bool,
