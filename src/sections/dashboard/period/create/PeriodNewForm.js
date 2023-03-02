@@ -1,22 +1,13 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import { Alert, Box, Card, Grid, Stack, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useSnackbar } from '../../../../components/snackbar';
-import FormProvider, {
-  RHFTextField,
-} from '../../../../components/hook-form';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
-import { createRole } from '../../../../services/role';
-import { useLocales } from '../../../../locales';
-import { createPeriod } from '../../../../services/period';
-
-// ----------------------------------------------------------------------
+import FormProvider, {} from '../../../../components/hook-form';
 
 PeriodNewForm.propTypes = {
   isEdit: PropTypes.bool,
@@ -24,10 +15,6 @@ PeriodNewForm.propTypes = {
 };
 
 export default function PeriodNewForm({ isEdit = false, currentUser }) {
-  const navigate = useNavigate();
-  const { translate } = useLocales();
-
-
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
@@ -73,7 +60,6 @@ export default function PeriodNewForm({ isEdit = false, currentUser }) {
       if ( Date.parse(createDate) > Date.parse(dueDate)){
         console.log('Due Date debe ser mayor');
       }
-      console.log('DATA', data);
       // await createPeriod(data);
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();

@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-// @mui
 import { styled } from '@mui/material/styles';
 import {
   Box,
@@ -9,10 +8,7 @@ import {
   StepLabel,
   StepConnector as MUIStepConnector,
 } from '@mui/material';
-// components
 import Iconify from '../../../../components/iconify';
-
-// ----------------------------------------------------------------------
 
 const StepConnector = styled(MUIStepConnector)(({ theme }) => ({
   top: 10,
@@ -29,8 +25,6 @@ const StepConnector = styled(MUIStepConnector)(({ theme }) => ({
   },
 }));
 
-// ----------------------------------------------------------------------
-
 CheckoutSteps.propTypes = {
   sx: PropTypes.object,
   activeStep: PropTypes.number,
@@ -38,7 +32,6 @@ CheckoutSteps.propTypes = {
 };
 
 export default function CheckoutSteps({ steps, activeStep, sx, ...other }) {
-    console.log('steps', steps);
   return (
     <Stepper
       alternativeLabel
@@ -64,8 +57,6 @@ export default function CheckoutSteps({ steps, activeStep, sx, ...other }) {
     </Stepper>
   );
 }
-
-// ----------------------------------------------------------------------
 
 StepIcon.propTypes = {
   active: PropTypes.bool,

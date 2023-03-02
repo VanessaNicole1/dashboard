@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // form
 import { useForm } from 'react-hook-form';
@@ -56,13 +56,10 @@ export default function StudentNewEditForm({ isEdit = false, currentUser }) {
 
   const {
     reset,
-    watch,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
 
   useEffect(() => {
     if (isEdit && currentUser) {
@@ -77,7 +74,6 @@ export default function StudentNewEditForm({ isEdit = false, currentUser }) {
   useEffect(() => {
     const fetchGrades = async () => {
       const grades = await getGrades();
-      console.log('grades', grades);
       setGrades(grades);
     };
     fetchGrades();
@@ -86,12 +82,9 @@ export default function StudentNewEditForm({ isEdit = false, currentUser }) {
 
   const [grades, setGrades] = useState([]);
 
-  console.log('GRADES', grades);
-
   const onSubmit = async (data) => {
     try {
       const message = await createStudent(data);
-      console.log('message', message);
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');

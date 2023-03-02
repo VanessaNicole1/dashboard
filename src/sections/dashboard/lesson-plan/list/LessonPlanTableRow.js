@@ -6,7 +6,6 @@ import {
   TableCell,
   IconButton,
 } from '@mui/material';
-
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 
