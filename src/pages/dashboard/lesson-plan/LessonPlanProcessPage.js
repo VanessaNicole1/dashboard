@@ -3,39 +3,32 @@ import { useNavigate } from 'react-router-dom';
 import { Grid, Container } from '@mui/material';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { useDispatch, useSelector } from '../../../redux/store';
-import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
-import CreateNewPeriod from '../../../sections/dashboard/lesson-plan/initial-process/period';
-import CheckoutSteps from '../../../sections/dashboard/lesson-plan/initial-process/checkoutSteps';
-import CreateNewStudents from '../../../sections/dashboard/lesson-plan/initial-process/students';
-import { backStep, nextStep } from '../../../redux/slices/initialProcess';
-import CreateNewTeachers from '../../../sections/dashboard/lesson-plan/initial-process/teachers';
-import CreateNewSubjects from '../../../sections/dashboard/lesson-plan/initial-process/subjects';
+import {
+  backStep,
+  fillGeneralInformation,
+  nextStep,
+} from '../../../redux/slices/initialProcess';
+import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import CreateStudents from '../../../sections/dashboard/lesson-plan/start-process/students/CreateStudents';
+import FillGeneralInformation from '../../../sections/dashboard/lesson-plan/start-process/general-information/FillGeneralInformation';
+import InitialProcessSteps from '../../../sections/dashboard/lesson-plan/start-process/InitialProcessSteps';
+import CreateTeachers from '../../../sections/dashboard/lesson-plan/start-process/teachers/CreateTeachers';
+import ReviewInformation from '../../../sections/dashboard/lesson-plan/start-process/review-information/ReviewInformation';
 
-const STEPS = ['Period', 'Students', 'Teachers', 'Subjects'];
-
-export default function EcommerceCheckoutPage() {
+export default function CreateLessonPlanProcessPage() {
+  const STEPS = [
+    'General Information',
+    'Students',
+    'Teachers',
+    'Review Information',
+  ];
   const navigate = useNavigate();
-
-  const { themeStretch } = useSettingsContext();
-
   const dispatch = useDispatch();
-
-  const {checkout} = useSelector((state) => state.initial);
-
-  const { activeStep } = checkout;
-
-  // const completed = activeStep === STEPS.length;
-
-  // useEffect(() => {
-  //   dispatch(getCart(cart));
-  // }, [dispatch, cart]);
-
-  // useEffect(() => {
-  //   if (activeStep === 1) {
-  //     dispatch(createBilling(null));
-  //   }
-  // }, [dispatch, activeStep]);
+  const { themeStretch } = useSettingsContext();
+  const { initialProcess } = useSelector((state) => state.initial);
+  const { activeStep, generalInformation } = initialProcess;
+  const completed = activeStep === STEPS.length;
 
   const handleNextStep = () => {
     dispatch(nextStep());
@@ -45,24 +38,20 @@ export default function EcommerceCheckoutPage() {
     dispatch(backStep());
   };
 
-  const handleReset = () => {
-    // if (completed) {
-    //   dispatch(resetCart());
-    //   navigate(PATH_DASHBOARD.eCommerce.shop, { replace: true });
-    // }
+  const handleFillGeneralInformation = (data) => {
+    dispatch(fillGeneralInformation(data));
+    dispatch(nextStep());
   };
-
-  const completed = false;
 
   return (
     <>
       <Helmet>
-        <title> Lesson Plan Process</title>
+        <title>Lesson Plan - Start Process</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Initial Process"
+          heading='Start Process'
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
@@ -73,44 +62,30 @@ export default function EcommerceCheckoutPage() {
           ]}
         />
 
-        <Grid container justifyContent={completed ? 'center' : 'flex-start'}>
-          <Grid item xs={12} md={8}>
-            <CheckoutSteps activeStep={activeStep} steps={STEPS} />
+        <Grid container justifyContent='center'>
+          <Grid item xs={12} md={8} lg={12}>
+            <InitialProcessSteps activeStep={activeStep} steps={STEPS} />
           </Grid>
         </Grid>
 
-        {completed ? (
-          <CheckoutSteps open={completed} onReset={handleReset} onDownloadPDF={() => {}} />
-        ) : (
-          <>
-            {activeStep === 0 && (
-              <CreateNewPeriod
-                checkout={checkout}
-                onNextStep={handleNextStep}
-              />
-            )}
-            {activeStep === 1 && (
-              <CreateNewStudents
-                onNextStep={handleNextStep}
-              />
-            )}
-            {activeStep === 2 && (
-              <CreateNewTeachers
-                onNextStep={handleNextStep}
-              />
-            )}
-            {activeStep === 3 && (
-              <CreateNewSubjects
-                // checkout={checkout}
-                onNextStep={handleNextStep}
-                // onBackStep={handleBackStep}
-                // onGotoStep={handleGotoStep}
-                // onApplyShipping={handleApplyShipping}
-                // onReset={handleReset}
-              />
-            )}
-          </>
-        )}
+        <>
+          {activeStep === 0 && (
+            <FillGeneralInformation
+              generalInformation={generalInformation}
+              onFillGeneralInformation={handleFillGeneralInformation}
+            />
+          )}
+          {activeStep === 1 && (
+            <CreateStudents
+              onNextStep={handleNextStep}
+              onBackStep={handleBackStep}
+            />
+          )}
+          {activeStep === 2 && <CreateTeachers onNextStep={handleNextStep} />}
+          {activeStep === 3 && (
+            <ReviewInformation onNextStep={handleNextStep} />
+          )}
+        </>
       </Container>
     </>
   );

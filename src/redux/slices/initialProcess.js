@@ -1,12 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
-import axios from '../../utils/axios';
 
 const initialState = {
   isLoading: false,
   error: null,
-  checkout: {
+  initialProcess: {
     activeStep: 0,
-    idManager: ''
+    generalInformation: {
+      startDate: null,
+      endDate: null,
+      manager: '',
+      degree: '',
+    },
   },
 };
 
@@ -14,42 +18,35 @@ const slice = createSlice({
   name: 'initial',
   initialState,
   reducers: {
-    // START LOADING
     startLoading(state) {
       state.isLoading = true;
     },
-
-    // HAS ERROR
     hasError(state, action) {
       state.isLoading = false;
       state.error = action.payload;
     },
-
-    // GET MANAGER
     getManager(state, action) {
       state.isLoading = false;
       state.products = action.payload;
     },
-
     backStep(state) {
-      state.checkout.activeStep -= 1;
+      state.initialProcess.activeStep -= 1;
     },
-
     nextStep(state) {
-      state.checkout.activeStep += 1;
+      state.initialProcess.activeStep += 1;
     },
-
     gotoStep(state, action) {
       const step = action.payload;
-      state.checkout.activeStep = step;
+      state.initialProcess.activeStep = step;
+    },
+    fillGeneralInformation(state, action) {
+      state.initialProcess.generalInformation = action.payload;
     },
   },
 });
 
-// Reducer
 export default slice.reducer;
 
-// Actions
 export const {
   getCart,
   addToCart,
@@ -62,5 +59,5 @@ export const {
   applyShipping,
   applyDiscount,
   increaseQuantity,
-  decreaseQuantity,
+  fillGeneralInformation,
 } = slice.actions;
