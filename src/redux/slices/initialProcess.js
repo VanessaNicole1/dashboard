@@ -11,6 +11,8 @@ const initialState = {
       manager: '',
       degree: '',
     },
+    csvStudents: null,
+    students: [],
   },
 };
 
@@ -42,22 +44,20 @@ const slice = createSlice({
     fillGeneralInformation(state, action) {
       state.initialProcess.generalInformation = action.payload;
     },
+    createStudents(state, action) {
+      const { csv, students } = action.payload;
+      state.initialProcess.students = students;
+      state.initialProcess.csvStudents = csv;
+    }
   },
 });
 
 export default slice.reducer;
 
 export const {
-  getCart,
-  addToCart,
-  resetCart,
   gotoStep,
   backStep,
   nextStep,
-  deleteCart,
-  createBilling,
-  applyShipping,
-  applyDiscount,
-  increaseQuantity,
   fillGeneralInformation,
+  createStudents
 } = slice.actions;
