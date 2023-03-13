@@ -58,9 +58,10 @@ RHFUpload.propTypes = {
   name: PropTypes.string,
   multiple: PropTypes.bool,
   helperText: PropTypes.node,
+  accept: PropTypes.object
 };
 
-export function RHFUpload({ name, multiple, helperText, ...other }) {
+export function RHFUpload({ name, multiple, helperText, accept={'image/*': []}, ...other }) {
   const { control } = useFormContext();
 
   return (
@@ -71,7 +72,7 @@ export function RHFUpload({ name, multiple, helperText, ...other }) {
         multiple ? (
           <Upload
             multiple
-            accept={{ 'image/*': [] }}
+            accept={accept}
             files={field.value}
             error={!!error}
             helperText={
@@ -85,7 +86,7 @@ export function RHFUpload({ name, multiple, helperText, ...other }) {
           />
         ) : (
           <Upload
-            accept={{ 'image/*': [] }}
+            accept={accept}
             file={field.value}
             error={!!error}
             helperText={
