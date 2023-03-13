@@ -98,6 +98,9 @@ export function fileThumb(fileUrl) {
     case 'image':
       thumb = iconUrl('ic_img');
       break;
+    case 'csv':
+      thumb = iconUrl('ic_csv');
+      break;
     default:
       thumb = iconUrl('ic_file');
   }
