@@ -1,6 +1,13 @@
 import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
-import { Box, Stack, Button, IconButton, Typography } from '@mui/material';
+import {
+  Box,
+  Stack,
+  Button,
+  IconButton,
+  Typography,
+  Grid,
+} from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import { UploadIllustration } from '../../assets/illustrations';
 
@@ -34,9 +41,12 @@ Upload.propTypes = {
   onDelete: PropTypes.func,
   onRemove: PropTypes.func,
   onUpload: PropTypes.func,
+  uploadButtonText: PropTypes.string,
   thumbnail: PropTypes.bool,
   helperText: PropTypes.node,
   onRemoveAll: PropTypes.func,
+  showStyledDropZone: PropTypes.bool,
+  removeAllButtonText: PropTypes.string
 };
 
 export default function Upload({
@@ -49,12 +59,21 @@ export default function Upload({
   files,
   thumbnail,
   onUpload,
+  uploadButtonText = 'Uplaod files',
   onRemove,
   onRemoveAll,
+  removeAllButtonText = 'Remove all',
   sx,
+  showStyledDropZone = true,
   ...other
 }) {
-  const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    isDragReject,
+    fileRejections,
+  } = useDropzone({
     multiple,
     disabled,
     ...other,
@@ -68,38 +87,40 @@ export default function Upload({
 
   return (
     <Box sx={{ width: 1, position: 'relative', ...sx }}>
-      <StyledDropZone
-        {...getRootProps()}
-        sx={{
-          ...(isDragActive && {
-            opacity: 0.72,
-          }),
-          ...(isError && {
-            color: 'error.main',
-            bgcolor: 'error.lighter',
-            borderColor: 'error.light',
-          }),
-          ...(disabled && {
-            opacity: 0.48,
-            pointerEvents: 'none',
-          }),
-          ...(hasFile && {
-            padding: '12% 0',
-          }),
-        }}
-      >
-        <input {...getInputProps()} />
-
-        <Placeholder
+      {showStyledDropZone && (
+        <StyledDropZone
+          {...getRootProps()}
           sx={{
+            ...(isDragActive && {
+              opacity: 0.72,
+            }),
+            ...(isError && {
+              color: 'error.main',
+              bgcolor: 'error.lighter',
+              borderColor: 'error.light',
+            }),
+            ...(disabled && {
+              opacity: 0.48,
+              pointerEvents: 'none',
+            }),
             ...(hasFile && {
-              opacity: 0,
+              padding: '12% 0',
             }),
           }}
-        />
+        >
+          <input {...getInputProps()} />
 
-        {hasFile && <SingleFilePreview file={file} />}
-      </StyledDropZone>
+          <Placeholder
+            sx={{
+              ...(hasFile && {
+                opacity: 0,
+              }),
+            }}
+          />
+
+          {hasFile && <SingleFilePreview file={file} />}
+        </StyledDropZone>
+      )}
 
       {helperText && helperText}
 
@@ -107,7 +128,7 @@ export default function Upload({
 
       {hasFile && onDelete && (
         <IconButton
-          size="small"
+          size='small'
           onClick={onDelete}
           sx={{
             top: 16,
@@ -121,29 +142,49 @@ export default function Upload({
             },
           }}
         >
-          <Iconify icon="eva:close-fill" width={18} />
+          <Iconify icon='eva:close-fill' width={18} />
         </IconButton>
       )}
 
       {hasFiles && (
         <>
-          <Box sx={{ my: 3 }}>
-            <MultiFilePreview files={files} thumbnail={thumbnail} onRemove={onRemove} />
-          </Box>
+          <Grid container spacing={3}>
+            <Grid item xs={7} md={9} lg={9}>
+              <Box sx={{ my: 3 }}>
+                <MultiFilePreview
+                  files={files}
+                  thumbnail={thumbnail}
+                  onRemove={onRemove}
+                />
+              </Box>
+            </Grid>
 
-          <Stack direction="row" justifyContent="flex-end" spacing={1.5}>
-            {onRemoveAll && (
-              <Button color="inherit" variant="outlined" size="small" onClick={onRemoveAll}>
-                Remove all
-              </Button>
-            )}
+            <Grid item xs={5} md={3} lg={3}>
+              <Stack
+                direction='column'
+                marginTop={3}
+                justifyContent='flex-end'
+                spacing={1.5}
+              >
+                {onRemoveAll && (
+                  <Button
+                    color='inherit'
+                    variant='outlined'
+                    size='small'
+                    onClick={onRemoveAll}
+                  >
+                    { removeAllButtonText }
+                  </Button>
+                )}
 
-            {onUpload && (
-              <Button size="small" variant="contained" onClick={onUpload}>
-                Upload files
-              </Button>
-            )}
-          </Stack>
+                {onUpload && (
+                  <Button size='small' variant='contained' onClick={onUpload}>
+                    { uploadButtonText }
+                  </Button>
+                )}
+              </Stack>
+            </Grid>
+          </Grid>
         </>
       )}
     </Box>
@@ -158,8 +199,8 @@ function Placeholder({ sx, ...other }) {
   return (
     <Stack
       spacing={5}
-      alignItems="center"
-      justifyContent="center"
+      alignItems='center'
+      justifyContent='center'
       direction={{
         xs: 'column',
         md: 'row',
@@ -177,15 +218,15 @@ function Placeholder({ sx, ...other }) {
       <UploadIllustration sx={{ width: 220 }} />
 
       <div>
-        <Typography gutterBottom variant="h5">
+        <Typography gutterBottom variant='h5'>
           Drop or Select file
         </Typography>
 
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+        <Typography variant='body2' sx={{ color: 'text.secondary' }}>
           Drop files here or click
           <Typography
-            variant="body2"
-            component="span"
+            variant='body2'
+            component='span'
             sx={{
               mx: 0.5,
               color: 'primary.main',
