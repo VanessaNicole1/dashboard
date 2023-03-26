@@ -55,6 +55,7 @@ const navConfig = [
           { title: 'create', path: PATH_DASHBOARD.lessonPlan.create, roles: [ROLES.teacher] },
           { title: 'list', path: PATH_DASHBOARD.lessonPlan.listStudentPlans, roles: [ROLES.student] },
           { title: 'pending', path: PATH_DASHBOARD.lessonPlan.listStudentPendings, roles: [ROLES.student] },
+          { title: 'processes_list', path: PATH_DASHBOARD.lessonPlan.listProcesses, roles: [ROLES.manager] },
         ]
       },
       {
@@ -68,47 +69,67 @@ const navConfig = [
           
         ]
       },
+      // {
+      //   title: 'Users',
+      //   path: PATH_DASHBOARD.user.root,
+      //   icon: ICONS.user,
+      //   roles: [ROLES.manager],
+      //   children: [
+      //     { title: 'list', path: PATH_DASHBOARD.user.list, roles: [ROLES.manager] },
+      //     { title: 'update', path: PATH_DASHBOARD.user.edit, roles: [ROLES.manager] },
+          
+      //   ]
+      // },
+      // {
+      //   title: 'Teachers',
+      //   path: PATH_DASHBOARD.teachers.root,
+      //   icon: ICONS.user,
+      //   roles: [ROLES.manager],
+      //   children: [
+      //     { title: 'List', path: PATH_DASHBOARD.teachers.listTeachers, roles: [ROLES.manager] },
+      //     { title: 'Create', path: PATH_DASHBOARD.teachers.create, roles: [ROLES.manager] },
+          
+      //   ]
+      // },
+      // {
+      //   title: 'Students',
+      //   path: PATH_DASHBOARD.students.root,
+      //   icon: ICONS.user,
+      //   roles: [ROLES.manager],
+      //   children: [
+      //     { title: 'List', path: PATH_DASHBOARD.students.listStudents, roles: [ROLES.manager] },
+      //     { title: 'Create', path: PATH_DASHBOARD.students.create, roles: [ROLES.manager] },
+          
+      //   ]
+      // },
+      // {
+      //   title: 'Grades',
+      //   path: PATH_DASHBOARD.grades.root,
+      //   icon: ICONS.user,
+      //   roles: [ROLES.manager, ROLES.teacher],
+      //   children: [
+      //     { title: 'List', path: PATH_DASHBOARD.grades.listGrades, roles: [ROLES.manager, ROLES.teacher] },
+      //     { title: 'Create', path: PATH_DASHBOARD.grades.create, roles: [ROLES.manager] },
+          
+      //   ]
+      // },
+      // {
+      //   title: 'Degree',
+      //   path: PATH_DASHBOARD.grades.root,
+      //   icon: ICONS.user,
+      //   roles: [ROLES.manager],
+      //   children: [
+      //     { title: 'View', path: PATH_DASHBOARD.degree.view, roles: [ROLES.manager] },
+      //     { title: 'Create', path: PATH_DASHBOARD.degree.create, roles: [ROLES.manager] },
+      //   ]
+      // },
       {
-        title: 'Teachers',
-        path: PATH_DASHBOARD.teachers.root,
+        title: 'Users',
+        path: PATH_DASHBOARD.user.root,
         icon: ICONS.user,
         roles: [ROLES.manager],
         children: [
-          { title: 'List', path: PATH_DASHBOARD.teachers.listTeachers, roles: [ROLES.manager] },
-          { title: 'Create', path: PATH_DASHBOARD.teachers.create, roles: [ROLES.manager] },
-          
-        ]
-      },
-      {
-        title: 'Students',
-        path: PATH_DASHBOARD.students.root,
-        icon: ICONS.user,
-        roles: [ROLES.manager],
-        children: [
-          { title: 'List', path: PATH_DASHBOARD.students.listStudents, roles: [ROLES.manager] },
-          { title: 'Create', path: PATH_DASHBOARD.students.create, roles: [ROLES.manager] },
-          
-        ]
-      },
-      {
-        title: 'Grades',
-        path: PATH_DASHBOARD.grades.root,
-        icon: ICONS.user,
-        roles: [ROLES.manager, ROLES.teacher],
-        children: [
-          { title: 'List', path: PATH_DASHBOARD.grades.listGrades, roles: [ROLES.manager, ROLES.teacher] },
-          { title: 'Create', path: PATH_DASHBOARD.grades.create, roles: [ROLES.manager] },
-          
-        ]
-      },
-      {
-        title: 'Degree',
-        path: PATH_DASHBOARD.grades.root,
-        icon: ICONS.user,
-        roles: [ROLES.manager],
-        children: [
-          { title: 'View', path: PATH_DASHBOARD.degree.view, roles: [ROLES.manager] },
-          { title: 'Create', path: PATH_DASHBOARD.degree.create, roles: [ROLES.manager] },
+          { title: 'List', path: PATH_DASHBOARD.user.list, roles: [ROLES.manager] }
         ]
       },
       {
