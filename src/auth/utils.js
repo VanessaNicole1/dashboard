@@ -14,7 +14,6 @@ function jwtDecode(token) {
   );
   
   const jwtDecoded = JSON.parse(jsonPayload);
-  console.log(jwtDecoded);
   return jwtDecoded;
 }
 
