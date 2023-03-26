@@ -220,7 +220,7 @@ const en = {
       grade: 'Curso',
     },
     teacher_toolbar: {
-      teacher: 'Docente',
+      period: 'Periodo',
     },
     student_toolbar: {
       grade: 'Curso',
@@ -237,6 +237,7 @@ const en = {
   about: 'información',
   start_process: 'iniciar proceso',
   all_plans: 'planes de clase',
+  processes_list: 'procesos',
   teacher_plans: 'planes de clase por docentes',
   create: 'crear',
   list: 'listar',
@@ -305,6 +306,16 @@ const en = {
       actions: 'Acciones',
     },
   },
+  period_list_page: {
+    helmet: 'Periodos | Lista',
+    heading: 'Lista de Periodos',
+    dashboard: 'Dashboard',
+    start_label: 'Fecha de Inicio',
+    end_label: 'Fecha de Finalización',
+    manager_label: 'Director',
+    degree_label: 'Carrera',
+    status_label: 'Estado'
+  },
   degree_create_form: {
     button_create: 'Crear Carrera',
     input_name: 'Nombre de la carrera',
@@ -334,6 +345,7 @@ const en = {
     input_name: 'Nombre',
     last_name_input: 'Apellido',
     email_input: 'Correo',
+    button_update: 'Guardar cambios'
   },
   app: `app`,
   user: `user`,
