@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Card,
   Table,
@@ -34,10 +34,11 @@ import { GradeTableRow, GradeToolbar } from '../../../sections/dashboard/grade/l
 export default function GradesListPage () {
   const { translate } = useLocales();
 
+  const location = useLocation();
+
   const TABLE_HEAD = [
     { id: 'grade', label: translate('grades_list_page.table.grade'), align: 'center' },
     { id: 'parallel', label: translate('grades_list_page.table.parallel'), align: 'center' },
-    { id: 'degree', label: translate('grades_list_page.table.degree'), align: 'center' },
     { id: '', label: translate('grades_list_page.table.actions'), align: 'center' },
   ];
 
@@ -48,11 +49,9 @@ export default function GradesListPage () {
     orderBy,
     rowsPerPage,
     setPage,
-    //
     selected,
     setSelected,
     onSelectRow,
-    //
     onSort,
     onChangeDense,
     onChangePage,
@@ -61,21 +60,11 @@ export default function GradesListPage () {
 
   useEffect(() => {
     const fetchGrades = async () => {
-      const grades = await getGrades();
+      const grades = await getGrades(location.state);
       setTableData(grades);
     };
-
-    // TODO Get all degrees to filter
-    const fetchDegrees = async () => {
-      const grades = await getGrades();
-      const simpleDegrees = grades.map(grade => grade.displayName);
-      simpleDegrees.unshift('all');
-      setSimpleDegrees(simpleDegrees);
-    }
-
     fetchGrades();
-    fetchDegrees();
-  },[]);
+  },[location.state]);
 
 
   const [simpleDegrees, setSimpleDegrees] = useState(['all']);
@@ -138,6 +127,10 @@ export default function GradesListPage () {
     setFilterContent('');
     setFilterGrade('all');
   };
+
+  const handleViewStudents = (id) => {
+    navigate(PATH_DASHBOARD.students.listStudents, {state: { gradeId: id}});
+  }
   
   return (
     <>
@@ -191,6 +184,7 @@ export default function GradesListPage () {
                         onSelectRow={() => onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
                         onEditRow={() => handleEditRow(row.name)}
+                        onViewStudents={() => handleViewStudents(row.id)}
                       />
                     ))}
 

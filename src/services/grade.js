@@ -1,8 +1,12 @@
 import axios from "../utils/axios";
 
-export const getGrades = async () => {
+export const getGrades = async (filterGrades) => {
   try  {
-    const { data: grades } = await axios.get('/grade');
+    if (!filterGrades) {
+      const { data: grades } = await axios.post('/grades');
+      return grades;
+    }
+    const { data: grades } = await axios.post('/grades', filterGrades);
     return grades;
   } catch (error) {
     return {

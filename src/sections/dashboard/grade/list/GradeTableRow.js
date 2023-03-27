@@ -15,10 +15,11 @@ GradeTableRow.propTypes = {
   onEditRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
   onSelectRow: PropTypes.func,
+  onViewStudents: PropTypes.func,
 };
 
-export default function GradeTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { numberParallel, parallel, degree } = row;
+export default function GradeTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onViewStudents }) {
+  const { number, parallel } = row;
 
   const [openPopover, setOpenPopover] = useState(null);
 
@@ -33,15 +34,11 @@ export default function GradeTableRow({ row, selected, onEditRow, onSelectRow, o
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell align="center">{numberParallel}</TableCell>
+        <TableCell align="center">{number}</TableCell>
 
         <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
           {parallel}
         </TableCell>
-        <TableCell align="center">
-          {degree}
-        </TableCell>
-
         <TableCell align="center">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
@@ -53,14 +50,17 @@ export default function GradeTableRow({ row, selected, onEditRow, onSelectRow, o
         open={openPopover}
         onClose={handleClosePopover}
         arrow="right-top"
-        sx={{ width: 140 }}
+        sx={{ width: 160 }}
       >
 
         <MenuItem
-          onClick={() => {}}
-        >
-          <Iconify icon="ic:baseline-remove-red-eye" />
-          View
+          onClick={() => {
+            onViewStudents();
+            handleClosePopover();
+          }}
+          >
+            <Iconify icon="ic:baseline-person" />
+            View Students
         </MenuItem>
       </MenuPopover>
     </>
