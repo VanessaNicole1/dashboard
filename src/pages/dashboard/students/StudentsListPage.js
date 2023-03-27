@@ -1,7 +1,6 @@
 import { Helmet } from 'react-helmet-async';
-import { paramCase } from 'change-case';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Card,
   Table,
@@ -10,13 +9,10 @@ import {
   Container,
   TableContainer,
 } from '@mui/material';
-
 import { PATH_DASHBOARD } from '../../../routes/paths';
-
 import Scrollbar from '../../../components/scrollbar';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
-
 import {
   useTable,
   getComparator,
@@ -26,10 +22,8 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from '../../../components/table';
-
 import { useLocales } from '../../../locales';
 import { getStudents } from '../../../services/student';
-import { getGrades } from '../../../services/grade';
 import { StudentTableRow, StudentToobar } from '../../../sections/dashboard/student/list';
 
 export default function StudentsListPage () {
@@ -59,52 +53,51 @@ export default function StudentsListPage () {
     onChangeRowsPerPage,
   } = useTable();
 
-  useEffect(() => {
-    const fetchStudents = async () => {
-      const students = await getStudents();
-      setTableData(students);
-    };
-
-    const fetchGrades = async () => {
-      const grades = await getGrades();
-      const simpleGrades = grades.map(grade => grade.displayName);
-      simpleGrades.unshift('all');
-      setSimpleGrades(simpleGrades);
-    }
-
-    fetchStudents();
-    fetchGrades();
-  }, []);
-
-
-  const [simpleGrades, setSimpleGrades] = useState(['all']);
-
   const { themeStretch } = useSettingsContext();
 
   const navigate = useNavigate();
+
+  const location = useLocation();
+
 
   const [tableData, setTableData] = useState([]);
 
   const [filterContent, setFilterContent] = useState('');
 
-  const [filterGrade, setFilterGrade] = useState('all');
+  const [dataFiltered, setDataFiltered] = useState([]);
 
-  const dataFiltered = applyFilter({
-    inputData: tableData,
-    comparator: getComparator(order, orderBy),
-    filterContent,
-    filterGrade,
-  });
+  useEffect(() => {
+    const updateDataFiltered = async () => {
+      const filterApplied = await applyFilter({
+        inputData: tableData,
+        comparator: getComparator(order, orderBy),
+        filterContent,
+      });
+
+      setDataFiltered(filterApplied);
+    };
+
+    updateDataFiltered();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterContent, tableData]);
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      const students = await getStudents(location.state);
+      setTableData(students);
+    };
+    fetchStudents();
+  }, [location.state]);
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const denseHeight = dense ? 52 : 72;
 
-  const isFiltered = filterContent !== '' || filterGrade !== 'all'; // || filterStatus !== 'all'
+  const isFiltered = filterContent !== '';
 
   const isNotFound =
-    (!dataFiltered.length && !!filterContent) ||
-    (!dataFiltered.length && !!filterGrade)
+    (!dataFiltered.length && !!filterContent);
 
 
   const handleFilterContent = (event) => {
@@ -112,9 +105,8 @@ export default function StudentsListPage () {
     setFilterContent(event.target.value);
   };
 
-  const handleFilterRole = (event) => {
+  const handleFilterPeriod = (event) => {
     setPage(0);
-    setFilterGrade(event.target.value);
   };
 
   const handleDeleteRow = (id) => {
@@ -130,12 +122,11 @@ export default function StudentsListPage () {
   };
 
   const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
+    navigate(PATH_DASHBOARD.user.edit(id));
   };
 
   const handleResetFilter = () => {
     setFilterContent('');
-    setFilterGrade('all');
   };
   
   return (
@@ -160,10 +151,8 @@ export default function StudentsListPage () {
           <StudentToobar
             isFiltered={isFiltered}
             filterContent={filterContent}
-            filterGrade={filterGrade}
-            optionsRole={simpleGrades}
             onFilterContent={handleFilterContent}
-            onFilterGrade={handleFilterRole}
+            onFilterGrade={handleFilterPeriod}
             onResetFilter={handleResetFilter}
           />
           
@@ -189,7 +178,7 @@ export default function StudentsListPage () {
                         selected={selected.includes(row.id)}
                         onSelectRow={() => onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.name)}
+                        onEditRow={() => handleEditRow(row.user.id)}
                       />
                     ))}
 
@@ -210,7 +199,6 @@ export default function StudentsListPage () {
             rowsPerPage={rowsPerPage}
             onPageChange={onChangePage}
             onRowsPerPageChange={onChangeRowsPerPage}
-            //
             dense={dense}
             onChangeDense={onChangeDense}
           />
@@ -220,7 +208,7 @@ export default function StudentsListPage () {
   );
 };
 
-function applyFilter({ inputData, comparator, filterContent, filterStatus, filterGrade }) {
+async function applyFilter({ inputData, comparator, filterContent, filterStatus, filterGrade }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -240,10 +228,6 @@ function applyFilter({ inputData, comparator, filterContent, filterStatus, filte
       return name.toLowerCase().includes(filterContent.toLowerCase()) || lastName.toLowerCase().includes(filterContent.toLowerCase()) || email.toLowerCase().includes(filterContent.toLowerCase());
     });
   }
-
-  // if (filterStatus !== 'all') {
-  //   inputData = inputData.filter((user) => user.status === filterStatus);
-  // }
 
   if (filterGrade !== 'all') {
     inputData = inputData.filter((student) => student.grade.displayName === filterGrade);
