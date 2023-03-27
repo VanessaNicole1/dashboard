@@ -35,7 +35,6 @@ export default function RolesListPage () {
   const { translate } = useLocales();
 
   const TABLE_HEAD = [
-    { id: 'id', label: translate('roles_list_page.table.id'), align: 'center' },
     { id: 'type', label: translate('roles_list_page.table.type'), align: 'center' },
     { id: '', label: translate('roles_list_page.table.actions'), align: 'center' },
   ];
@@ -66,7 +65,7 @@ export default function RolesListPage () {
 
     const fetchRolesType = async () => {
       const roles = await getRoles();
-      const simpleRoles = roles.map(role => role.type);
+      const simpleRoles = roles.map(role => role.name);
       simpleRoles.unshift('all');
       setSimpleRoles(simpleRoles);
     }
@@ -94,6 +93,7 @@ export default function RolesListPage () {
     filterContent,
     filterRole,
   });
+
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
@@ -229,15 +229,15 @@ export default function RolesListPage () {
     inputData = stabilizedThis.map((el) => el[0]);
   
     if (filterContent) {
-      inputData = inputData.filter((roles) => roles.type.toLowerCase().includes(filterContent.toLowerCase()));
+      inputData = inputData.filter((roles) => roles.name.toLowerCase().includes(filterContent.toLowerCase()));
     }
-  
+
     // if (filterStatus !== 'all') {
     //   inputData = inputData.filter((user) => user.status === filterStatus);
     // }
   
     if (filterRole !== 'all') {
-      inputData = inputData.filter((role) => role.type === filterRole);
+      inputData = inputData.filter((role) => role.name === filterRole);
     }
   
     return inputData;

@@ -22,7 +22,7 @@ export default function RoleToobar({
   onFilterRole,
   onResetFilter,
 }) {
-  const { translate } = useLocales(); 
+  const { translate } = useLocales();
 
   return (
     <Stack

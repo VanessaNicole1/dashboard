@@ -18,7 +18,7 @@ RoleTableRow.propTypes = {
 };
 
 export default function RoleTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { id, type } = row;
+  const { name } = row;
 
   const [openPopover, setOpenPopover] = useState(null);
 
@@ -33,10 +33,9 @@ export default function RoleTableRow({ row, selected, onEditRow, onSelectRow, on
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell align="center">{id}</TableCell>
 
         <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {type}
+          {name}
         </TableCell>
 
         {/* <TableCell align="left">
