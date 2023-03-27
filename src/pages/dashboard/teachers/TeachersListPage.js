@@ -1,7 +1,5 @@
-import { Helmet } from 'react-helmet-async';
-import { paramCase } from 'change-case';
-import { useEffect, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Helmet } from "react-helmet-async";
+import { useEffect, useState } from "react";
 import {
   Card,
   Table,
@@ -9,14 +7,12 @@ import {
   TableBody,
   Container,
   TableContainer,
-} from '@mui/material';
-
-import { PATH_DASHBOARD } from '../../../routes/paths';
-
-import Scrollbar from '../../../components/scrollbar';
-import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
-import { useSettingsContext } from '../../../components/settings';
-
+} from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
+import { PATH_DASHBOARD } from "../../../routes/paths";
+import Scrollbar from "../../../components/scrollbar";
+import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
+import { useSettingsContext } from "../../../components/settings";
 import {
   useTable,
   getComparator,
@@ -25,21 +21,42 @@ import {
   TableEmptyRows,
   TableHeadCustom,
   TablePaginationCustom,
-} from '../../../components/table';
+} from "../../../components/table";
+import { useLocales } from "../../../locales";
+import { getTeachers } from "../../../services/teacher";
+import {
+  TeacherToobar,
+  TeacherTableRow,
+} from "../../../sections/dashboard/teacher/list";
 
-import { useLocales } from '../../../locales';
-import { getGrades } from '../../../services/grade';
-import { getTeachers } from '../../../services/teacher';
-import {TeacherToobar, TeacherTableRow } from '../../../sections/dashboard/teacher/list';
-
-export default function TeachersListPage () {
+export default function TeachersListPage() {
   const { translate } = useLocales();
 
+  const navigate = useNavigate();
+
+  const location = useLocation();
+
   const TABLE_HEAD = [
-    { id: 'name', label: translate('teachers_list_page.table.name'), align: 'center' },
-    { id: 'last name', label: translate('teachers_list_page.table.last'), align: 'center' },
-    { id: 'email', label: translate('teachers_list_page.table.email'), align: 'center' },
-    { id: '', label: translate('teachers_list_page.table.actions'), align: 'center' },
+    {
+      id: "name",
+      label: translate("teachers_list_page.table.name"),
+      align: "center",
+    },
+    {
+      id: "last name",
+      label: translate("teachers_list_page.table.last"),
+      align: "center",
+    },
+    {
+      id: "email",
+      label: translate("teachers_list_page.table.email"),
+      align: "center",
+    },
+    {
+      id: "",
+      label: translate("teachers_list_page.table.actions"),
+      align: "center",
+    },
   ];
 
   const {
@@ -49,74 +66,67 @@ export default function TeachersListPage () {
     orderBy,
     rowsPerPage,
     setPage,
-    //
     selected,
     setSelected,
     onSelectRow,
-    //
     onSort,
     onChangeDense,
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
 
-  useEffect(() => {
-    const fetchTeachers = async () => {
-      const teachers = await getTeachers();
-      setTableData(teachers);
-    };
-
-    // TODO What value should I filter?
-    const fetchGrades = async () => {
-      const grades = await getGrades();
-      const simpleGrades = grades.map(grade => grade.displayName);
-      simpleGrades.unshift('all');
-      setSimpleGrades(simpleGrades);
-    }
-
-    fetchTeachers();
-    fetchGrades();
-  }, []);
-
-
-  const [simpleGrades, setSimpleGrades] = useState(['all']);
-
   const { themeStretch } = useSettingsContext();
-
-  const navigate = useNavigate();
 
   const [tableData, setTableData] = useState([]);
 
-  const [filterContent, setFilterContent] = useState('');
+  const [filterContent, setFilterContent] = useState("");
 
-  const [filterGrade, setFilterGrade] = useState('all');
+  const [dataFiltered, setDataFiltered] = useState([]);
 
-  const dataFiltered = applyFilter({
-    inputData: tableData,
-    comparator: getComparator(order, orderBy),
-    filterContent,
-    filterGrade,
-  });
+  useEffect(() => {
+    const updateDataFiltered = async () => {
+      const filterApplied = await applyFilter({
+        inputData: tableData,
+        comparator: getComparator(order, orderBy),
+        filterContent,
+      });
 
-  const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+      setDataFiltered(filterApplied);
+    };
+
+    updateDataFiltered();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterContent, tableData]);
+
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      const teachers = await getTeachers(location.state);
+      setTableData(teachers);
+    };
+
+    fetchTeachers();
+  }, [location.state]);
+
+  const dataInPage = dataFiltered.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   const denseHeight = dense ? 52 : 72;
 
-  const isFiltered = filterContent !== '' || filterGrade !== 'all'; // || filterStatus !== 'all'
+  const isFiltered = filterContent !== "";
 
   const isNotFound =
-    (!dataFiltered.length && !!filterContent) ||
-    (!dataFiltered.length && !!filterGrade)
-
+    (!dataFiltered.length && !!filterContent);
 
   const handleFilterContent = (event) => {
     setPage(0);
     setFilterContent(event.target.value);
   };
 
-  const handleFilterRole = (event) => {
+  const handleFilterPeriod = (event) => {
     setPage(0);
-    setFilterGrade(event.target.value);
   };
 
   const handleDeleteRow = (id) => {
@@ -131,28 +141,33 @@ export default function TeachersListPage () {
     }
   };
 
-  const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
+  const handleResetFilter = () => {
+    setFilterContent("");
   };
 
-  const handleResetFilter = () => {
-    setFilterContent('');
-    setFilterGrade('all');
+  const handleEditRow = (id) => {
+    navigate(PATH_DASHBOARD.user.edit(id));
   };
-  
+
   return (
     <>
       <Helmet>
-        <title>{translate('teachers_list_page.helmet')}</title>
+        <title>{translate("teachers_list_page.helmet")}</title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+      <Container maxWidth={themeStretch ? false : "lg"}>
         <CustomBreadcrumbs
-          heading={translate('teachers_list_page.heading')}
+          heading={translate("teachers_list_page.heading")}
           links={[
-            { name: translate('teachers_list_page.dashboard'), href: PATH_DASHBOARD.root },
-            { name: translate('teachers_list_page.teachers'), href: PATH_DASHBOARD.lessonPlan.root },
-            { name: translate('teachers_list_page.list') },
+            {
+              name: translate("teachers_list_page.dashboard"),
+              href: PATH_DASHBOARD.root,
+            },
+            {
+              name: translate("teachers_list_page.teachers"),
+              href: PATH_DASHBOARD.lessonPlan.root,
+            },
+            { name: translate("teachers_list_page.list") },
           ]}
         />
 
@@ -162,16 +177,14 @@ export default function TeachersListPage () {
           <TeacherToobar
             isFiltered={isFiltered}
             filterContent={filterContent}
-            filterGrade={filterGrade}
-            optionsRole={simpleGrades}
             onFilterContent={handleFilterContent}
-            onFilterGrade={handleFilterRole}
+            onFilterPeriod={handleFilterPeriod}
             onResetFilter={handleResetFilter}
           />
-          
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+
+          <TableContainer sx={{ position: "relative", overflow: "unset" }}>
             <Scrollbar>
-              <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+              <Table size={dense ? "small" : "medium"} sx={{ minWidth: 800 }}>
                 <TableHeadCustom
                   order={order}
                   orderBy={orderBy}
@@ -191,7 +204,7 @@ export default function TeachersListPage () {
                         selected={selected.includes(row.id)}
                         onSelectRow={() => onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.name)}
+                        onEditRow={() => handleEditRow(row.user.id)}
                       />
                     ))}
 
@@ -212,7 +225,6 @@ export default function TeachersListPage () {
             rowsPerPage={rowsPerPage}
             onPageChange={onChangePage}
             onRowsPerPageChange={onChangeRowsPerPage}
-            //
             dense={dense}
             onChangeDense={onChangeDense}
           />
@@ -220,9 +232,14 @@ export default function TeachersListPage () {
       </Container>
     </>
   );
-};
+}
 
-function applyFilter({ inputData, comparator, filterContent, filterStatus, filterGrade }) {
+async function applyFilter({
+  inputData,
+  comparator,
+  filterContent,
+  filterStatus,
+}) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -236,21 +253,15 @@ function applyFilter({ inputData, comparator, filterContent, filterStatus, filte
   if (filterContent) {
     inputData = inputData.filter((student) => {
       const { user } = student;
-      const {name} = user;
-      const {lastName} = user;
-      const {email} = user;
-      return name.toLowerCase().includes(filterContent.toLowerCase()) || lastName.toLowerCase().includes(filterContent.toLowerCase()) || email.toLowerCase().includes(filterContent.toLowerCase());
+      const { name } = user;
+      const { lastName } = user;
+      const { email } = user;
+      return (
+        name.toLowerCase().includes(filterContent.toLowerCase()) ||
+        lastName.toLowerCase().includes(filterContent.toLowerCase()) ||
+        email.toLowerCase().includes(filterContent.toLowerCase())
+      );
     });
   }
-
-  // if (filterStatus !== 'all') {
-  //   inputData = inputData.filter((user) => user.status === filterStatus);
-  // }
-
-  if (filterGrade !== 'all') {
-    inputData = inputData.filter((student) => student.grade.displayName === filterGrade);
-  }
-
   return inputData;
 }
-  

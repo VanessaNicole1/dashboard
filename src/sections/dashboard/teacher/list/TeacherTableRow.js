@@ -6,7 +6,6 @@ import {
   TableCell,
   IconButton,
 } from '@mui/material';
-
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 
@@ -43,16 +42,6 @@ export default function TeacherTableRow({ row, selected, onEditRow, onSelectRow,
           {user.email}
         </TableCell>
 
-        {/* <TableCell align="left">
-          <Label
-            variant="soft"
-            color={(status === 'banned' && 'error') || 'success'}
-            sx={{ textTransform: 'capitalize' }}
-          >
-            {status}
-          </Label>
-        </TableCell> */}
-
         <TableCell align="center">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
@@ -66,12 +55,14 @@ export default function TeacherTableRow({ row, selected, onEditRow, onSelectRow,
         arrow="right-top"
         sx={{ width: 140 }}
       >
-
         <MenuItem
-          onClick={() => {}}
+          onClick={() => {
+            onEditRow();
+            handleClosePopover();
+          }}
         >
-          <Iconify icon="ic:baseline-remove-red-eye" />
-          View
+          <Iconify icon="eva:edit-fill" />
+          Edit
         </MenuItem>
       </MenuPopover>
     </>
