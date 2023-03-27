@@ -8,7 +8,6 @@ export const createDegree = async (data) => {
       const res = await axios.post('/degree', post);
       return res.data;
     } catch (error) {
-      console.log('ERRORRRRR', error);
       return {
         message: "Couldn't create a new student"
       }
