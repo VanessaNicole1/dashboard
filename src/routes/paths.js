@@ -50,6 +50,7 @@ export const PATH_DASHBOARD = {
     listTeacherPlans: path(ROOTS_DASHBOARD, '/lesson-plan/teacher/list'),
     listStudentPlans: path(ROOTS_DASHBOARD, '/lesson-plan/student/list'),
     listStudentPendings: path(ROOTS_DASHBOARD, '/lesson-plan/student/pendings'),
+    listProcesses: path(ROOTS_DASHBOARD, '/lesson-plan/processes-list'),
   },
   roles: {
     root: path(ROOTS_DASHBOARD, '/roles'),
@@ -58,7 +59,7 @@ export const PATH_DASHBOARD = {
   },
   teachers: {
     root: path(ROOTS_DASHBOARD, '/teachers'),
-    listTeachers: path(ROOTS_DASHBOARD, '/teachers/list'),
+    listTeachers: path(ROOTS_DASHBOARD,  '/teachers/list'),
     create: path(ROOTS_DASHBOARD, '/teachers/create')
   },
   students: {
@@ -121,7 +122,7 @@ export const PATH_DASHBOARD = {
     cards: path(ROOTS_DASHBOARD, '/user/cards'),
     profile: path(ROOTS_DASHBOARD, '/user/profile'),
     account: path(ROOTS_DASHBOARD, '/user/account'),
-    edit: (name) => path(ROOTS_DASHBOARD, `/user/${name}/edit`),
+    edit: (id) => path(ROOTS_DASHBOARD, `/user/${id}/edit`),
     demoEdit: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
   },
   eCommerce: {
