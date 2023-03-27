@@ -12,7 +12,6 @@ import LessonPlanListPage from "../pages/dashboard/lesson-plan/LessonPlanListPag
 import LessonPlanListStudentPage from "../pages/dashboard/lesson-plan/LessonPlanListStudentPage";
 import LessonPlanListStudentPendingsPage from "../pages/dashboard/lesson-plan/LessonPlanListStudentsPendingsPage";
 import LessonPlanListTeacherPage from "../pages/dashboard/lesson-plan/LessonPlanListTeacherPage";
-import RolesCreatePage from "../pages/dashboard/roles/RolesCreatePage";
 import RolesListPage from "../pages/dashboard/roles/RolesListPage";
 import StudentsCreatePage from "../pages/dashboard/students/StudentsCreatePage";
 import StudentsListPage from "../pages/dashboard/students/StudentsListPage";
@@ -125,14 +124,7 @@ export default function Router () {
             <RoleBasedGuard hasContent roles={[ROLES.manager]}>
                <RolesListPage />
             </RoleBasedGuard>
-          )},
-          {
-            path: 'create',
-            element: (
-              <RoleBasedGuard hasContent roles={[ROLES.manager]}>
-                <RolesCreatePage />
-              </RoleBasedGuard>
-            )},
+          )}
         ]
       },
       { 
