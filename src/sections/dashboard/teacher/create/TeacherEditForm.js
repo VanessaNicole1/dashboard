@@ -67,7 +67,6 @@ export default function TeacherNewEditForm({ isEdit = false, currentUser, onCanc
   }, [isEdit, currentUser]);
 
   const onSubmit = async (data) => {
-    console.log('DATA IN SUBMIT', data);
     try {
       await updateUser(currentUser.id, data);
       await new Promise((resolve) => setTimeout(resolve, 500));

@@ -10,7 +10,7 @@ UserToobar.propTypes = {
   filterRole: PropTypes.string,
   onResetFilter: PropTypes.func,
   onFilterRole: PropTypes.func,
-  optionsRole: PropTypes.arrayOf(PropTypes.object),
+  optionsRole: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default function UserToobar({
@@ -23,8 +23,6 @@ export default function UserToobar({
   onFilterRole
 }) {
   const { translate } = useLocales();
-
-  console.log('filterRole', filterRole);
 
   return (
     <Stack
@@ -59,8 +57,8 @@ export default function UserToobar({
       >
         {optionsRole.map((option) => (
           <MenuItem
-            key={option.id}
-            value={option.id}
+            key={option}
+            value={option}
             sx={{
               mx: 1,
               borderRadius: 0.75,
@@ -68,7 +66,7 @@ export default function UserToobar({
               textTransform: 'capitalize',
             }}
           >
-            { option.name === 'all' ? translate('sections.toolbar_custom.all_option'): option.name}
+            { option === 'all' ? translate('sections.toolbar_custom.all_option'): option}
           </MenuItem>
         ))}
       </TextField>

@@ -7,22 +7,32 @@ import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { getUser } from '../../../services/user';
 import UserEditForm from '../../../sections/dashboard/user/update/UserEditForm';
+import { getRoles } from '../../../services/role';
 
 export default function UserEditPage() {
   const { themeStretch } = useSettingsContext();
 
   const { id } = useParams();
 
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState({});
+
+  const [simpleRoles, setSimpleRoles] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
-        const user = await getUser(id);
-        setCurrentUser(user);
-      }
-      fetchUser();
+      const user = await getUser(id);
+      setCurrentUser(user);
+    }
+
+    const fetchRoles = async () => {
+      const currentsRoles = await getRoles();
+      setSimpleRoles(currentsRoles);
+    }
+
+    fetchUser();
+    fetchRoles();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   return (
     <>
@@ -45,8 +55,7 @@ export default function UserEditPage() {
             { name: currentUser?.name },
           ]}
         />
-
-        <UserEditForm currentUser={currentUser} />
+        <UserEditForm currentUser={currentUser} simpleRoles={simpleRoles} />
       </Container>
     </>
   );

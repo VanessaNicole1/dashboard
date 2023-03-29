@@ -8,7 +8,7 @@ import {
   Container,
   TableContainer,
 } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PATH_DASHBOARD } from "../../../routes/paths";
 import Scrollbar from "../../../components/scrollbar";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
@@ -33,43 +33,42 @@ export default function UsersListPage() {
 
   const navigate = useNavigate();
 
-  const [filterRole, setFilterRole] = useState('0');
+  const [filterRole, setFilterRole] = useState('all');
 
-  const [simpleRoles, setSimpleRoles] = useState([{id: '0', name: 'all'}]);
+  const [simpleRoles, setSimpleRoles] = useState(['all']);
 
   const { themeStretch } = useSettingsContext();
 
   const [tableData, setTableData] = useState([]);
 
-  const [filterContent, setFilterContent] = useState("");
+  const [filterContent, setFilterContent] = useState('');
 
   const [dataFiltered, setDataFiltered] = useState([]);
-
 
   const TABLE_HEAD = [
     {
       id: "name",
-      label: translate("teachers_list_page.table.name"),
+      label: translate("users_list_page.table.name"),
       align: "center",
     },
     {
       id: "last name",
-      label: translate("teachers_list_page.table.last"),
+      label: translate("users_list_page.table.last"),
       align: "center",
     },
     {
       id: "email",
-      label: translate("teachers_list_page.table.email"),
+      label: translate("users_list_page.table.email"),
       align: "center",
     },
     {
         id: "roles",
-        label: 'roles',
+        label: translate("users_list_page.table.roles"),
         align: "center",
       },
     {
       id: "",
-      label: translate("teachers_list_page.table.actions"),
+      label: translate("users_list_page.table.actions"),
       align: "center",
     },
   ];
@@ -105,7 +104,7 @@ export default function UsersListPage() {
     updateDataFiltered();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterContent, tableData]);
+  }, [filterContent, tableData, filterRole]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -115,8 +114,8 @@ export default function UsersListPage() {
 
     const fetchRoles = async () => {
       const roles = await getRoles();
-      const currentRoles = roles.map(role => ({id: role.id, name: role.name}));
-      currentRoles.unshift({id: '0', name: 'all'});
+      const currentRoles = roles.map(role => role.name);
+      currentRoles.unshift('all');
       setSimpleRoles(currentRoles);
     }
 
@@ -132,7 +131,7 @@ export default function UsersListPage() {
 
   const denseHeight = dense ? 52 : 72;
 
-  const isFiltered = filterContent !== "" || filterRole !== '0';
+  const isFiltered = filterContent !== "" || filterRole !== 'all';
 
   const isNotFound =
     (!dataFiltered.length && !!filterContent) ||
@@ -141,10 +140,6 @@ export default function UsersListPage() {
   const handleFilterContent = (event) => {
     setPage(0);
     setFilterContent(event.target.value);
-  };
-
-  const handleFilterPeriod = (event) => {
-    setPage(0);
   };
 
   const handleDeleteRow = (id) => {
@@ -161,6 +156,7 @@ export default function UsersListPage() {
 
   const handleResetFilter = () => {
     setFilterContent("");
+    setFilterRole('all');
   };
 
   const handleEditRow = (id) => {
@@ -175,22 +171,22 @@ export default function UsersListPage() {
   return (
     <>
     <Helmet>
-        <title>{translate("teachers_list_page.helmet")}</title>
+        <title>{translate("users_list_page.helmet")}</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : "lg"}>
         <CustomBreadcrumbs
-          heading="User List"
+          heading={translate("users_list_page.heading")}
           links={[
             {
-              name: translate("teachers_list_page.dashboard"),
+              name: translate("users_list_page.dashboard"),
               href: PATH_DASHBOARD.root,
             },
             {
               name: "Users",
               href: PATH_DASHBOARD.lessonPlan.root,
             },
-            { name: translate("teachers_list_page.list") },
+            { name: translate("users_list_page.list") },
           ]}
         />
 
@@ -203,7 +199,6 @@ export default function UsersListPage() {
             filterRole={filterRole}
             optionsRole={simpleRoles}
             onFilterContent={handleFilterContent}
-            onFilterPeriod={handleFilterPeriod}
             onResetFilter={handleResetFilter}
             onFilterRole={handleFilterRole}
           />
@@ -264,7 +259,6 @@ async function applyFilter({
   inputData,
   comparator,
   filterContent,
-  filterStatus,
   filterRole
 }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
@@ -276,17 +270,15 @@ async function applyFilter({
   });
 
   inputData = stabilizedThis.map((el) => el[0]);
-
-  if (filterRole !== '0') {
-    // inputData = inputData.filter((role) => role.name === filterRole);
+  
+  if (filterRole !== 'all') {
+    const currentUsers = await getUsers({roleType: filterRole});
+    inputData = currentUsers;
   }
 
   if (filterContent) {
-    inputData = inputData.filter((student) => {
-      const { user } = student;
-      const { name } = user;
-      const { lastName } = user;
-      const { email } = user;
+    inputData = inputData.filter((user) => {
+      const { name, lastName, email } = user;
       return (
         name.toLowerCase().includes(filterContent.toLowerCase()) ||
         lastName.toLowerCase().includes(filterContent.toLowerCase()) ||

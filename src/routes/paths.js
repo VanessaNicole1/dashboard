@@ -55,7 +55,6 @@ export const PATH_DASHBOARD = {
   roles: {
     root: path(ROOTS_DASHBOARD, '/roles'),
     listRoles: path(ROOTS_DASHBOARD, '/roles/list'),
-    create: path(ROOTS_DASHBOARD, '/roles/create')
   },
   teachers: {
     root: path(ROOTS_DASHBOARD, '/teachers'),

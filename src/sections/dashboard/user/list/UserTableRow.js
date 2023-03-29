@@ -20,7 +20,6 @@ UserTableRow.propTypes = {
 
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
   const { name, lastName, email, roles } = row;
-  console.log('roles ROW', roles);
   const [openPopover, setOpenPopover] = useState(null);
 
   const handleOpenPopover = (event) => {

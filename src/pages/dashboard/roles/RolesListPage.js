@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   Card,
   Table,
@@ -9,10 +9,12 @@ import {
   TableBody,
   Container,
   TableContainer,
+  Button,
+  Dialog,
+  DialogTitle,
 } from '@mui/material';
 
 import { PATH_DASHBOARD } from '../../../routes/paths';
-
 import Scrollbar from '../../../components/scrollbar';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
@@ -30,6 +32,8 @@ import {
 import { useLocales } from '../../../locales';
 import { RoleTableRow, RoleToolbar } from '../../../sections/dashboard/role/list';
 import { getRoles } from '../../../services/role';
+import Iconify from '../../../components/iconify/Iconify';
+import RoleNewForm from '../../../sections/dashboard/role/create/RoleNewForm';
 
 export default function RolesListPage () {
   const { translate } = useLocales();
@@ -46,11 +50,9 @@ export default function RolesListPage () {
     orderBy,
     rowsPerPage,
     setPage,
-    //
     selected,
     setSelected,
     onSelectRow,
-    //
     onSort,
     onChangeDense,
     onChangePage,
@@ -85,6 +87,8 @@ export default function RolesListPage () {
   const [filterContent, setFilterContent] = useState('');
 
   const [filterRole, setFilterRole] = useState('all');
+
+  const [openModal, setOpenModal] = useState(false);
 
 
   const dataFiltered = applyFilter({
@@ -135,111 +139,143 @@ export default function RolesListPage () {
     setFilterContent('');
     setFilterRole('all');
   };
-    return (
-      <>
-      <Helmet>
-        <title>{translate('roles_list_page.helmet')}</title>
-      </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading={translate('roles_list_page.heading')}
-          links={[
-            { name: translate('roles_list_page.dashboard'), href: PATH_DASHBOARD.root },
-            { name: translate('roles_list_page.roles'), href: PATH_DASHBOARD.lessonPlan.root },
-            { name: translate('roles_list_page.list') },
-          ]}
-        />
-
-        <Card>
-          <Divider />
-
-          <RoleToolbar
-            isFiltered={isFiltered}
-            filterContent={filterContent}
-            filterRole={filterRole}
-            optionsRole={simpleRoles}
-            onFilterContent={handleFilterContent}
-            onFilterRole={handleFilterRole}
-            onResetFilter={handleResetFilter}
-          />
-          
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <Scrollbar>
-              <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-                <TableHeadCustom
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
-                  numSelected={selected.length}
-                  onSort={onSort}
-                />
-
-                <TableBody>
-                  {dataFiltered
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => (
-                      <RoleTableRow
-                        key={row.id}
-                        row={row}
-                        selected={selected.includes(row.id)}
-                        onSelectRow={() => onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.name)}
-                      />
-                    ))}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
-                  />
-
-                  <TableNoData isNotFound={isNotFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            onPageChange={onChangePage}
-            onRowsPerPageChange={onChangeRowsPerPage}
-            //
-            dense={dense}
-            onChangeDense={onChangeDense}
-          />
-        </Card>
-      </Container>
-    </>
-    );
+  const handleOpenModal = () => {
+    setOpenModal(true);
   };
 
-  function applyFilter({ inputData, comparator, filterContent, filterStatus, filterRole }) {
-    const stabilizedThis = inputData.map((el, index) => [el, index]);
-  
-    stabilizedThis.sort((a, b) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) return order;
-      return a[1] - b[1];
-    });
-  
-    inputData = stabilizedThis.map((el) => el[0]);
-  
-    if (filterContent) {
-      inputData = inputData.filter((roles) => roles.name.toLowerCase().includes(filterContent.toLowerCase()));
-    }
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
-    // if (filterStatus !== 'all') {
-    //   inputData = inputData.filter((user) => user.status === filterStatus);
-    // }
-  
-    if (filterRole !== 'all') {
-      inputData = inputData.filter((role) => role.name === filterRole);
-    }
-  
-    return inputData;
+  return (
+    <>
+    <Helmet>
+      <title>{translate('roles_list_page.helmet')}</title>
+    </Helmet>
+
+    <Container maxWidth={themeStretch ? false : 'lg'}>
+      <CustomBreadcrumbs
+        heading={translate('roles_list_page.heading')}
+        links={[
+          { name: translate('roles_list_page.dashboard'), href: PATH_DASHBOARD.root },
+          { name: translate('roles_list_page.roles'), href: PATH_DASHBOARD.lessonPlan.root },
+          { name: translate('roles_list_page.list') },
+        ]}
+        action={
+          <Button
+            variant="contained"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+            onClick={handleOpenModal}
+          >
+            {translate('roles_list_page.new')}
+          </Button>
+        }
+      />
+
+      <Card>
+        <Divider />
+
+        <RoleToolbar
+          isFiltered={isFiltered}
+          filterContent={filterContent}
+          filterRole={filterRole}
+          optionsRole={simpleRoles}
+          onFilterContent={handleFilterContent}
+          onFilterRole={handleFilterRole}
+          onResetFilter={handleResetFilter}
+        />
+        
+        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+          <Scrollbar>
+            <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+              <TableHeadCustom
+                order={order}
+                orderBy={orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={tableData.length}
+                numSelected={selected.length}
+                onSort={onSort}
+              />
+
+              <TableBody>
+                {dataFiltered
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => (
+                    <RoleTableRow
+                      key={row.id}
+                      row={row}
+                      selected={selected.includes(row.id)}
+                      onSelectRow={() => onSelectRow(row.id)}
+                      onDeleteRow={() => handleDeleteRow(row.id)}
+                      onEditRow={() => handleEditRow(row.name)}
+                    />
+                  ))}
+
+                <TableEmptyRows
+                  height={denseHeight}
+                  emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
+                />
+
+                <TableNoData isNotFound={isNotFound} />
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
+
+        <TablePaginationCustom
+          count={dataFiltered.length}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          onPageChange={onChangePage}
+          onRowsPerPageChange={onChangeRowsPerPage}
+          //
+          dense={dense}
+          onChangeDense={onChangeDense}
+        />
+      </Card>
+
+      <Dialog
+          fullWidth
+          maxWidth="xs"
+          open={openModal}
+          onClose={handleCloseModal}
+        >
+          <DialogTitle>Create Role</DialogTitle>
+           <RoleNewForm  onClose={handleCloseModal}/>
+          {/* <TeacherNewEditForm
+            onCancel={handleCloseModal}
+            currentUser={userToEdit}
+          /> */}
+        </Dialog>
+    </Container>
+  </>
+  );
+};
+
+function applyFilter({ inputData, comparator, filterContent, filterStatus, filterRole }) {
+  const stabilizedThis = inputData.map((el, index) => [el, index]);
+
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+
+  inputData = stabilizedThis.map((el) => el[0]);
+
+  if (filterContent) {
+    inputData = inputData.filter((roles) => roles.name.toLowerCase().includes(filterContent.toLowerCase()));
   }
+
+  // if (filterStatus !== 'all') {
+  //   inputData = inputData.filter((user) => user.status === filterStatus);
+  // }
+
+  if (filterRole !== 'all') {
+    inputData = inputData.filter((role) => role.name === filterRole);
+  }
+
+  return inputData;
+}
   

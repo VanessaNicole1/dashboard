@@ -3,6 +3,7 @@ import axios from "../utils/axios";
 export const getRoles = async () => {
   try  {
     const { data: roles } = await axios.get('/roles');
+    console.log('roles service', roles);
     return roles;
   } catch (error) {
     return {
@@ -13,12 +14,10 @@ export const getRoles = async () => {
 
 export const createRole = async (role) => {
   try {
-      const post = { type: role.role }
+      const post = { name: role.name };
       const res = await axios.post('/roles', post);
-      return res.data;
+      return res;
   } catch (error) {
-    return {
-      message: "Couldn't create a new role"
-    }
+    return error;
   }
 }

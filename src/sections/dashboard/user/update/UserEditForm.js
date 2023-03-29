@@ -1,17 +1,16 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
+import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel, Autocomplete, TextField } from '@mui/material';
 import { fData } from '../../../../utils/formatNumber';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import Label from '../../../../components/label';
 import { useSnackbar } from '../../../../components/snackbar';
 import FormProvider, {
-  RHFSelect,
   RHFSwitch,
   RHFTextField,
   RHFUploadAvatar,
@@ -19,12 +18,13 @@ import FormProvider, {
 
 UserEditForm.propTypes = {
   currentUser: PropTypes.object,
+  simpleRoles: PropTypes.array,
 };
 
-export default function UserEditForm({ currentUser }) {
+export default function UserEditForm({ currentUser, simpleRoles }) {
   const navigate = useNavigate();
 
-  const countries = [];
+  console.log(currentUser);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -33,31 +33,31 @@ export default function UserEditForm({ currentUser }) {
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     phoneNumber: Yup.string().required('Phone number is required'),
     address: Yup.string().required('Address is required'),
-    country: Yup.string().required('Country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
     city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role is required'),
-    avatarUrl: Yup.string().required('Avatar is required').nullable(true),
+    roles: Yup.array(),
+    avatarUrl: Yup.mixed(),
   });
 
   const defaultValues = useMemo(
     () => ({
       name: currentUser?.name || '',
       email: currentUser?.email || '',
-      lastName: currentUser?.lastName || '',
+      phoneNumber: currentUser?.phoneNumber || '',
       address: currentUser?.address || '',
-      state: currentUser?.state || '',
       city: currentUser?.city || '',
+      roles: currentUser?.roles || [],
       avatarUrl: currentUser?.avatarUrl || null,
-      isVerified: currentUser?.isVerified || true,
-      status: currentUser?.status,
-      company: currentUser?.company || '',
-      role: currentUser?.roles.name || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
   );
+
+  useEffect(() => {
+    if (currentUser) {
+      reset(defaultValues);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]);
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -75,26 +75,18 @@ export default function UserEditForm({ currentUser }) {
 
   const values = watch();
 
-  console.log('VALUES', values);
-
-  useEffect(() => {
-    if (currentUser) {
-      reset(defaultValues);
-    }
-    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+  console.log(values.roles, 'Values');
 
   const onSubmit = async (data) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar('Update success!');
-      navigate(PATH_DASHBOARD.user.list);
-      console.log('DATA', data);
-    } catch (error) {
-      console.error(error);
-    }
+    // try {
+    //   await new Promise((resolve) => setTimeout(resolve, 500));
+    //   reset();
+    //   enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+    //   navigate(PATH_DASHBOARD.user.list);
+    //   console.log('DATA', data);
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
 
   const handleDrop = useCallback(
@@ -117,12 +109,14 @@ export default function UserEditForm({ currentUser }) {
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card sx={{ pt: 10, pb: 5, px: 3 }}>
+            {true && (
               <Label
                 color={values.status === 'active' ? 'success' : 'error'}
                 sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
               >
                 {values.status}
               </Label>
+            )}
 
             <Box sx={{ mb: 5 }}>
               <RHFUploadAvatar
@@ -146,6 +140,8 @@ export default function UserEditForm({ currentUser }) {
                 }
               />
             </Box>
+
+            {true && (
               <FormControlLabel
                 labelPlacement="start"
                 control={
@@ -175,6 +171,7 @@ export default function UserEditForm({ currentUser }) {
                 }
                 sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
               />
+            )}
           </Card>
         </Grid>
 
@@ -191,20 +188,36 @@ export default function UserEditForm({ currentUser }) {
             >
               <RHFTextField name="name" label="Full Name" />
               <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="lastName" label="Last name" />
-              <RHFTextField name="state" label="State/Region" />
+              <RHFTextField name="phoneNumber" label="Phone Number" />
               <RHFTextField name="city" label="City" />
               <RHFTextField name="address" label="Address" />
-              <RHFTextField name="company" label="Company" />
-              <RHFTextField name="role" label="Role"> 
-              <Label
-            variant="soft"
-            color='success'
-            sx={{ textTransform: 'capitalize' }}
-          >
-            Active
-          </Label>
-              </RHFTextField>
+              <RHFTextField name="identificationCard" label="Identification Card" />
+              <Controller 
+                name="roles"
+                control={control}
+                render={({ field: { ref, ...field } }) => (
+                  <Autocomplete
+                    multiple
+                    defaultValue={field.roles}
+                    onChange={(event, value) => field.onChange(value)}
+                    id="multiple-limit-tags"
+                    options={simpleRoles}
+                    getOptionLabel={(option) => option?.name}
+                    // getOptionDisabled={(option) => {
+                    //   if (userRoles.includes('STUDENT') && option.name !== 'STUDENT') {
+                    //     return true;
+                    //   }
+                    //   if ((userRoles.includes('MANAGER') || userRoles.includes('TEACHER')) && option.name === 'STUDENT') {
+                    //     return true;
+                    //   }
+                    //   return false;
+                    // }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Roles" placeholder="Roles" />
+                    )}
+                  />
+                )}
+              />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

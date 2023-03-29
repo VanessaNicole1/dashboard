@@ -22,7 +22,7 @@ export default function AuthLoginForm() {
   });
 
   const defaultValues = {
-    email: 'vane@gmail.com',
+    email: 'vane@unl.edu.ec',
     password: '123456',
   };
 
@@ -42,7 +42,6 @@ export default function AuthLoginForm() {
     try {
       await login(data.email, data.password);
     } catch (error) {
-      console.log(error);
       reset();
       setError('afterSubmit', {
         ...error,
