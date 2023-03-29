@@ -248,6 +248,7 @@ const en = {
     dashboard: 'Dashboard',
     roles: 'Roles',
     list: 'Listado',
+    new: 'Nuevo Rol',
     table: {
       id: 'ID',
       type: 'Tipo',
@@ -315,6 +316,20 @@ const en = {
     manager_label: 'Director',
     degree_label: 'Carrera',
     status_label: 'Estado'
+  },
+  users_list_page: {
+    helmet: 'Usuarios | Lista',
+    heading: 'Lista de Usuarios',
+    dashboard: 'Dashboard',
+    roles: 'Usuarios',
+    list: 'Lista',
+    table: {
+      name: 'Nombre',
+      last: 'Apellido',
+      email: 'Correo Electrónico',
+      actions: 'Acciones',
+      roles: 'Roles'
+    }
   },
   degree_create_form: {
     button_create: 'Crear Carrera',

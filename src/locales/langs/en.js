@@ -251,11 +251,12 @@ const en = {
   list: "list",
   pending: "pending",
   roles_list_page: {
-    helmet: "Roles | List",
-    heading: "Role List",
-    dashboard: "Dashboard",
-    roles: "Roles",
-    list: "List",
+    helmet: 'Roles | List',
+    heading: 'Role List',
+    dashboard: 'Dashboard',
+    roles: 'Roles',
+    list: 'List',
+    new: 'New Role',
     table: {
       id: "ID",
       type: "Type",
@@ -335,6 +336,20 @@ const en = {
     manager_label: 'Manager',
     degree_label: 'Degree',
     status_label: 'Status'
+  },
+  users_list_page: {
+    helmet: 'Users | List',
+    heading: 'Users List',
+    dashboard: 'Dashboard',
+    roles: 'Users',
+    list: 'List',
+    table: {
+      name: 'Name',
+      last: 'Last Name',
+      email: 'Email',
+      actions: 'Actions',
+      roles: 'Roles'
+    }
   },
   degree_create_form: {
     button_create: "Create degree",
