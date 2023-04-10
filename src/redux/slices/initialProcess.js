@@ -6,13 +6,15 @@ const initialState = {
   initialProcess: {
     activeStep: 0,
     generalInformation: {
-      startDate: null,
-      endDate: null,
+      startDate: new Date(),
+      endDate: new Date(),
       manager: '',
       degree: '',
     },
-    csvStudents: null,
+    csvStudents: [],
     students: [],
+    csvTeachers: [],
+    teachers: []
   },
 };
 
@@ -45,9 +47,14 @@ const slice = createSlice({
       state.initialProcess.generalInformation = action.payload;
     },
     createStudents(state, action) {
-      const { csv, students } = action.payload;
-      state.initialProcess.students = students;
+      const { csv, entities } = action.payload;
+      state.initialProcess.students = entities;
       state.initialProcess.csvStudents = csv;
+    },
+    createTeachers(state, action) {
+      const { csv, entities } = action.payload;
+      state.initialProcess.teachers = entities;
+      state.initialProcess.csvTeachers = csv;
     }
   },
 });
@@ -59,5 +66,6 @@ export const {
   backStep,
   nextStep,
   fillGeneralInformation,
-  createStudents
+  createStudents,
+  createTeachers
 } = slice.actions;
