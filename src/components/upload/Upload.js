@@ -149,7 +149,7 @@ export default function Upload({
       {hasFiles && (
         <>
           <Grid container spacing={3}>
-            <Grid item xs={7} md={9} lg={9}>
+            <Grid item xs={4} md={9} lg={9}>
               <Box sx={{ my: 3 }}>
                 <MultiFilePreview
                   files={files}
@@ -159,7 +159,7 @@ export default function Upload({
               </Box>
             </Grid>
 
-            <Grid item xs={5} md={3} lg={3}>
+            <Grid item xs={8} md={3} lg={3}>
               <Stack
                 direction='column'
                 marginTop={3}

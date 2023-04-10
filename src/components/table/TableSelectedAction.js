@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Checkbox, Typography, Stack } from '@mui/material';
+import { useLocales } from '../../locales';
 
 TableSelectedAction.propTypes = {
   sx: PropTypes.object,
@@ -19,6 +20,9 @@ export default function TableSelectedAction({
   sx,
   ...other
 }) {
+
+  const { translate } = useLocales();
+
   if (!numSelected) {
     return null;
   }
@@ -61,7 +65,7 @@ export default function TableSelectedAction({
           }),
         }}
       >
-        {numSelected} selected
+        { translate('components.table.selected_action', { number: numSelected }) }
       </Typography>
 
       {action && action}
