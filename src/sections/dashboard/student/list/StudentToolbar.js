@@ -3,21 +3,21 @@ import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/materia
 import Iconify from '../../../../components/iconify';
 import { useLocales } from '../../../../locales';
 
-StudentToobar.propTypes = {
+StudentToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterContent: PropTypes.string,
   filterGrade: PropTypes.string,
   onFilterContent: PropTypes.func,
   onFilterGrade: PropTypes.func,
   onResetFilter: PropTypes.func,
-  optionsRole: PropTypes.arrayOf(PropTypes.string),
+  optionsGrade: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default function StudentToobar({
+export default function StudentToolbar({
   isFiltered,
   filterContent,
   filterGrade,
-  optionsRole,
+  optionsGrade,
   onFilterContent,
   onFilterGrade,
   onResetFilter,
@@ -54,7 +54,7 @@ export default function StudentToobar({
           textTransform: 'capitalize',
         }}
       >
-        {optionsRole.map((option) => (
+        {optionsGrade.map((option) => (
           <MenuItem
             key={option}
             value={option}
