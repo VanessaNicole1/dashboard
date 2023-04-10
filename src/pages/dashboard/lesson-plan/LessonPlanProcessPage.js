@@ -1,13 +1,15 @@
 import { Helmet } from 'react-helmet-async';
-import { useNavigate } from 'react-router-dom';
 import { Grid, Container } from '@mui/material';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { useDispatch, useSelector } from '../../../redux/store';
 import { useSettingsContext } from '../../../components/settings';
 import {
   backStep,
+  createStudents,
+  createTeachers,
   fillGeneralInformation,
   nextStep,
+  gotoStep
 } from '../../../redux/slices/initialProcess';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import CreateStudents from '../../../sections/dashboard/lesson-plan/start-process/students/CreateStudents';
@@ -15,22 +17,49 @@ import FillGeneralInformation from '../../../sections/dashboard/lesson-plan/star
 import InitialProcessSteps from '../../../sections/dashboard/lesson-plan/start-process/InitialProcessSteps';
 import CreateTeachers from '../../../sections/dashboard/lesson-plan/start-process/teachers/CreateTeachers';
 import ReviewInformation from '../../../sections/dashboard/lesson-plan/start-process/review-information/ReviewInformation';
+import { useLocales } from '../../../locales';
+import { startProcess } from '../../../services/initial-process';
 
 export default function CreateLessonPlanProcessPage() {
+  const { translate } = useLocales();
+  const i18nStartProcess = 'lesson_plan.start_process';
   const STEPS = [
-    'General Information',
-    'Students',
-    'Teachers',
-    'Review Information',
+    translate(`${i18nStartProcess}.steps.general_information`),
+    translate(`${i18nStartProcess}.steps.students`),
+    translate(`${i18nStartProcess}.steps.teachers`),
+    translate(`${i18nStartProcess}.steps.review_information`)
   ];
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { themeStretch } = useSettingsContext();
   const { initialProcess } = useSelector((state) => state.initial);
-  const { activeStep, generalInformation } = initialProcess;
-  const completed = activeStep === STEPS.length;
+  const { 
+    activeStep,
+    generalInformation,
+    csvStudents,
+    students,
+    csvTeachers,
+    teachers
+  } = initialProcess;
 
-  const handleNextStep = () => {
+  const handleStartProcess = async() => {
+    const { startDate, endDate, manager, degree } = generalInformation;
+    const startProcessInformation = {
+      period: {
+        startDate,
+        endDate
+      },
+      manager: {
+        userId: manager
+      },
+      degree: {
+        name: degree
+      },
+      students,
+      teachers
+    };
+
+    const startProcessResponse = await startProcess(startProcessInformation);
+    
     dispatch(nextStep());
   };
 
@@ -43,22 +72,36 @@ export default function CreateLessonPlanProcessPage() {
     dispatch(nextStep());
   };
 
+  const handleCreateStudents = (data) => {
+    dispatch(createStudents(data));
+    dispatch(nextStep());
+  };
+
+  const handleCreateTeachers = (data) => {
+    dispatch(createTeachers(data));
+    dispatch(nextStep());
+  }
+
+  const handleGoToStep = (stepNumber) => {
+    dispatch(gotoStep(stepNumber));
+  }
+
   return (
     <>
       <Helmet>
-        <title>Lesson Plan - Start Process</title>
+        <title>{ translate(`${i18nStartProcess}.helmet`) }</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading='Start Process'
+          heading={translate(`${i18nStartProcess}.breadcrumbs.title`)}
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
-              name: 'Lesson Plan',
+              name: translate(`${i18nStartProcess}.breadcrumbs.lesson_plan`),
               href: PATH_DASHBOARD.lessonPlan.root,
             },
-            { name: 'Initial' },
+            { name: translate(`${i18nStartProcess}.breadcrumbs.start_process`) },
           ]}
         />
 
@@ -77,14 +120,29 @@ export default function CreateLessonPlanProcessPage() {
           )}
           {activeStep === 1 && (
             <CreateStudents
-              onNextStep={handleNextStep}
+              csv={csvStudents}
+              students={students}
+              onCreateStudents={handleCreateStudents}
               onBackStep={handleBackStep}
             />
           )}
-          {activeStep === 2 && <CreateTeachers onNextStep={handleNextStep} />}
-          {activeStep === 3 && (
-            <ReviewInformation onNextStep={handleNextStep} />
+          {activeStep === 2 && (
+            <CreateTeachers
+              csv={csvTeachers}
+              teachers={teachers}
+              onCreateTeachers={handleCreateTeachers}
+              onBackStep={handleBackStep}
+            />
           )}
+          {activeStep === 3 && (
+            <ReviewInformation
+              generalInformation={generalInformation}
+              students={students}
+              teachers={teachers}
+              onBackStep={handleBackStep}
+              onNextStep={handleStartProcess}
+              onGoToStep={handleGoToStep} />
+          )} 
         </>
       </Container>
     </>
