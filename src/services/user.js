@@ -10,3 +10,14 @@ export const getUsersWithManagerRole = async () => {
     };
   }
 };
+
+export const getUser = async (id) => {
+  try {
+    const { data } = await axios.get(`users/${id}`);
+    return data;
+  } catch (error) {
+    return {
+      message: 'Something was wrong',
+    };
+  }
+};

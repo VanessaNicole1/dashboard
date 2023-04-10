@@ -10,3 +10,13 @@ export const getGrades = async () => {
     }
   }
 };
+
+export const validateGradesMatch = async (students, teachers) => {
+  try {
+    await axios.post('/grades/validate', { students, teachers });
+  } catch (error) {
+    return {
+      errorMessage: error.message
+    }
+  }
+}

@@ -1,4 +1,7 @@
+import i18n from "../locales/i18n";
 import axios from "../utils/axios";
+
+const i18nTeacherServiceKey = 'services.teachers';
 
 export const getTeachers = async () => {
   try  {
@@ -23,3 +26,16 @@ export const createTeacher = async (data) => {
     }
   }
 }
+
+export const validateTeachers = async (data) => {
+  try {
+    await axios.post('/teachers/validate', { teachers: data })
+    const message = i18n.t(`${i18nTeacherServiceKey}.validateTeachers.successful`);
+    return {
+      message
+    };
+  } catch (error) {
+    const { errorMessage } = error;
+    return { errorMessage }
+  }
+};
