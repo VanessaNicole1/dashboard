@@ -147,45 +147,43 @@ export default function Upload({
       )}
 
       {hasFiles && (
-        <>
-          <Grid container spacing={3}>
-            <Grid item xs={4} md={9} lg={9}>
-              <Box sx={{ my: 3 }}>
-                <MultiFilePreview
-                  files={files}
-                  thumbnail={thumbnail}
-                  onRemove={onRemove}
-                />
-              </Box>
-            </Grid>
-
-            <Grid item xs={8} md={3} lg={3}>
-              <Stack
-                direction='column'
-                marginTop={3}
-                justifyContent='flex-end'
-                spacing={1.5}
-              >
-                {onRemoveAll && (
-                  <Button
-                    color='inherit'
-                    variant='outlined'
-                    size='small'
-                    onClick={onRemoveAll}
-                  >
-                    { removeAllButtonText }
-                  </Button>
-                )}
-
-                {onUpload && (
-                  <Button size='small' variant='contained' onClick={onUpload}>
-                    { uploadButtonText }
-                  </Button>
-                )}
-              </Stack>
-            </Grid>
+        <Grid container spacing={3}>
+          <Grid item xs={4} md={9} lg={9}>
+            <Box sx={{ my: 3 }}>
+              <MultiFilePreview
+                files={files}
+                thumbnail={thumbnail}
+                onRemove={onRemove}
+              />
+            </Box>
           </Grid>
-        </>
+
+          <Grid item xs={8} md={3} lg={3}>
+            <Stack
+              direction='column'
+              marginTop={3}
+              justifyContent='flex-end'
+              spacing={1.5}
+            >
+              {onRemoveAll && (
+                <Button
+                  color='inherit'
+                  variant='outlined'
+                  size='small'
+                  onClick={onRemoveAll}
+                >
+                  { removeAllButtonText }
+                </Button>
+              )}
+
+              {onUpload && (
+                <Button size='small' variant='contained' onClick={onUpload}>
+                  { uploadButtonText }
+                </Button>
+              )}
+            </Stack>
+          </Grid>
+        </Grid>
       )}
     </Box>
   );

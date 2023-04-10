@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
-import { Stack, Typography, Box, CircularProgress } from '@mui/material';
-import { fCurrency, fShortenNumber } from '../../utils/formatNumber';
+import { Stack, Typography, CircularProgress } from '@mui/material';
 import Iconify from '../iconify/Iconify';
 
 BudgeAnalytic.propTypes = {
