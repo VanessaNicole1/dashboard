@@ -1,91 +1,51 @@
 import PropTypes from 'prop-types';
-import { Button, Container, Grid } from '@mui/material';
-import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
-import { PATH_DASHBOARD } from '../../../../../routes/paths';
-import Iconify from '../../../../../components/iconify';
-import { useSettingsContext } from '../../../../../components/settings';
-import CustomBreadcrumbs from '../../../../../components/custom-breadcrumbs';
-import FileNewFolderDialog from '../../../upload-file/FileNewFolderDialog';
-import StudentsCSVTable from '../../../file/view/students-csv';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Typography,
+} from '@mui/material';
+import CreateEntitiesForm from '../../common/CreateEntitiesForm';
+import { validateStudents } from '../../../../../services/student';
+import { useLocales } from '../../../../../locales';
 
 CreateStudents.propTypes = {
-  checkout: PropTypes.object,
+  csv: PropTypes.any,
+  students: PropTypes.array,
   onBackStep: PropTypes.func,
-  onNextStep: PropTypes.func,
+  onCreateStudents: PropTypes.func,
 };
 
-export default function CreateStudents({
-  checkout,
-  onBackStep,
-  onNextStep,
-}) {
+export default function CreateStudents({ csv, students, onBackStep, onCreateStudents }) {
+  const { translate } = useLocales(); 
 
-  const [openUploadFile, setOpenUploadFile] = useState(false);
-  const [view, setView] = useState('list');
-  const [data, setData] = useState([]);
-  // const { cart, total, discount, subtotal } = checkout;
-
-  const { themeStretch } = useSettingsContext();
-
-  const handleOpenUploadFile = () => {
-    setOpenUploadFile(true);
+  const csvStudentsHeaders = {
+    Nombre: 'name',
+    Apellido: 'lastName',
+    Correo: 'email',
+    Ciclo: 'numberParallel',
+    Paralelo: 'parallel',
   };
-
-  const handleCloseUploadFile = () => {
-    setOpenUploadFile(false);
-  };
+  
+  const tableHeaders = ['name', 'lastname', 'email', 'grade', 'actions'];
 
   return (
-    <Grid container spacing={3}>
-      <h1>Students</h1>
-      <Helmet>
-        <title> File Manager</title>
-      </Helmet>
-
-      <Container maxWidth={themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading="File Students"
-          links={[
-            {
-              name: 'Dashboard',
-              href: PATH_DASHBOARD.root,
-            },
-            { name: 'File Students' },
-          ]}
-          action={
-            <Button
-              variant="contained"
-              startIcon={<Iconify icon="eva:cloud-upload-fill" />}
-              onClick={handleOpenUploadFile}
-            >
-              Upload
-            </Button>
-          }
+    <Card>
+      <CardHeader
+        title={<Typography variant='h4'>{ translate('lesson_plan.start_process.students.header_title') }</Typography>}
+      />
+      <CardContent>
+        <CreateEntitiesForm
+          csv={csv}
+          entitiesData={students}
+          onBackStep={onBackStep}
+          onCreateEntities={onCreateStudents}
+          validateEntities={validateStudents}
+          csvHeaders={csvStudentsHeaders}
+          entity='students'
+          tableHeaders={tableHeaders}
         />
-        <FileNewFolderDialog open={openUploadFile} onClose={handleCloseUploadFile} inputData={data} onInputDataChange={setData} />
-        {view === 'list' && (
-            <StudentsCSVTable data={data} />
-        )}
-      </Container>
-      <Button
-        fullWidth
-        size="large"
-        type="submit"
-        variant="contained"
-        onClick={onNextStep}
-      >
-      Check Out
-      </Button>
-
-      <Button
-              size="small"
-              color="inherit"
-              onClick={onBackStep}
-              startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
-            >
-              Back
-            </Button>
-    </Grid>
+      </CardContent>
+    </Card>
   );
 }
