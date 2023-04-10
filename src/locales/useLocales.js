@@ -24,5 +24,6 @@ export default function useLocales() {
     translate: (text, options) => translate(text, options),
     currentLang,
     allLangs,
+    i18n
   };
 }
