@@ -310,10 +310,10 @@ const en = {
     subjects: "Subjects",
     list: "List",
     table: {
-      id: "ID",
-      name: "Name",
-      actions: "Actions",
-    },
+      name: 'Name',
+      grades: 'Grades',
+      actions: 'Actions',
+    }
   },
   degrees_list_page: {
     helmet: "Degrees | List",
@@ -381,6 +381,10 @@ const en = {
     last_name_input: 'Last Name',
     email_input: 'Email',
     button_update: 'Save changes'
+  },
+  subject_edit_form: {
+    name: 'Name',
+    button_edit: 'Update Subject'
   },
   app: `app`,
   user: `user`,

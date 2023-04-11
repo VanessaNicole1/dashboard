@@ -331,6 +331,18 @@ const en = {
       roles: 'Roles'
     }
   },
+  subjects_list_page: {
+    helmet: 'Materias | Lista',
+    heading: 'Lista de Materias',
+    dashboard: 'Dashboard',
+    subjects: 'Materias',
+    list: 'Lista',
+    table: {
+      name: 'Nombre',
+      grades: 'Grados',
+      actions: 'Acciones'
+    }
+  },
   degree_create_form: {
     button_create: 'Crear Carrera',
     input_name: 'Nombre de la carrera',
