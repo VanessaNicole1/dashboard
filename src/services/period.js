@@ -12,9 +12,9 @@ export const createPeriod = async (period) => {
   }
 }
 
-export const getPeriods = async () => {
+export const getPeriods = async (filterPeriod) => {
   try  {
-    const { data: periods } = await axios.post('/periods');
+    const { data: periods } = await axios.post('/periods', filterPeriod);
     return periods;
   } catch (error) {
     return {

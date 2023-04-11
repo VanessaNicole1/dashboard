@@ -5,20 +5,20 @@ import Iconify from '../../../../components/iconify';
 PeriodTableToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterContent: PropTypes.string,
-  filterRole: PropTypes.string,
+  filterManager: PropTypes.string,
   onFilterName: PropTypes.func,
-  onFilterRole: PropTypes.func,
+  onFilterManager: PropTypes.func,
   onResetFilter: PropTypes.func,
-  optionsRole: PropTypes.arrayOf(PropTypes.string),
+  optionsManagers: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default function PeriodTableToolbar({
   isFiltered,
   filterContent,
-  filterRole,
-  optionsRole,
+  filterManager,
+  optionsManagers,
   onFilterName,
-  onFilterRole,
+  onFilterManager,
   onResetFilter,
 }) {
   return (
@@ -34,9 +34,9 @@ export default function PeriodTableToolbar({
       <TextField
         fullWidth
         select
-        label="Role"
-        value={filterRole}
-        onChange={onFilterRole}
+        label="Manager"
+        value={filterManager}
+        onChange={onFilterManager}
         SelectProps={{
           MenuProps: {
             PaperProps: {
@@ -51,10 +51,10 @@ export default function PeriodTableToolbar({
           textTransform: 'capitalize',
         }}
       >
-        {optionsRole.map((option) => (
+        {optionsManagers.map((option) => (
           <MenuItem
-            key={option}
-            value={option}
+            key={option.id}
+            value={option.id}
             sx={{
               mx: 1,
               borderRadius: 0.75,
@@ -62,7 +62,7 @@ export default function PeriodTableToolbar({
               textTransform: 'capitalize',
             }}
           >
-            {option}
+            {option.name}
           </MenuItem>
         ))}
       </TextField>

@@ -21,9 +21,10 @@ PeriodTableRow.propTypes = {
   onViewTeachers: PropTypes.func,
   onViewStudents: PropTypes.func,
   onViewGrades: PropTypes.func,
+  onViewSubjects: PropTypes.func,
 };
 
-export default function PeriodTableRow({ row, selected, onEditRow, onDeleteRow, onViewTeachers, onViewStudents, onViewGrades }) {
+export default function PeriodTableRow({ row, selected, onEditRow, onDeleteRow, onViewTeachers, onViewStudents, onViewGrades, onViewSubjects }) {
   const { startDate, endDate, degree, isActive } = row;
 
   const startDateFormat = `${getMonth(startDate)} - ${getFullYears(startDate)}`;
@@ -76,7 +77,7 @@ export default function PeriodTableRow({ row, selected, onEditRow, onDeleteRow, 
           </Label>
         </TableCell>
 
-        <TableCell align="right">
+        <TableCell align="center">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
@@ -142,6 +143,16 @@ export default function PeriodTableRow({ row, selected, onEditRow, onDeleteRow, 
           >
             <Iconify icon="ic:baseline-meeting-room" />
             View Grades
+          </MenuItem>
+
+          <MenuItem
+          onClick={() => {
+            onViewSubjects();
+            handleClosePopover();
+          }}
+          >
+          <Iconify icon="material-symbols:book" />
+            View Subjects
           </MenuItem>
       </MenuPopover>
 

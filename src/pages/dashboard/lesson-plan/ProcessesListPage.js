@@ -29,21 +29,9 @@ import PeriodTableToolbar from '../../../sections/dashboard/period/list/PeriodTa
 import PeriodTableRow from '../../../sections/dashboard/period/list/PeriodTableRow';
 import { useLocales } from "../../../locales";
 import { getPeriods } from '../../../services/period';
+import { getUsers } from '../../../services/user';
 
 const STATUS_OPTIONS = ['all', 'active', 'finished'];
-
-const ROLE_OPTIONS = [
-  'all',
-  'ux designer',
-  'full stack designer',
-  'backend developer',
-  'project manager',
-  'leader',
-  'ui designer',
-  'ui/ux designer',
-  'front end developer',
-  'full stack developer',
-];
 
 export default function ProcessesListPage() {
   const {
@@ -69,9 +57,13 @@ export default function ProcessesListPage() {
 
   const [filterContent, setFilterName] = useState('');
 
-  const [filterRole, setFilterRole] = useState('all');
+  const [filterManager, setFilterManager] = useState('0');
 
   const [filterStatus, setFilterStatus] = useState('all');
+
+  const [managers, setManagers] = useState([{id: '0', name: 'all'}]);
+
+  const [dataFiltered, setDataFiltered] = useState([]);
 
   const { translate } = useLocales();
 
@@ -80,17 +72,33 @@ export default function ProcessesListPage() {
       const periods = await getPeriods();
       setTableData(periods);
     }
-    fetchPeriods();
-  }, [])
-  
 
-  const dataFiltered = applyFilter({
-    inputData: tableData,
-    comparator: getComparator(order, orderBy),
-    filterContent,
-    filterRole,
-    filterStatus,
-  });
+    const fetchManagers = async () => {
+      const currentManagers = await getUsers({roleType: 'MANAGER'});
+      const allManagers = currentManagers.map((manager) => ({id: manager.id, name: manager.name}));
+      allManagers.unshift({id: '0', name: 'all'});
+      setManagers(allManagers);
+    }
+
+    fetchPeriods();
+    fetchManagers();
+  }, []);
+
+  useEffect(() => {
+    const updateDataFiltered = async () => {
+      const filterApplied = await applyFilter({
+        inputData: tableData,
+        comparator: getComparator(order, orderBy),
+        filterContent,
+        filterManager
+      });
+
+      setDataFiltered(filterApplied);
+    };
+
+    updateDataFiltered();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterContent, tableData, filterManager]);
 
   const TABLE_HEAD = [
     { id: 'start', label: translate("period_list_page.start_label"), align: 'left' },
@@ -98,18 +106,18 @@ export default function ProcessesListPage() {
     { id: 'manager', label: translate("period_list_page.manager_label"), align: 'left' },
     { id: 'degree', label: translate("period_list_page.degree_label"), align: 'left' },
     { id: 'status', label: translate("period_list_page.status_label"), align: 'left' },
-    { id: 'Actions', label: 'Actions', align: 'left' },
+    { id: 'Actions', label: 'Actions', align: 'center' },
   ];
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const denseHeight = dense ? 52 : 72;
 
-  const isFiltered = filterContent !== '' || filterRole !== 'all' || filterStatus !== 'all';
+  const isFiltered = filterContent !== '' || filterManager !== '0' || filterStatus !== 'all';
 
   const isNotFound =
     (!dataFiltered.length && !!filterContent) ||
-    (!dataFiltered.length && !!filterRole) ||
+    (!dataFiltered.length && !!filterManager) ||
     (!dataFiltered.length && !!filterStatus);
 
   const handleFilterStatus = (event, newValue) => {
@@ -122,9 +130,9 @@ export default function ProcessesListPage() {
     setFilterName(event.target.value);
   };
 
-  const handleFilterRole = (event) => {
+  const handleFilterManager = (event) => {
     setPage(0);
-    setFilterRole(event.target.value);
+    setFilterManager(event.target.value);
   };
 
   const handleDeleteRow = (id) => {
@@ -144,20 +152,24 @@ export default function ProcessesListPage() {
   };
 
   const handleViewTeachers = (id) => {
-    navigate(PATH_DASHBOARD.teachers.listTeachers, {state: { periodId: id}});
-  }
+    navigate(PATH_DASHBOARD.teachers.listTeachers, {state: { periodId: id, pathHref: PATH_DASHBOARD.lessonPlan.listProcesses }});
+  };
 
   const handleViewStudents = (id) => {
-    navigate(PATH_DASHBOARD.students.listStudents, {state: { periodId: id}});
-  }
+    navigate(PATH_DASHBOARD.students.listStudents, {state: { periodId: id }});
+  };
 
   const handleViewGrades = (id) => {
-    navigate(PATH_DASHBOARD.grades.listGrades, {state: { periodId: id}});
-  }
+    navigate(PATH_DASHBOARD.grades.listGrades, {state: { periodId: id }});
+  };
+
+  const handleViewSubjects = (id) => {
+    navigate(PATH_DASHBOARD.subjects.listSubjects, {state: { periodId: id, link: { name: 'Processes', href: PATH_DASHBOARD.lessonPlan.listProcesses } }});
+  };
 
   const handleResetFilter = () => {
     setFilterName('');
-    setFilterRole('all');
+    setFilterManager('0');
     setFilterStatus('all');
   };
 
@@ -172,7 +184,7 @@ export default function ProcessesListPage() {
           heading={translate("period_list_page.heading")}
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'About', href: PATH_DASHBOARD.lessonPlan.purpose },
+            { name: 'Processes', href: PATH_DASHBOARD.lessonPlan.listProcesses },
             { name: 'List' },
           ]}
         />
@@ -196,10 +208,10 @@ export default function ProcessesListPage() {
           <PeriodTableToolbar
             isFiltered={isFiltered}
             filterContent={filterContent}
-            filterRole={filterRole}
-            optionsRole={ROLE_OPTIONS}
+            filterManager={filterManager}
+            optionsManagers={managers}
             onFilterName={handleFilterName}
-            onFilterRole={handleFilterRole}
+            onFilterManager={handleFilterManager}
             onResetFilter={handleResetFilter}
           />
 
@@ -228,6 +240,7 @@ export default function ProcessesListPage() {
                         onViewTeachers={() => handleViewTeachers(row.id)}
                         onViewStudents={() => handleViewStudents(row.id)}
                         onViewGrades={() => handleViewGrades(row.id)}
+                        onViewSubjects={() => handleViewSubjects(row.id)}
                       />
                     ))}
 
@@ -257,7 +270,7 @@ export default function ProcessesListPage() {
   );
 }
 
-function applyFilter({ inputData, comparator, filterContent, filterStatus, filterRole }) {
+async function applyFilter({ inputData, comparator, filterContent, filterStatus, filterManager }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -287,8 +300,9 @@ function applyFilter({ inputData, comparator, filterContent, filterStatus, filte
     inputData = inputData.filter((period) => period.isActive === false);
   }
 
-  if (filterRole !== 'all') {
-    inputData = inputData.filter((user) => user.role === filterRole);
+  if (filterManager !== '0') {
+    const currentPeriods = await getPeriods({idManagerUser: filterManager});
+    inputData = currentPeriods;
   }
 
   return inputData;
