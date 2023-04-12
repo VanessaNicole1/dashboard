@@ -13,12 +13,11 @@ import { createRole } from '../../../../services/role';
 import { useLocales } from '../../../../locales';
 
 RoleNewForm.propTypes = {
-  isEdit: PropTypes.bool,
   currentRole: PropTypes.object,
   onClose: PropTypes.func,
 };
 
-export default function RoleNewForm({ isEdit = false, currentRole, onClose }) {
+export default function RoleNewForm({ currentRole, onClose }) {
   const navigate = useNavigate();
 
   const { translate } = useLocales();
@@ -50,14 +49,11 @@ export default function RoleNewForm({ isEdit = false, currentRole, onClose }) {
 
 
   useEffect(() => {
-    if (isEdit && currentRole) {
-      reset(defaultValues);
-    }
-    if (!isEdit) {
+    if (currentRole) {
       reset(defaultValues);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEdit, currentRole]);
+  }, [currentRole]);
 
   const onSubmit = async (data) => {
     try {
@@ -83,19 +79,15 @@ export default function RoleNewForm({ isEdit = false, currentRole, onClose }) {
               rowGap={3}
               columnGap={2}
               display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
-              }}
             >
               <RHFTextField name="name" label={translate('role_create_form.input_name')} />
             </Box>
 
-            <Stack direction="row" sx={{ mt: 3 }}>
+            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting} onClick={() => {
                 onClose();
               }}>
-                {!isEdit ? translate('role_create_form.button_create') : 'Save Changes'}
+                {translate('role_create_form.button_create')}
               </LoadingButton>
             </Stack>
           </Card>
