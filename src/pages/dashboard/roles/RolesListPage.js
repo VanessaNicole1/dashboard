@@ -36,10 +36,10 @@ export default function RolesListPage () {
       const roles = await getRoles();
       const simplesRoles = roles.map(role => role.name);
       simplesRoles.unshift('all');
-    }
+    };
 
     fetchRoles();
-    fetchRolesType(); 
+    fetchRolesType();
   }, []);
 
 
