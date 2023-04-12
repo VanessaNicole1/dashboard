@@ -1,17 +1,13 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel, Autocomplete, TextField } from '@mui/material';
 import { fData } from '../../../../utils/formatNumber';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
 import Label from '../../../../components/label';
-import { useSnackbar } from '../../../../components/snackbar';
 import FormProvider, {
-  RHFSwitch,
   RHFTextField,
   RHFUploadAvatar,
 } from '../../../../components/hook-form';
@@ -22,19 +18,14 @@ UserEditForm.propTypes = {
 };
 
 export default function UserEditForm({ currentUser, simpleRoles }) {
-  const navigate = useNavigate();
-
-  console.log(currentUser);
-
-  const { enqueueSnackbar } = useSnackbar();
-
-  const NewUserSchema = Yup.object().shape({
+  const userSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     phoneNumber: Yup.string().required('Phone number is required'),
     address: Yup.string().required('Address is required'),
     city: Yup.string().required('City is required'),
     roles: Yup.array(),
+    isActive: Yup.boolean(),
     avatarUrl: Yup.mixed(),
   });
 
@@ -46,6 +37,7 @@ export default function UserEditForm({ currentUser, simpleRoles }) {
       address: currentUser?.address || '',
       city: currentUser?.city || '',
       roles: currentUser?.roles || [],
+      isActive: currentUser?.isActive || false,
       avatarUrl: currentUser?.avatarUrl || null,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,7 +52,7 @@ export default function UserEditForm({ currentUser, simpleRoles }) {
   }, [currentUser]);
 
   const methods = useForm({
-    resolver: yupResolver(NewUserSchema),
+    resolver: yupResolver(userSchema),
     defaultValues,
   });
 
@@ -75,15 +67,12 @@ export default function UserEditForm({ currentUser, simpleRoles }) {
 
   const values = watch();
 
-  console.log(values.roles, 'Values');
-
   const onSubmit = async (data) => {
     // try {
     //   await new Promise((resolve) => setTimeout(resolve, 500));
     //   reset();
     //   enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
     //   navigate(PATH_DASHBOARD.user.list);
-    //   console.log('DATA', data);
     // } catch (error) {
     //   console.error(error);
     // }
@@ -111,10 +100,10 @@ export default function UserEditForm({ currentUser, simpleRoles }) {
           <Card sx={{ pt: 10, pb: 5, px: 3 }}>
             {true && (
               <Label
-                color={values.status === 'active' ? 'success' : 'error'}
+                color={values.isActive === true ? 'success' : 'error'}
                 sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
               >
-                {values.status}
+                {values.isActive ? 'Active' : 'Inactive'}
               </Label>
             )}
 
@@ -146,14 +135,14 @@ export default function UserEditForm({ currentUser, simpleRoles }) {
                 labelPlacement="start"
                 control={
                   <Controller
-                    name="status"
+                    name="isActive"
                     control={control}
                     render={({ field }) => (
                       <Switch
                         {...field}
-                        checked={field.value !== 'active'}
+                        checked={field.value !== true}
                         onChange={(event) =>
-                          field.onChange(event.target.checked ? 'banned' : 'active')
+                          field.onChange(!event.target.checked)
                         }
                       />
                     )}
