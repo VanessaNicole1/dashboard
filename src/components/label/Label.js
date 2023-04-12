@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
-//
 import { StyledLabel } from './styles';
 
 const Label = forwardRef(
