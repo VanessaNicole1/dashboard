@@ -33,11 +33,9 @@ export const getUser = async (id) => {
   }
 }
 
-// eslint-disable-next-line no-shadow
-export const updateUser = async (id, updateUser) => {
-  console.log('updateUser', updateUser);
+export const updateUser = async (id, updateUserData) => {
   try {
-    const { data: user } = await axios.patch( `/users/${id}`, updateUser);
+    const { data: user } = await axios.patch( `/users/${id}`, updateUserData);
     return user;
   } catch (error) {
     return {

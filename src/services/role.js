@@ -3,7 +3,6 @@ import axios from "../utils/axios";
 export const getRoles = async () => {
   try  {
     const { data: roles } = await axios.get('/roles');
-    console.log('roles service', roles);
     return roles;
   } catch (error) {
     return {

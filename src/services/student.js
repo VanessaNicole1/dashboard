@@ -4,7 +4,6 @@ import axios from "../utils/axios";
 const i18nStudentsServiceKey = 'services.students';
 
 export const getStudents = async (filterStudents) => {
-  console.log('filterStudents', filterStudents);
   try  {
     if (!filterStudents) {
       const { data: students } = await axios.post('/students');
