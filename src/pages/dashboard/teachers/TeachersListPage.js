@@ -83,6 +83,8 @@ export default function TeachersListPage() {
 
   const [dataFiltered, setDataFiltered] = useState([]);
 
+  const { pathHref } = location.state;
+
   useEffect(() => {
     const updateDataFiltered = async () => {
       const filterApplied = await applyFilter({
@@ -95,13 +97,12 @@ export default function TeachersListPage() {
     };
 
     updateDataFiltered();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterContent, tableData]);
 
   useEffect(() => {
     const fetchTeachers = async () => {
-      const teachers = await getTeachers(location.state);
+      const teachers = await getTeachers({periodId: location.state.periodId});
       setTableData(teachers);
     };
 
@@ -117,8 +118,7 @@ export default function TeachersListPage() {
 
   const isFiltered = filterContent !== "";
 
-  const isNotFound =
-    (!dataFiltered.length && !!filterContent);
+  const isNotFound = (!dataFiltered.length && !!filterContent);
 
   const handleFilterContent = (event) => {
     setPage(0);
@@ -165,7 +165,7 @@ export default function TeachersListPage() {
             },
             {
               name: translate("teachers_list_page.teachers"),
-              href: PATH_DASHBOARD.lessonPlan.root,
+              href: pathHref,
             },
             { name: translate("teachers_list_page.list") },
           ]}
@@ -238,7 +238,6 @@ async function applyFilter({
   inputData,
   comparator,
   filterContent,
-  filterStatus,
 }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
