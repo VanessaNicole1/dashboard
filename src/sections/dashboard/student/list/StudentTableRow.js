@@ -1,25 +1,21 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   TableRow,
   MenuItem,
   TableCell,
   IconButton,
 } from '@mui/material';
-
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
-
 
 StudentTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
-  onDeleteRow: PropTypes.func,
-  onSelectRow: PropTypes.func,
 };
 
-export default function StudentTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
+export default function StudentTableRow({ row, selected, onEditRow }) {
   const { grade, user } = row;
   const [openPopover, setOpenPopover] = useState(null);
 
@@ -35,7 +31,6 @@ export default function StudentTableRow({ row, selected, onEditRow, onSelectRow,
     <>
       <TableRow hover selected={selected}>
         <TableCell align="center">{user.name}</TableCell>
-
         <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
           {user.lastName}
         </TableCell>
@@ -43,19 +38,8 @@ export default function StudentTableRow({ row, selected, onEditRow, onSelectRow,
           {user.email}
         </TableCell>
         <TableCell align="center">
-          {grade.displayName}
+          { `${grade.number} "${grade.parallel}"` }
         </TableCell>
-
-        {/* <TableCell align="left">
-          <Label
-            variant="soft"
-            color={(status === 'banned' && 'error') || 'success'}
-            sx={{ textTransform: 'capitalize' }}
-          >
-            {status}
-          </Label>
-        </TableCell> */}
-
         <TableCell align="center">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
@@ -69,12 +53,14 @@ export default function StudentTableRow({ row, selected, onEditRow, onSelectRow,
         arrow="right-top"
         sx={{ width: 140 }}
       >
-
         <MenuItem
-          onClick={() => {}}
+          onClick={() => {
+            onEditRow();
+            handleClosePopover();
+          }}
         >
-          <Iconify icon="ic:baseline-remove-red-eye" />
-          View
+          <Iconify icon="eva:edit-fill" />
+          Edit
         </MenuItem>
       </MenuPopover>
     </>
