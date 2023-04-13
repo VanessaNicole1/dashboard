@@ -13,27 +13,27 @@ import { createRole } from '../../../../services/role';
 import { useLocales } from '../../../../locales';
 
 RoleNewForm.propTypes = {
-  isEdit: PropTypes.bool,
-  currentUser: PropTypes.object,
+  currentRole: PropTypes.object,
+  onClose: PropTypes.func,
 };
 
-export default function RoleNewForm({ isEdit = false, currentUser }) {
+export default function RoleNewForm({ currentRole, onClose }) {
   const navigate = useNavigate();
-  const { translate } = useLocales();
 
+  const { translate } = useLocales();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    role: Yup.string().required(translate('role_create_form.role_schema')),
+    name: Yup.string().required(translate('role_create_form.role_schema')),
   });
 
   const defaultValues = useMemo(
     () => ({
-      role: currentUser?.role || '',
+      name: currentRole?.name || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentUser]
+    [currentRole]
   );
 
   const methods = useForm({
@@ -49,21 +49,21 @@ export default function RoleNewForm({ isEdit = false, currentUser }) {
 
 
   useEffect(() => {
-    if (isEdit && currentUser) {
-      reset(defaultValues);
-    }
-    if (!isEdit) {
+    if (currentRole) {
       reset(defaultValues);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEdit, currentUser]);
+  }, [currentRole]);
 
   const onSubmit = async (data) => {
     try {
-      await createRole(data);
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      const message = await createRole(data);
       reset();
-      enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+      if (message.data) {
+        enqueueSnackbar(message.data, { variant: 'success' });
+      } else {
+        enqueueSnackbar(message.error && message.message, { variant: 'error' });
+      }
       navigate(PATH_DASHBOARD.roles.listRoles);
     } catch (error) {
       console.error(error);
@@ -73,24 +73,21 @@ export default function RoleNewForm({ isEdit = false, currentUser }) {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
-
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={12}>
           <Card sx={{ p: 3 }}>
             <Box
               rowGap={3}
               columnGap={2}
               display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
-              }}
             >
-              <RHFTextField name="role" label={translate('role_create_form.input_name')} />
+              <RHFTextField name="name" label={translate('role_create_form.input_name')} />
             </Box>
 
-            <Stack direction="row" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!isEdit ? translate('role_create_form.button_create') : 'Save Changes'}
+            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+              <LoadingButton type="submit" variant="contained" loading={isSubmitting} onClick={() => {
+                onClose();
+              }}>
+                {translate('role_create_form.button_create')}
               </LoadingButton>
             </Stack>
           </Card>
