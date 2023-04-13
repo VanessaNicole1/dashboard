@@ -1,25 +1,19 @@
 import PropTypes from 'prop-types';
-import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/material';
-import { useLocales } from '../../../../locales';
+import { Stack, InputAdornment, TextField, Button } from '@mui/material';
 import Iconify from '../../../../components/iconify';
+import { useLocales } from '../../../../locales';
 
 SubjectToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterContent: PropTypes.string,
-  filterRole: PropTypes.string,
   onFilterContent: PropTypes.func,
-  onFilterRole: PropTypes.func,
   onResetFilter: PropTypes.func,
-  optionsRole: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default function SubjectToolbar({
   isFiltered,
   filterContent,
-  filterRole,
-  optionsRole,
   onFilterContent,
-  onFilterRole,
   onResetFilter,
 }) {
   const { translate } = useLocales();
@@ -34,42 +28,6 @@ export default function SubjectToolbar({
       }}
       sx={{ px: 2.5, py: 3 }}
     >
-      <TextField
-        fullWidth
-        select
-        label={translate('sections.role_toolbar.type')}
-        value={filterRole}
-        onChange={onFilterRole}
-        SelectProps={{
-          MenuProps: {
-            PaperProps: {
-              sx: {
-                maxHeight: 260,
-              },
-            },
-          },
-        }}
-        sx={{
-          maxWidth: { sm: 240 },
-          textTransform: 'capitalize',
-        }}
-      >
-        {optionsRole.map((option) => (
-          <MenuItem
-            key={option}
-            value={option}
-            sx={{
-              mx: 1,
-              borderRadius: 0.75,
-              typography: 'body2',
-              textTransform: 'capitalize',
-            }}
-          >
-            { option === 'all' ? translate('sections.toolbar_custom.all_option'): option}
-          </MenuItem>
-        ))}
-      </TextField>
-
       <TextField
         fullWidth
         value={filterContent}
