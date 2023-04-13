@@ -11,13 +11,35 @@ export const getUsersWithManagerRole = async () => {
   }
 };
 
-export const getUser = async (id) => {
-  try {
-    const { data } = await axios.get(`users/${id}`);
-    return data;
+export const getUsers = async (filterUser = {}) => {
+  try  {
+    const { data: users } = await axios.post('/users', filterUser);
+    return users;
   } catch (error) {
     return {
-      message: 'Something was wrong',
-    };
+      message: "Couldn't retrieve users"
+    }
+  }
+};
+
+export const getUser = async (id) => {
+  try {
+    const { data: user } = await axios.get( `/users/${id}`);
+    return user;
+  } catch (error) {
+    return {
+      message: "Couldn't retrieve user"
+    }
+  }
+};
+
+export const updateUser = async (id, updateUserData) => {
+  try {
+    const { data: user } = await axios.patch( `/users/${id}`, updateUserData);
+    return user;
+  } catch (error) {
+    return {
+      message: "Couldn't update user"
+    }
   }
 };
