@@ -224,7 +224,7 @@ const en = {
       type: "Type",
     },
     teacher_toolbar: {
-      teacher: "Teacher",
+      teacher: "Period",
     },
     student_toolbar: {
       grade: "Grade",
@@ -241,9 +241,11 @@ const en = {
       },
     },
   },
-  about: "about",
-  start_process: "start process",
-  all_plans: "all plans",
+  lesson_plan_title: 'lesson plan',
+  about: 'about',
+  start_process: 'start process',
+  all_plans: 'all plans',
+  processes_list: 'processes',
   teacher_plans: `teacher's plans`,
   create: "create",
   list: "list",
@@ -307,9 +309,9 @@ const en = {
     subjects: "Subjects",
     list: "List",
     table: {
-      id: "ID",
-      name: "Name",
-      actions: "Actions",
+      name: 'Name',
+      grades: 'Grades',
+      actions: 'Actions',
     },
   },
   degrees_list_page: {
@@ -323,6 +325,30 @@ const en = {
       name: "Name",
       actions: "Actions",
     },
+  },
+  period_list_page: {
+    helmet: 'Periods | List',
+    heading: 'Periods List',
+    dashboard: 'Dashboard',
+    start_label: 'Start Date',
+    end_label: 'End Date',
+    manager_label: 'Manager',
+    degree_label: 'Degree',
+    status_label: 'Status'
+  },
+  users_list_page: {
+    helmet: 'Users | List',
+    heading: 'Users List',
+    dashboard: 'Dashboard',
+    roles: 'Users',
+    list: 'List',
+    table: {
+      name: 'Name',
+      last: 'Last Name',
+      email: 'Email',
+      actions: 'Actions',
+      roles: 'Roles'
+    }
   },
   degree_create_form: {
     button_create: "Create degree",
@@ -346,13 +372,18 @@ const en = {
     grade_input: "Grade",
   },
   teacher_create_form: {
-    button_create: "Create teacher",
-    name_schema: "Name is required",
-    last_name_schema: "Last Name is required",
-    email_schema: "Email is required",
-    input_name: "Name",
-    last_name_input: "Last Name",
-    email_input: "Email",
+    button_create: 'Create teacher',
+    name_schema: 'Name is required',
+    last_name_schema: 'Last Name is required',
+    email_schema: 'Email is required',
+    input_name: 'Name',
+    last_name_input: 'Last Name',
+    email_input: 'Email',
+    button_update: 'Save changes'
+  },
+  subject_edit_form: {
+    name: 'Name',
+    button_edit: 'Update Subject'
   },
   app: `app`,
   user: `user`,

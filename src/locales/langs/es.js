@@ -220,7 +220,7 @@ const en = {
       grade: 'Curso',
     },
     teacher_toolbar: {
-      teacher: 'Docente',
+      teacher: 'Periodo',
     },
     student_toolbar: {
       grade: 'Curso',
@@ -237,6 +237,7 @@ const en = {
   about: 'información',
   start_process: 'iniciar proceso',
   all_plans: 'planes de clase',
+  processes_list: 'procesos',
   teacher_plans: 'planes de clase por docentes',
   create: 'crear',
   list: 'listar',
@@ -247,6 +248,7 @@ const en = {
     dashboard: 'Dashboard',
     roles: 'Roles',
     list: 'Listado',
+    new: 'Nuevo Rol',
     table: {
       id: 'ID',
       type: 'Tipo',
@@ -305,10 +307,47 @@ const en = {
       actions: 'Acciones',
     },
   },
+  period_list_page: {
+    helmet: 'Periodos | Lista',
+    heading: 'Lista de Periodos',
+    dashboard: 'Dashboard',
+    start_label: 'Fecha de Inicio',
+    end_label: 'Fecha de Finalización',
+    manager_label: 'Director',
+    degree_label: 'Carrera',
+    status_label: 'Estado'
+  },
+  users_list_page: {
+    helmet: 'Usuarios | Lista',
+    heading: 'Lista de Usuarios',
+    dashboard: 'Dashboard',
+    roles: 'Usuarios',
+    list: 'Lista',
+    table: {
+      name: 'Nombre',
+      last: 'Apellido',
+      email: 'Correo Electrónico',
+      actions: 'Acciones',
+      roles: 'Roles'
+    }
+  },
+  subjects_list_page: {
+    helmet: 'Materias | Lista',
+    heading: 'Lista de Materias',
+    dashboard: 'Dashboard',
+    subjects: 'Materias',
+    list: 'Lista',
+    table: {
+      name: 'Nombre',
+      grades: 'Grados',
+      actions: 'Acciones'
+    }
+  },
   degree_create_form: {
     button_create: 'Crear Carrera',
     input_name: 'Nombre de la carrera',
     name_schema: 'El nombre es requerido',
+    button_update: 'Guardar cambios'
   },
   role_create_form: {
     button_create: 'Crear rol',
