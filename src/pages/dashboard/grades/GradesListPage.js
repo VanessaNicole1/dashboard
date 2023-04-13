@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Card,
   Table,
@@ -10,13 +10,10 @@ import {
   Container,
   TableContainer,
 } from '@mui/material';
-
 import { PATH_DASHBOARD } from '../../../routes/paths';
-
 import Scrollbar from '../../../components/scrollbar';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
-
 import {
   useTable,
   getComparator,
@@ -26,18 +23,18 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from '../../../components/table';
-
 import { useLocales } from '../../../locales';
 import { getGrades } from '../../../services/grade';
-import { GradeTableRow, GradeToolbar } from '../../../sections/dashboard/grade/list';
+import { GradeTableRow } from '../../../sections/dashboard/grade/list';
 
 export default function GradesListPage () {
   const { translate } = useLocales();
 
+  const location = useLocation();
+
   const TABLE_HEAD = [
     { id: 'grade', label: translate('grades_list_page.table.grade'), align: 'center' },
     { id: 'parallel', label: translate('grades_list_page.table.parallel'), align: 'center' },
-    { id: 'degree', label: translate('grades_list_page.table.degree'), align: 'center' },
     { id: '', label: translate('grades_list_page.table.actions'), align: 'center' },
   ];
 
@@ -48,11 +45,9 @@ export default function GradesListPage () {
     orderBy,
     rowsPerPage,
     setPage,
-    //
     selected,
     setSelected,
     onSelectRow,
-    //
     onSort,
     onChangeDense,
     onChangePage,
@@ -61,24 +56,11 @@ export default function GradesListPage () {
 
   useEffect(() => {
     const fetchGrades = async () => {
-      const grades = await getGrades();
+      const grades = await getGrades(location.state);
       setTableData(grades);
     };
-
-    // TODO Get all degrees to filter
-    const fetchDegrees = async () => {
-      const grades = await getGrades();
-      const simpleDegrees = grades.map(grade => grade.displayName);
-      simpleDegrees.unshift('all');
-      setSimpleDegrees(simpleDegrees);
-    }
-
     fetchGrades();
-    fetchDegrees();
-  },[]);
-
-
-  const [simpleDegrees, setSimpleDegrees] = useState(['all']);
+  },[location.state]);
 
   const { themeStretch } = useSettingsContext();
 
@@ -86,37 +68,17 @@ export default function GradesListPage () {
 
   const [tableData, setTableData] = useState([]);
 
-  const [filterContent, setFilterContent] = useState('');
-
-  const [filterGrade, setFilterGrade] = useState('all');
-
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(order, orderBy),
-    filterContent,
-    filterGrade,
   });
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const denseHeight = dense ? 52 : 72;
 
-  const isFiltered = filterContent !== '' || filterGrade !== 'all'; // || filterStatus !== 'all'
-
   const isNotFound =
-    (!dataFiltered.length && !!filterContent) ||
-    (!dataFiltered.length && !!filterGrade)
-
-
-  const handleFilterContent = (event) => {
-    setPage(0);
-    setFilterContent(event.target.value);
-  };
-
-  const handleFilterRole = (event) => {
-    setPage(0);
-    setFilterGrade(event.target.value);
-  };
+    !dataFiltered.length || !dataFiltered.length;
 
   const handleDeleteRow = (id) => {
     const deleteRow = tableData.filter((row) => row.id !== id);
@@ -134,10 +96,9 @@ export default function GradesListPage () {
     navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
   };
 
-  const handleResetFilter = () => {
-    setFilterContent('');
-    setFilterGrade('all');
-  };
+  const handleViewStudents = (id) => {
+    navigate(PATH_DASHBOARD.students.listStudents, {state: { gradeId: id}});
+  }
   
   return (
     <>
@@ -157,16 +118,6 @@ export default function GradesListPage () {
 
         <Card>
           <Divider />
-
-          <GradeToolbar
-            isFiltered={isFiltered}
-            filterContent={filterContent}
-            filterGrade={filterGrade}
-            optionsDegree={simpleDegrees}
-            onFilterContent={handleFilterContent}
-            onFilterGrade={handleFilterRole}
-            onResetFilter={handleResetFilter}
-          />
           
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <Scrollbar>
@@ -191,6 +142,7 @@ export default function GradesListPage () {
                         onSelectRow={() => onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
                         onEditRow={() => handleEditRow(row.name)}
+                        onViewStudents={() => handleViewStudents(row.id)}
                       />
                     ))}
 
@@ -221,7 +173,7 @@ export default function GradesListPage () {
   );
 };
 
-function applyFilter({ inputData, comparator, filterContent, filterStatus, filterGrade }) {
+function applyFilter({ inputData, comparator, filterContent, filterGrade }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -239,10 +191,5 @@ function applyFilter({ inputData, comparator, filterContent, filterStatus, filte
     });
   }
 
-  if (filterGrade !== 'all') {
-    inputData = inputData.filter((student) => student.grade.displayName === filterGrade);
-  }
-
   return inputData;
 }
-  
