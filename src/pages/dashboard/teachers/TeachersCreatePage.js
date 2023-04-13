@@ -3,7 +3,7 @@ import { Container } from '@mui/material';
 import { useSettingsContext } from "../../../components/settings";
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs/CustomBreadcrumbs';
 import { PATH_DASHBOARD } from '../../../routes/paths';
-import TeacherNewEditForm from '../../../sections/dashboard/teacher/create/TeacherNewForm';
+import TeacherNewEditForm from '../../../sections/dashboard/teacher/create/TeacherEditForm';
 import { useLocales } from '../../../locales';
 
 
