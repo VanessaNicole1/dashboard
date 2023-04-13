@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import {
   Card,
   Table,
@@ -9,6 +8,7 @@ import {
   Container,
   TableContainer,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { PATH_DASHBOARD } from "../../../routes/paths";
 import Scrollbar from "../../../components/scrollbar";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
@@ -23,38 +23,52 @@ import {
   TablePaginationCustom,
 } from "../../../components/table";
 import { useLocales } from "../../../locales";
-import { getTeachers } from "../../../services/teacher";
-import {
-  TeacherToobar,
-  TeacherTableRow,
-} from "../../../sections/dashboard/teacher/list";
+import { getRoles } from "../../../services/role";
+import UserToobar from "../../../sections/dashboard/user/list/UserToolbar";
+import UserTableRow from "../../../sections/dashboard/user/list/UserTableRow";
+import { getUsers } from "../../../services/user";
 
-export default function TeachersListPage() {
+export default function UsersListPage() {
   const { translate } = useLocales();
 
   const navigate = useNavigate();
 
-  const location = useLocation();
+  const [filterRole, setFilterRole] = useState('all');
+
+  const [simpleRoles, setSimpleRoles] = useState(['all']);
+
+  const { themeStretch } = useSettingsContext();
+
+  const [tableData, setTableData] = useState([]);
+
+  const [filterContent, setFilterContent] = useState('');
+
+  const [dataFiltered, setDataFiltered] = useState([]);
 
   const TABLE_HEAD = [
     {
       id: "name",
-      label: translate("teachers_list_page.table.name"),
+      label: translate("users_list_page.table.name"),
       align: "center",
     },
     {
       id: "last name",
-      label: translate("teachers_list_page.table.last"),
+      label: translate("users_list_page.table.last"),
       align: "center",
     },
     {
       id: "email",
-      label: translate("teachers_list_page.table.email"),
+      label: translate("users_list_page.table.email"),
       align: "center",
     },
     {
+        id: "roles",
+        label: translate("users_list_page.table.roles"),
+        align: "center",
+      },
+    {
       id: "",
-      label: translate("teachers_list_page.table.actions"),
+      label: translate("users_list_page.table.actions"),
       align: "center",
     },
   ];
@@ -75,39 +89,40 @@ export default function TeachersListPage() {
     onChangeRowsPerPage,
   } = useTable();
 
-  const { themeStretch } = useSettingsContext();
-
-  const [tableData, setTableData] = useState([]);
-
-  const [filterContent, setFilterContent] = useState("");
-
-  const [dataFiltered, setDataFiltered] = useState([]);
-
-  const { pathHref } = location.state;
-
   useEffect(() => {
     const updateDataFiltered = async () => {
       const filterApplied = await applyFilter({
         inputData: tableData,
         comparator: getComparator(order, orderBy),
         filterContent,
+        filterRole
       });
 
       setDataFiltered(filterApplied);
     };
 
     updateDataFiltered();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterContent, tableData]);
+  }, [filterContent, tableData, filterRole]);
 
   useEffect(() => {
-    const fetchTeachers = async () => {
-      const teachers = await getTeachers({periodId: location.state.periodId});
-      setTableData(teachers);
+    const fetchUsers = async () => {
+      const users = await getUsers();
+      setTableData(users);
     };
 
-    fetchTeachers();
-  }, [location.state]);
+    const fetchRoles = async () => {
+      const roles = await getRoles();
+      const currentRoles = roles.map(role => role.name);
+      currentRoles.unshift('all');
+      setSimpleRoles(currentRoles);
+    }
+
+    fetchUsers();
+    fetchRoles();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const dataInPage = dataFiltered.slice(
     page * rowsPerPage,
@@ -116,17 +131,15 @@ export default function TeachersListPage() {
 
   const denseHeight = dense ? 52 : 72;
 
-  const isFiltered = filterContent !== "";
+  const isFiltered = filterContent !== "" || filterRole !== 'all';
 
-  const isNotFound = (!dataFiltered.length && !!filterContent);
+  const isNotFound =
+    (!dataFiltered.length && !!filterContent) ||
+    (!dataFiltered.length && !!filterRole);
 
   const handleFilterContent = (event) => {
     setPage(0);
     setFilterContent(event.target.value);
-  };
-
-  const handleFilterPeriod = (event) => {
-    setPage(0);
   };
 
   const handleDeleteRow = (id) => {
@@ -143,43 +156,51 @@ export default function TeachersListPage() {
 
   const handleResetFilter = () => {
     setFilterContent("");
+    setFilterRole('all');
   };
 
   const handleEditRow = (id) => {
     navigate(PATH_DASHBOARD.user.edit(id));
   };
 
+  const handleFilterRole = (event) => {
+    setPage(0);
+    setFilterRole(event.target.value);
+  };
+
   return (
     <>
-      <Helmet>
-        <title>{translate("teachers_list_page.helmet")}</title>
+    <Helmet>
+        <title>{translate("users_list_page.helmet")}</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : "lg"}>
         <CustomBreadcrumbs
-          heading={translate("teachers_list_page.heading")}
+          heading={translate("users_list_page.heading")}
           links={[
             {
-              name: translate("teachers_list_page.dashboard"),
+              name: translate("users_list_page.dashboard"),
               href: PATH_DASHBOARD.root,
             },
             {
-              name: translate("teachers_list_page.teachers"),
-              href: pathHref,
+              name: "Users",
+              href: PATH_DASHBOARD.lessonPlan.root,
             },
-            { name: translate("teachers_list_page.list") },
+            { name: translate("users_list_page.list") },
           ]}
         />
 
         <Card>
           <Divider />
 
-          <TeacherToobar
+          <UserToobar
             isFiltered={isFiltered}
             filterContent={filterContent}
+            filterRole={filterRole}
+            optionsRole={simpleRoles}
             onFilterContent={handleFilterContent}
-            onFilterPeriod={handleFilterPeriod}
             onResetFilter={handleResetFilter}
+            onFilterRole={handleFilterRole}
           />
 
           <TableContainer sx={{ position: "relative", overflow: "unset" }}>
@@ -198,13 +219,13 @@ export default function TeachersListPage() {
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
-                      <TeacherTableRow
+                      <UserTableRow
                         key={row.id}
                         row={row}
                         selected={selected.includes(row.id)}
                         onSelectRow={() => onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.user.id)}
+                        onEditRow={() => handleEditRow(row.id)}
                       />
                     ))}
 
@@ -238,6 +259,7 @@ async function applyFilter({
   inputData,
   comparator,
   filterContent,
+  filterRole
 }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
@@ -248,13 +270,15 @@ async function applyFilter({
   });
 
   inputData = stabilizedThis.map((el) => el[0]);
+  
+  if (filterRole !== 'all') {
+    const currentUsers = await getUsers({roleType: filterRole});
+    inputData = currentUsers;
+  }
 
   if (filterContent) {
-    inputData = inputData.filter((student) => {
-      const { user } = student;
-      const { name } = user;
-      const { lastName } = user;
-      const { email } = user;
+    inputData = inputData.filter((user) => {
+      const { name, lastName, email } = user;
       return (
         name.toLowerCase().includes(filterContent.toLowerCase()) ||
         lastName.toLowerCase().includes(filterContent.toLowerCase()) ||

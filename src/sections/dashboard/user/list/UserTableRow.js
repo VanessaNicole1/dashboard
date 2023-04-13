@@ -7,9 +7,10 @@ import {
   IconButton,
 } from '@mui/material';
 import Iconify from '../../../../components/iconify';
-import MenuPopover from '../../../../components/menu-popover/MenuPopover';
+import MenuPopover from '../../../../components/menu-popover';
+import Label from '../../../../components/label';
 
-RoleTableRow.propTypes = {
+UserTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
@@ -17,9 +18,8 @@ RoleTableRow.propTypes = {
   onSelectRow: PropTypes.func,
 };
 
-export default function RoleTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { id, type } = row;
-
+export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
+  const { name, lastName, email, roles } = row;
   const [openPopover, setOpenPopover] = useState(null);
 
   const handleOpenPopover = (event) => {
@@ -33,22 +33,28 @@ export default function RoleTableRow({ row, selected, onEditRow, onSelectRow, on
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell align="center">{id}</TableCell>
-
+        <TableCell align="center">{name}</TableCell>
         <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {type}
+          {lastName}
+        </TableCell>
+        <TableCell align="center">
+          {email}
         </TableCell>
 
-        {/* <TableCell align="left">
-          <Label
-            variant="soft"
-            color={(status === 'banned' && 'error') || 'success'}
-            sx={{ textTransform: 'capitalize' }}
-          >
-            {status}
-          </Label>
-        </TableCell> */}
-
+        <TableCell align="center">
+          {
+            roles.map((role) => (
+                <Label
+                key={role.id}
+                variant="soft"
+                color={(role.name === 'MANAGER' && 'secondary') || (role.name === 'STUDENT' && 'primary') || (role.name === 'TEACHER' && 'error')}
+                sx={{ textTransform: 'capitalize' }}
+                >
+                  {role.name}
+                </Label>
+            ))
+          }
+        </TableCell>
         <TableCell align="center">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
@@ -62,12 +68,14 @@ export default function RoleTableRow({ row, selected, onEditRow, onSelectRow, on
         arrow="right-top"
         sx={{ width: 140 }}
       >
-
         <MenuItem
-          onClick={() => {}}
+          onClick={() => {
+            onEditRow();
+            handleClosePopover();
+          }}
         >
-          <Iconify icon="ic:baseline-remove-red-eye" />
-          View
+          <Iconify icon="eva:edit-fill" />
+          Edit
         </MenuItem>
       </MenuPopover>
     </>

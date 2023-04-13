@@ -1,29 +1,26 @@
 import PropTypes from 'prop-types';
 import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/material';
-import { useLocales } from '../../../../locales';
 import Iconify from '../../../../components/iconify';
 
-RoleToobar.propTypes = {
+PeriodToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterContent: PropTypes.string,
-  filterRole: PropTypes.string,
-  onFilterContent: PropTypes.func,
-  onFilterRole: PropTypes.func,
+  filterManager: PropTypes.string,
+  onFilterName: PropTypes.func,
+  onFilterManager: PropTypes.func,
   onResetFilter: PropTypes.func,
-  optionsRole: PropTypes.arrayOf(PropTypes.string),
+  optionsManagers: PropTypes.arrayOf(PropTypes.object),
 };
 
-export default function RoleToobar({
+export default function PeriodToolbar({
   isFiltered,
   filterContent,
-  filterRole,
-  optionsRole,
-  onFilterContent,
-  onFilterRole,
+  filterManager,
+  optionsManagers,
+  onFilterName,
+  onFilterManager,
   onResetFilter,
 }) {
-  const { translate } = useLocales(); 
-
   return (
     <Stack
       spacing={2}
@@ -37,9 +34,9 @@ export default function RoleToobar({
       <TextField
         fullWidth
         select
-        label={translate('sections.role_toolbar.type')}
-        value={filterRole}
-        onChange={onFilterRole}
+        label="Manager"
+        value={filterManager}
+        onChange={onFilterManager}
         SelectProps={{
           MenuProps: {
             PaperProps: {
@@ -54,10 +51,10 @@ export default function RoleToobar({
           textTransform: 'capitalize',
         }}
       >
-        {optionsRole.map((option) => (
+        {optionsManagers.map((option) => (
           <MenuItem
-            key={option}
-            value={option}
+            key={option.id}
+            value={option.id}
             sx={{
               mx: 1,
               borderRadius: 0.75,
@@ -65,7 +62,7 @@ export default function RoleToobar({
               textTransform: 'capitalize',
             }}
           >
-            { option === 'all' ? translate('sections.toolbar_custom.all_option'): option}
+            {option.name}
           </MenuItem>
         ))}
       </TextField>
@@ -73,8 +70,8 @@ export default function RoleToobar({
       <TextField
         fullWidth
         value={filterContent}
-        onChange={onFilterContent}
-        placeholder={translate('sections.toolbar_custom.search')}
+        onChange={onFilterName}
+        placeholder="Search..."
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -96,4 +93,4 @@ export default function RoleToobar({
       )}
     </Stack>
   );
-};
+}

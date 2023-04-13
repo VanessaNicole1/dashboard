@@ -3,9 +3,13 @@ import axios from "../utils/axios";
 
 const i18nStudentsServiceKey = 'services.students';
 
-export const getStudents = async () => {
+export const getStudents = async (filterStudents) => {
   try  {
-    const { data: students } = await axios.get('/student');
+    if (!filterStudents) {
+      const { data: students } = await axios.post('/students');
+      return students;
+    }
+    const { data: students } = await axios.post('/students', filterStudents);
     return students;
   } catch (error) {
     return {
@@ -18,7 +22,7 @@ export const createStudent = async (data) => {
   try {
     const {name, lastName, email, grade} = data;
     const post = { name, lastName, email, gradeId: grade }
-    const res = await axios.post('/student', post);
+    const res = await axios.post('/students', post);
     return res.data;
   } catch (error) {
     return {
