@@ -65,7 +65,6 @@ const navConfig = [
         roles: [ROLES.manager],
         children: [
           { title: 'list', path: PATH_DASHBOARD.roles.listRoles, roles: [ROLES.manager] },
-          { title: 'create', path: PATH_DASHBOARD.roles.create, roles: [ROLES.manager] },
           
         ]
       },

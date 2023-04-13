@@ -28,6 +28,7 @@ export default function RolesListPage () {
   useEffect(() => {
     const fetchRoles = async () => {
       const roles = await getRoles();
+      console.log('ROLES', roles);
       setTableData(roles);
     };
 
@@ -80,15 +81,14 @@ export default function RolesListPage () {
                   <AnalyticsWidgetSummary
                     key={role.id}
                     title={role.name}
-                    total={role.users.length}
+                    total={role.users.length > 0 ? role.users.length : 0}
                     color={ (role.name === 'MANAGER' && 'error') ||
                       (role.name === 'STUDENT' && 'warning') ||
-                      (role.name === 'TEACHER' && 'info') ||
-                      ('info')
+                      (role.name === 'TEACHER' && 'info') || 'info'
                     }
                     icon={ (role.name === 'MANAGER' && 'mdi:user') ||
                      (role.name === 'STUDENT' && 'mdi:account-student') ||
-                     (role.name === 'TEACHER' && 'mdi:teacher')
+                     (role.name === 'TEACHER' && 'mdi:teacher') || 'grommet-icons:user-manager'
                     } 
                   />
                 </Grid>
