@@ -66,7 +66,7 @@ export default function ProcessesListPage() {
   const [dataFiltered, setDataFiltered] = useState([]);
 
   const { translate } = useLocales();
-
+  
   useEffect(() => {
     const fetchPeriods = async () => {
       const periods = await getPeriods();
@@ -90,6 +90,7 @@ export default function ProcessesListPage() {
         inputData: tableData,
         comparator: getComparator(order, orderBy),
         filterContent,
+        filterStatus,
         filterManager
       });
 
@@ -98,7 +99,7 @@ export default function ProcessesListPage() {
 
     updateDataFiltered();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterContent, tableData, filterManager]);
+  }, [filterContent, tableData, filterManager, filterStatus]);
 
   const TABLE_HEAD = [
     { id: 'start', label: translate("period_list_page.start_label"), align: 'left' },
