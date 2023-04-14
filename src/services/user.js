@@ -13,7 +13,7 @@ export const getUsersWithManagerRole = async () => {
 
 export const getUsers = async (filterUser = {}) => {
   try  {
-    const { data: users } = await axios.post('/users', filterUser);
+    const { data: users } = await axios.get('/users/managers', filterUser);
     return users;
   } catch (error) {
     return {

@@ -90,6 +90,7 @@ export default function ProcessesListPage() {
         inputData: tableData,
         comparator: getComparator(order, orderBy),
         filterContent,
+        filterStatus,
         filterManager
       });
 
@@ -98,7 +99,7 @@ export default function ProcessesListPage() {
 
     updateDataFiltered();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterContent, tableData, filterManager]);
+  }, [filterContent, tableData, filterManager, filterStatus]);
 
   const TABLE_HEAD = [
     { id: 'start', label: translate("period_list_page.start_label"), align: 'left' },
@@ -184,7 +185,7 @@ export default function ProcessesListPage() {
           heading={translate("period_list_page.heading")}
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Processes', href: PATH_DASHBOARD.lessonPlan.listProcesses },
+            { name: 'Process', href: PATH_DASHBOARD.lessonPlan.listProcesses },
             { name: 'List' },
           ]}
         />
@@ -253,7 +254,7 @@ export default function ProcessesListPage() {
                 </TableBody>
               </Table>
             </Scrollbar>
-          </TableContainer>
+          </TableContainer>Periodos
 
           <TablePaginationCustom
             count={dataFiltered.length}

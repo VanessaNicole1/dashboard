@@ -75,7 +75,7 @@ export default function Router () {
             )
           },
           { 
-            path: 'processes-list', 
+            path: 'process-list',
             element: (
               <RoleBasedGuard hasContent roles={[ROLES.manager]}>
                 <ProcessesListPage />
