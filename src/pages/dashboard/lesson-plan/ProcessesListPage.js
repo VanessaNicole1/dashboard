@@ -66,7 +66,7 @@ export default function ProcessesListPage() {
   const [dataFiltered, setDataFiltered] = useState([]);
 
   const { translate } = useLocales();
-  
+
   useEffect(() => {
     const fetchPeriods = async () => {
       const periods = await getPeriods();
@@ -185,7 +185,7 @@ export default function ProcessesListPage() {
           heading={translate("period_list_page.heading")}
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Processes', href: PATH_DASHBOARD.lessonPlan.listProcesses },
+            { name: 'Process', href: PATH_DASHBOARD.lessonPlan.listProcesses },
             { name: 'List' },
           ]}
         />
@@ -254,7 +254,7 @@ export default function ProcessesListPage() {
                 </TableBody>
               </Table>
             </Scrollbar>
-          </TableContainer>
+          </TableContainer>Periodos
 
           <TablePaginationCustom
             count={dataFiltered.length}

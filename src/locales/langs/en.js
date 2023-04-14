@@ -245,7 +245,7 @@ const en = {
   about: 'about',
   start_process: 'start process',
   all_plans: 'all plans',
-  processes_list: 'processes',
+  process_list: 'process',
   teacher_plans: `teacher's plans`,
   create: "create",
   list: "list",

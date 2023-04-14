@@ -55,7 +55,7 @@ const navConfig = [
           { title: 'create', path: PATH_DASHBOARD.lessonPlan.create, roles: [ROLES.teacher] },
           { title: 'list', path: PATH_DASHBOARD.lessonPlan.listStudentPlans, roles: [ROLES.student] },
           { title: 'pending', path: PATH_DASHBOARD.lessonPlan.listStudentPendings, roles: [ROLES.student] },
-          { title: 'processes_list', path: PATH_DASHBOARD.lessonPlan.listProcesses, roles: [ROLES.manager] },
+          { title: 'process_list', path: PATH_DASHBOARD.lessonPlan.listProcesses, roles: [ROLES.manager] },
         ]
       },
       {

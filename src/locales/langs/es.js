@@ -237,7 +237,7 @@ const en = {
   about: 'información',
   start_process: 'iniciar proceso',
   all_plans: 'planes de clase',
-  processes_list: 'procesos',
+  process_list: 'procesos',
   teacher_plans: 'planes de clase por docentes',
   create: 'crear',
   list: 'listar',
