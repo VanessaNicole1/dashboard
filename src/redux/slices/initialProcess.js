@@ -25,6 +25,11 @@ const slice = createSlice({
     startLoading(state) {
       state.isLoading = true;
     },
+    resetState(state) {
+      state.isLoading = initialState.isLoading;
+      state.error = initialState.error;
+      state.initialProcess = initialState.initialProcess;
+    },
     hasError(state, action) {
       state.isLoading = false;
       state.error = action.payload;
@@ -67,5 +72,6 @@ export const {
   nextStep,
   fillGeneralInformation,
   createStudents,
-  createTeachers
+  createTeachers,
+  resetState
 } = slice.actions;

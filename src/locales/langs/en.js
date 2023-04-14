@@ -25,6 +25,11 @@ const en = {
       validateStudents: {
         successful: 'Students CSV file is correctly structured.'
       }
+    },
+    initial_process: {
+      startProcess: {
+        successful: 'The process has been successfully started.'
+      }
     }
   },
   lesson_plan: {

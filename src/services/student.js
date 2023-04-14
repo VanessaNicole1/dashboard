@@ -38,7 +38,6 @@ export const validateStudents = async (data) => {
       message: i18n.t(`${i18nStudentsServiceKey}.validateStudents.successful`)
     };
   } catch (error) {
-    const { errorMessage } = error;
-    return { errorMessage }
+    return { errorMessage: error.message }
   }
 };
