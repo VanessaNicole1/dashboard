@@ -39,7 +39,6 @@ export const validateTeachers = async (data) => {
       message
     };
   } catch (error) {
-    const { errorMessage } = error;
-    return { errorMessage }
+    return { errorMessage: error.message }
   }
 };
