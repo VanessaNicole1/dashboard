@@ -308,8 +308,8 @@ const en = {
     },
   },
   period_list_page: {
-    helmet: 'Periodos | Lista',
-    heading: 'Lista de Periodos',
+    helmet: 'Procesos | Lista',
+    heading: 'Lista de Procesos',
     dashboard: 'Dashboard',
     start_label: 'Fecha de Inicio',
     end_label: 'Fecha de Finalización',

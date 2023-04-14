@@ -327,8 +327,8 @@ const en = {
     },
   },
   period_list_page: {
-    helmet: 'Periods | List',
-    heading: 'Periods List',
+    helmet: 'Process | List',
+    heading: 'Process List',
     dashboard: 'Dashboard',
     start_label: 'Start Date',
     end_label: 'End Date',
