@@ -36,6 +36,10 @@ export default function TeachersListPage() {
 
   const location = useLocation();
 
+  const { periodId } = location.state;
+
+  const [links, setLinks] = useState([]);
+
   const TABLE_HEAD = [
     {
       id: "name",
@@ -83,8 +87,6 @@ export default function TeachersListPage() {
 
   const [dataFiltered, setDataFiltered] = useState([]);
 
-  const { pathHref } = location.state;
-
   useEffect(() => {
     const updateDataFiltered = async () => {
       const filterApplied = await applyFilter({
@@ -105,6 +107,17 @@ export default function TeachersListPage() {
       const teachers = await getTeachers({periodId: location.state.periodId});
       setTableData(teachers);
     };
+
+    const currentLinks = location.state?.links;
+    currentLinks.push({ name: translate('teachers_list_page.list'), href: PATH_DASHBOARD.teachers.listTeachers });
+    const uniquecurrentLinks = currentLinks.filter((value, index) => {
+      const _value = JSON.stringify(value);
+      return index === currentLinks.findIndex(obj => JSON.stringify(obj) === _value);
+    });
+
+    if (currentLinks) {
+      setLinks(uniquecurrentLinks);
+    }
 
     fetchTeachers();
   }, [location.state]);
@@ -146,7 +159,7 @@ export default function TeachersListPage() {
   };
 
   const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.user.edit(id));
+    navigate(PATH_DASHBOARD.user.edit(id), { state: { periodId, links: [{ name: 'Process', href: PATH_DASHBOARD.lessonPlan.listProcesses }, { name: translate("teachers_list_page.list"), href: PATH_DASHBOARD.teachers.listTeachers }] }});
   };
 
   return (
@@ -163,11 +176,7 @@ export default function TeachersListPage() {
               name: translate("teachers_list_page.dashboard"),
               href: PATH_DASHBOARD.root,
             },
-            {
-              name: translate("teachers_list_page.teachers"),
-              href: pathHref,
-            },
-            { name: translate("teachers_list_page.list") },
+            ...links,
           ]}
         />
 
