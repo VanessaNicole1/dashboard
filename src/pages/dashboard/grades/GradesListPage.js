@@ -32,6 +32,10 @@ export default function GradesListPage () {
 
   const location = useLocation();
 
+  const { periodId } = location.state;
+
+  const [links, setLinks] = useState([]);
+
   const TABLE_HEAD = [
     { id: 'grade', label: translate('grades_list_page.table.grade'), align: 'center' },
     { id: 'parallel', label: translate('grades_list_page.table.parallel'), align: 'center' },
@@ -59,6 +63,20 @@ export default function GradesListPage () {
       const grades = await getGrades(location.state);
       setTableData(grades);
     };
+
+    let currentLinks = location.state?.links;
+    currentLinks = currentLinks.filter((currentLink) => currentLink.name !== 'Student List');
+
+    currentLinks.push({ name: translate('grades_list_page.list'), href: PATH_DASHBOARD.grades.listGrades });
+    const uniquecurrentLinks = currentLinks.filter((value, index) => {
+      const currentValue = JSON.stringify(value);
+      return index === currentLinks.findIndex(obj => JSON.stringify(obj) === currentValue);
+    });
+
+    if (currentLinks) {
+      setLinks(uniquecurrentLinks);
+    }
+
     fetchGrades();
   },[location.state]);
 
@@ -97,7 +115,7 @@ export default function GradesListPage () {
   };
 
   const handleViewStudents = (id) => {
-    navigate(PATH_DASHBOARD.students.listStudents, {state: { gradeId: id}});
+    navigate(PATH_DASHBOARD.students.listStudents, {state: { periodId, gradeId: id, links: [{ name: 'Process', href: PATH_DASHBOARD.lessonPlan.listProcesses }, { name: translate('grades_list_page.list'), href: PATH_DASHBOARD.grades.listGrades }] }});
   }
   
   return (
@@ -111,8 +129,7 @@ export default function GradesListPage () {
           heading={translate('grades_list_page.heading')}
           links={[
             { name: translate('grades_list_page.dashboard'), href: PATH_DASHBOARD.root },
-            { name: translate('grades_list_page.grades'), href: PATH_DASHBOARD.lessonPlan.root },
-            { name: translate('grades_list_page.list') },
+            ...links,
           ]}
         />
 
