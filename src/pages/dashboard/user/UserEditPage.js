@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Container } from '@mui/material';
 import { useSettingsContext } from '../../../components/settings';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
@@ -17,6 +17,12 @@ export default function UserEditPage() {
   const [currentUser, setCurrentUser] = useState({});
 
   const [simpleRoles, setSimpleRoles] = useState([]);
+
+  const location = useLocation();
+
+  const { links } = location.state;
+
+  const currentState = location.state;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -43,15 +49,13 @@ export default function UserEditPage() {
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Edit user"
+          state={currentState}
           links={[
             {
               name: 'Dashboard',
               href: PATH_DASHBOARD.root,
             },
-            {
-              name: 'User',
-              href: PATH_DASHBOARD.user.list,
-            },
+            ...links,
             { name: currentUser?.name },
           ]}
         />
