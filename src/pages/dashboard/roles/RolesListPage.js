@@ -28,7 +28,6 @@ export default function RolesListPage () {
   useEffect(() => {
     const fetchRoles = async () => {
       const roles = await getRoles();
-      console.log('ROLES', roles);
       setTableData(roles);
     };
 
