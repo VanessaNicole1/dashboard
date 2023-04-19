@@ -272,7 +272,7 @@ const en = {
     heading: "Students List",
     dashboard: "Dashboard",
     roles: "Students",
-    list: "List",
+    list: "Student List",
     table: {
       name: "Name",
       last: "Last Name",
@@ -286,7 +286,7 @@ const en = {
     heading: "Teachers List",
     dashboard: "Dashboard",
     teachers: "Teachers",
-    list: "List",
+    list: "Teacher List",
     table: {
       name: "Name",
       last: "Last Name",
@@ -299,7 +299,7 @@ const en = {
     heading: "Grades List",
     dashboard: "Dashboard",
     grades: "Grades",
-    list: "List",
+    list: "Grade List",
     table: {
       grade: "Grade",
       parallel: "Parallel",
@@ -339,7 +339,8 @@ const en = {
     end_label: 'End Date',
     manager_label: 'Manager',
     degree_label: 'Degree',
-    status_label: 'Status'
+    status_label: 'Status',
+    list: 'Process'
   },
   users_list_page: {
     helmet: 'Users | List',

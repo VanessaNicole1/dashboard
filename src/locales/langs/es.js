@@ -265,7 +265,7 @@ const en = {
     heading: 'Listado de Estudiantes',
     dashboard: 'Dashboard',
     roles: 'Estudiantes',
-    list: 'Listado',
+    list: 'Estudiantes',
     table: {
       name: 'Nombre',
       last: 'Apellido',
@@ -279,7 +279,7 @@ const en = {
     heading: 'Lista de Docentes',
     dashboard: 'Dashboard',
     roles: 'Docentes',
-    list: 'Lista',
+    list: 'Docentes',
     table: {
       name: 'Nombre',
       last: 'Apellido',
@@ -292,7 +292,7 @@ const en = {
     heading: 'Lista de Cursos',
     dashboard: 'Dashboard',
     grades: 'Cursos',
-    list: 'Lista',
+    list: 'Grados',
     table: {
       grade: 'Curso',
       parallel: 'Paralelo',
@@ -320,7 +320,8 @@ const en = {
     end_label: 'Fecha de Finalización',
     manager_label: 'Director',
     degree_label: 'Carrera',
-    status_label: 'Estado'
+    status_label: 'Estado',
+    list: 'Procesos'
   },
   users_list_page: {
     helmet: 'Usuarios | Lista',
@@ -341,7 +342,7 @@ const en = {
     heading: 'Lista de Materias',
     dashboard: 'Dashboard',
     subjects: 'Materias',
-    list: 'Lista',
+    list: 'Materias',
     table: {
       name: 'Nombre',
       grades: 'Grados',
