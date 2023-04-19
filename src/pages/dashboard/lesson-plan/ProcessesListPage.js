@@ -153,19 +153,19 @@ export default function ProcessesListPage() {
   };
 
   const handleViewTeachers = (id) => {
-    navigate(PATH_DASHBOARD.teachers.listTeachers, {state: { periodId: id, pathHref: PATH_DASHBOARD.lessonPlan.listProcesses }});
+    navigate(PATH_DASHBOARD.teachers.listTeachers, {state: { periodId: id, links: [{ name: translate('period_list_page.list'), href: PATH_DASHBOARD.lessonPlan.listProcesses }]}});
   };
 
   const handleViewStudents = (id) => {
-    navigate(PATH_DASHBOARD.students.listStudents, {state: { periodId: id }});
+    navigate(PATH_DASHBOARD.students.listStudents, {state: { periodId: id, links: [{ name: translate('period_list_page.list'), href: PATH_DASHBOARD.lessonPlan.listProcesses }]}});
   };
 
   const handleViewGrades = (id) => {
-    navigate(PATH_DASHBOARD.grades.listGrades, {state: { periodId: id }});
+    navigate(PATH_DASHBOARD.grades.listGrades, {state: { periodId: id, links: [{ name: translate('period_list_page.list'), href: PATH_DASHBOARD.lessonPlan.listProcesses }]}});
   };
 
   const handleViewSubjects = (id) => {
-    navigate(PATH_DASHBOARD.subjects.listSubjects, {state: { periodId: id, link: { name: 'Processes', href: PATH_DASHBOARD.lessonPlan.listProcesses } }});
+    navigate(PATH_DASHBOARD.subjects.listSubjects, {state: { periodId: id, links: [{ name: translate('period_list_page.list'), href: PATH_DASHBOARD.lessonPlan.listProcesses }]}});
   };
 
   const handleResetFilter = () => {
