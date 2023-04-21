@@ -59,12 +59,15 @@ export default function StudentsListPage () {
 
   const location = useLocation();
 
-
   const [tableData, setTableData] = useState([]);
 
   const [filterContent, setFilterContent] = useState('');
 
   const [dataFiltered, setDataFiltered] = useState([]);
+
+  const [links, setLinks] = useState([]);
+
+  const currentState = location.state;
 
   useEffect(() => {
     const updateDataFiltered = async () => {
@@ -87,6 +90,17 @@ export default function StudentsListPage () {
       setTableData(students);
     };
 
+    const currentLinks = location.state?.links;
+    currentLinks.push({ name: translate('students_list_page.list'), href: PATH_DASHBOARD.students.listStudents });
+    const uniquecurrentLinks = currentLinks.filter((value, index) => {
+      const _value = JSON.stringify(value);
+      return index === currentLinks.findIndex(obj => JSON.stringify(obj) === _value);
+    });
+
+    if (currentLinks) {
+      setLinks(uniquecurrentLinks);
+    }
+    
     fetchStudents();
   }, [location.state]);
 
@@ -120,7 +134,7 @@ export default function StudentsListPage () {
   };
 
   const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.user.edit(id));
+    navigate(PATH_DASHBOARD.user.edit(id), { state: currentState });
   };
 
   const handleResetFilter = () => {
@@ -136,10 +150,10 @@ export default function StudentsListPage () {
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading={translate('students_list_page.heading')}
+          state={currentState}
           links={[
             { name: translate('students_list_page.dashboard'), href: PATH_DASHBOARD.root },
-            { name: translate('students_list_page.roles'), href: PATH_DASHBOARD.lessonPlan.root },
-            { name: translate('students_list_page.list') },
+            ...links,
           ]}
         />
 

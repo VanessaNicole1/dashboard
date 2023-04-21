@@ -9,6 +9,7 @@ CustomBreadcrumbs.propTypes = {
   heading: PropTypes.string,
   moreLink: PropTypes.array,
   activeLast: PropTypes.bool,
+  state: PropTypes.object
 };
 
 export default function CustomBreadcrumbs({
@@ -17,6 +18,7 @@ export default function CustomBreadcrumbs({
   heading,
   moreLink,
   activeLast,
+  state,
   sx,
   ...other
 }) {
@@ -42,6 +44,7 @@ export default function CustomBreadcrumbs({
                   link={link}
                   activeLast={activeLast}
                   disabled={link.name === lastLink}
+                  state={state}
                 />
               ))}
             </Breadcrumbs>

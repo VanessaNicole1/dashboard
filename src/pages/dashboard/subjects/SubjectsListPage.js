@@ -58,6 +58,8 @@ export default function SubjectsListPage () {
 
   const location = useLocation();
 
+  const { links } = location.state;
+
   const [tableData, setTableData] = useState([]);
 
   const [filterContent, setFilterContent] = useState('');
@@ -165,7 +167,7 @@ export default function SubjectsListPage () {
             heading={translate('subjects_list_page.heading')}
             links={[
               { name: translate('subjects_list_page.dashboard'), href: PATH_DASHBOARD.root },
-              location.state.link,
+              ...links,
               { name: translate('subjects_list_page.list') },
             ]}
           />

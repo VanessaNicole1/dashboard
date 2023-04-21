@@ -10,9 +10,10 @@ BreadcrumbsLink.propTypes = {
     icon: PropTypes.node,
     name: PropTypes.string,
   }),
+  state: PropTypes.object
 };
 
-export default function BreadcrumbsLink({ link, activeLast, disabled }) {
+export default function BreadcrumbsLink({ link, activeLast, disabled, state }) {
   const { name, href, icon } = link;
 
   const styles = {
@@ -48,7 +49,7 @@ export default function BreadcrumbsLink({ link, activeLast, disabled }) {
 
   if (href) {
     return (
-      <Link component={RouterLink} to={href} sx={styles}>
+      <Link component={RouterLink} to={href} state={state} sx={styles}>
         {renderContent}
       </Link>
     );
