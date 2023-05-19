@@ -21,7 +21,6 @@ import TeachersListPage from "../pages/dashboard/teachers/TeachersListPage";
 import GradesCreatePage from "../pages/dashboard/grades/GradesCreatePage";
 
 
-
 import {
   LoginPage
 } from './elements';
@@ -35,6 +34,7 @@ import DegreesCreatePage from "../pages/dashboard/degree/DegreesCreatePage";
 import ProcessesListPage from "../pages/dashboard/lesson-plan/ProcessesListPage";
 import UserEditPage from "../pages/dashboard/user/UserEditPage";
 import UsersListPage from "../pages/dashboard/user/UsersListPage";
+import RegisterPage from "../pages/auth/RegisterPage";
 
 export default function Router () {
 
@@ -48,7 +48,15 @@ export default function Router () {
             <LoginPage />
           </GuestGuard>
         )
-      }
+      },
+      {
+        path: 'register/:registeredToken',
+        element: (
+          <GuestGuard>
+            <RegisterPage />
+          </GuestGuard>
+        ),
+      },
     ]
   };
 
@@ -90,7 +98,7 @@ export default function Router () {
             )
           },
           { path: 'all',
-             element: (
+            element: (
               <RoleBasedGuard hasContent roles={[ROLES.manager]}>
                 <LessonPlanListPage />
               </RoleBasedGuard>
@@ -125,7 +133,7 @@ export default function Router () {
           { element: <Navigate to='/dashboard/roles/list' replace />, index: true },
           { path: 'list', element: (
             <RoleBasedGuard hasContent roles={[ROLES.manager]}>
-               <RolesListPage />
+              <RolesListPage />
             </RoleBasedGuard>
           )},
         ]
@@ -137,13 +145,13 @@ export default function Router () {
           {
             path: 'list', element: (
             <RoleBasedGuard hasContent roles={[ROLES.manager]}>
-               <UsersListPage />
+              <UsersListPage />
             </RoleBasedGuard>
             )
           },
           { path: ':id/edit', element: (
             <RoleBasedGuard hasContent roles={[ROLES.manager]}>
-               <UserEditPage />
+              <UserEditPage />
             </RoleBasedGuard>
           )},
         ]
@@ -154,7 +162,7 @@ export default function Router () {
           { element: <Navigate to='/dashboard/teachers/list' replace />, index: true },
           { path: 'list', element: (
             <RoleBasedGuard hasContent roles={[ROLES.manager]}>
-               <TeachersListPage />
+              <TeachersListPage />
             </RoleBasedGuard>
           )},
           {
