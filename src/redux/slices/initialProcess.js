@@ -10,6 +10,7 @@ const initialState = {
       endDate: new Date(),
       manager: '',
       degree: '',
+      studentsNumber: 0,
     },
     csvStudents: [],
     students: [],

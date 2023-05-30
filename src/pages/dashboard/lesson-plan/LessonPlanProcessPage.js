@@ -48,7 +48,7 @@ export default function CreateLessonPlanProcessPage() {
   } = initialProcess;
 
   const handleStartProcess = async() => {
-    const { startDate, endDate, manager, degree } = generalInformation;
+    const { startDate, endDate, manager, degree, studentsNumber } = generalInformation;
     const startProcessInformation = {
       period: {
         startDate,
@@ -59,6 +59,9 @@ export default function CreateLessonPlanProcessPage() {
       },
       degree: {
         name: degree
+      },
+      minimumNumberOfStudentsToEvaluate: {
+        minimumNumber: studentsNumber
       },
       students,
       teachers

@@ -18,6 +18,7 @@ CreateGeneralInformationForm.propTypes = {
     endDate: PropTypes.instanceOf(Date),
     manager: PropTypes.string,
     degree: PropTypes.string,
+    studentsNumber: PropTypes.number,
   }),
 };
 
@@ -48,6 +49,7 @@ export default function CreateGeneralInformationForm({
     endDateShouldBeGreater: translate(`${i18nErrorsKey}.greater_end_date`),
     requiredManager: translate(`${i18nErrorsKey}.required_manager`),
     requiredDegree: translate(`${i18nErrorsKey}.required_degree`),
+    requiredStudentsNumber: translate(`${i18nErrorsKey}.required_students_number`),
   };
   
   const generalInformationSchema = Yup.object().shape({
@@ -69,6 +71,7 @@ export default function CreateGeneralInformationForm({
       .uuid(schemaErrorMessages.requiredManager)
       .required(schemaErrorMessages.requiredManager),
     degree: Yup.string().required(schemaErrorMessages.requiredDegree),
+    studentsNumber: Yup.number().required(schemaErrorMessages.requiredStudentsNumber),
   });
 
   const defaultValues = useMemo(
@@ -166,6 +169,12 @@ export default function CreateGeneralInformationForm({
           </option>
         ))}
       </RHFSelect>
+
+      <Divider sx={{ marginBottom: 3, marginTop: 3 }}>
+        <Chip label={translate(`${i18nGeneralInformationKey}.students_number_chip`)} />
+      </Divider>
+
+      <RHFTextField name='studentsNumber' label={translate(`${i18nFormKey}.students_number`)} />
 
       <Stack alignItems='flex-end' sx={{ mt: 3 }}>
         <LoadingButton type='submit' variant='contained' loading={isSubmitting}>
