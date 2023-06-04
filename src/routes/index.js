@@ -28,8 +28,7 @@ import GradesListPage from "../pages/dashboard/grades/GradesListPage";
 import DegreeViewPage from "../pages/dashboard/degree/DegreeViewPage";
 import SubjectsListPage from "../pages/dashboard/subjects/SubjectsListPage";
 import SubjectsCreatePage from "../pages/dashboard/subjects/SubjectsCreatePage";
-import ScheduleViewPage from "../pages/dashboard/schedule/ScheduleViewPage";
-import ScheduleCreatePage from "../pages/dashboard/schedule/ScheduleCreatePage";
+import SchedulePage from "../pages/dashboard/schedule/SchedulePage";
 import DegreesCreatePage from "../pages/dashboard/degree/DegreesCreatePage";
 import ProcessesListPage from "../pages/dashboard/lesson-plan/ProcessesListPage";
 import UserEditPage from "../pages/dashboard/user/UserEditPage";
@@ -264,17 +263,9 @@ export default function Router () {
           { path: 'view', 
             element: (
               <RoleBasedGuard hasContent roles={[ROLES.teacher]}>
-                <ScheduleViewPage />
+                <SchedulePage />
               </RoleBasedGuard>
-          )},
-          {
-            path: 'create',
-            element: (
-              <RoleBasedGuard hasContent roles={[ROLES.teacher]}>
-                <ScheduleCreatePage />
-              </RoleBasedGuard>
-            )
-          },
+          )}
         ]
       },
     ]

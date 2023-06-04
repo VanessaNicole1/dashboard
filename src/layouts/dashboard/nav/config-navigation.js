@@ -77,6 +77,13 @@ const navConfig = [
           { title: 'List', path: PATH_DASHBOARD.user.list, roles: [ROLES.manager] }
         ]
       },
+      {
+        title: 'Schedule',
+        path: PATH_DASHBOARD.schedule.root,
+        icon: ICONS.calendar,
+        roles: [ROLES.teacher]
+      }
+
       // {
       //   title: 'Teachers',
       //   path: PATH_DASHBOARD.teachers.root,
@@ -142,20 +149,20 @@ const navConfig = [
       // }
     ] 
   },
-  {
-    subheader: 'settings',
-    items: [
-      {
-        title: 'Update password',
-        path: PATH_DASHBOARD.schedule.root,
-        icon: ICONS.calendar,
-        roles: [ROLES.manager, ROLES.teacher, ROLES.student],
-        children: [
-          { title: 'Update', path: PATH_DASHBOARD.updatePassword.update, roles: [ROLES.manager, ROLES.teacher, ROLES.student] },
-        ]
-      }
-    ]
-  }
+  // {
+  //   subheader: 'settings',
+  //   items: [
+  //     {
+  //       title: 'Update password',
+  //       path: PATH_DASHBOARD.schedule.root,
+  //       icon: ICONS.calendar,
+  //       roles: [ROLES.manager, ROLES.teacher, ROLES.student],
+  //       children: [
+  //         { title: 'Update', path: PATH_DASHBOARD.updatePassword.update, roles: [ROLES.manager, ROLES.teacher, ROLES.student] },
+  //       ]
+  //     }
+  //   ]
+  // }
 ]
 
 
