@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
-import { persistReducer } from 'redux-persist';
+// import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import mailReducer from './slices/mail';
 import initialReducer from './slices/initialProcess';
+import calendarReducer from './slices/calendar';
 // import chatReducer from './slices/chat';
 // import productReducer from './slices/product';
-// import calendarReducer from './slices/calendar';
 // import kanbanReducer from './slices/kanban';
 
 // ----------------------------------------------------------------------
@@ -27,8 +27,8 @@ export const productPersistConfig = {
 const rootReducer = combineReducers({
   mail: mailReducer,
   initial: initialReducer,
+  calendar: calendarReducer,
   // chat: chatReducer,
-  // calendar: calendarReducer,
   // kanban: kanbanReducer,
   // product: persistReducer(productPersistConfig, productReducer),
 });
