@@ -10,6 +10,7 @@ FillGeneralInformation.propTypes = {
     endDate: PropTypes.instanceOf(Date),
     manager: PropTypes.string,
     degree: PropTypes.string,
+    studentsNumber: PropTypes.number
   }),
 };
 

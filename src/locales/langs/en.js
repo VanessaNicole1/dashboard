@@ -116,6 +116,7 @@ const en = {
         period_chip: "Period",
         degree_chip: "Degree",
         manager_chip: "Manager",
+        students_number_chip: "Students Number to grade",
         next_step_button: "Next Step",
         form: {
           period: {
@@ -124,6 +125,7 @@ const en = {
           },
           degree: "Degree name",
           manager: "Select degree manager",
+          students_number: "Number of students who will be able to grade"
         },
         errors: {
           required_start_date: "Period start date is required.",
@@ -132,6 +134,7 @@ const en = {
             "Period end date should be greater than period start date",
           required_manager: "Manager is required.",
           required_degree: "Degree is required.",
+          required_students_number: "Students number to grade is required."
         },
       },
       students: {

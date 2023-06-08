@@ -113,6 +113,7 @@ const en = {
         period_chip: 'Periodo',
         degree_chip: 'Carrera',
         manager_chip: 'Director de Carrera',
+        students_number_chip: "Número de estudiantes",
         next_step_button: 'Siguiente Paso',
         form: {
           period: {
@@ -120,14 +121,16 @@ const en = {
             end_date: 'Fin del periodo'
           },
           degree: 'Nombre de la Carrera',
-          manager: 'Seleccione el director de carrera'
+          manager: 'Seleccione el director de carrera',
+          students_number: "Número de estudiantes que calificarán el plan de clases"
         },
         errors: {  
           required_start_date: 'La fecha de inicio del periodo es requerida.',
           required_end_date: 'La fecha de fin del periodo es requerida',
           greater_end_date: 'La fecha de fin de periodo debe ser mayor a la fecha de inicio de periodo',
           required_manager: 'El director de carrera es requerido.',
-          required_degree: 'La carrera es requerida.'
+          required_degree: 'La carrera es requerida.',
+          required_students_number: "El número de estudiantes ha calificar es requerido."
         }
       },
       students: {
