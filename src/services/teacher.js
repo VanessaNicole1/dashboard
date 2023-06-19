@@ -42,3 +42,25 @@ export const validateTeachers = async (data) => {
     return { errorMessage: error.message }
   }
 };
+
+export const getTeacherEvents = async (periodId, userId) => {
+  try  {
+    const { data } = await axios.get( `/teachers/events/`, { params: { userId, periodId } });
+    return data;
+  } catch (error) {
+    return {
+      message: "Couldn't retrieve schedule"
+    }
+  }
+};
+
+export const findTeacherActivePeriods = async (userId) => {
+  try  {
+    const { data } = await axios.get(`/teachers/${userId}/active-periods`);
+    return data;
+  } catch (error) {
+    return {
+      message: "Couldn't retrieve teacher active periods"
+    }
+  }
+}

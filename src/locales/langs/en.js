@@ -1,10 +1,3 @@
-// ----------------------------------------------------------------------
-
-// IF THIS TRANSLATION IS INCORRECT PLEASE IGNORE THIS AS THIS TRANSLATION IS FOR DEMO PURPOSES ONLY
-// We are happy if you can help improve the translation by sending an email to support@minimals.cc.
-
-// ----------------------------------------------------------------------
-
 const en = {
   Schedule: "Schedule",
   demo: {
@@ -437,6 +430,48 @@ const en = {
   schedule: {
     helmet: {
       title: 'Schedule - Lesson Plan'
+    },
+    handleSave: {
+      success: 'Schedule successfully updated.',
+      error: 'There was an error trying to update the schedule.'
+    },
+    breacrumb: {
+      heading: 'Class Schedule.',
+      schedule_link: 'Class Schedule',
+      action_button: 'Update Schedule'
+    },
+    select: {
+      label: 'Period'
+    },
+    alert: {
+      text: 'Dear teacher, you have not been assigned to any subjects in the active periods.'
+    },
+    dialog: {
+      title: 'Delete event'
+    }
+  },
+  calendarForm: {
+    event_schema: {
+      required_title: 'Title is required.',
+      required_day: 'Day is required.'
+    },
+    form: {
+      title: {
+        label: 'Title'
+      },
+      day: {
+        label: 'Day'
+      },
+      start_date: {
+        label: 'Start hour'
+      },
+      end_date: {
+        label: 'End hour'
+      }
+    },
+    dialog: {
+      cancel_button: 'Cancel',
+      delete_button: 'Delete'
     }
   }
 };

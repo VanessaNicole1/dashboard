@@ -1,24 +1,22 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import merge from 'lodash/merge';
-import { isBefore } from 'date-fns';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Stack, Button, Tooltip, TextField, IconButton, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import { Box, Stack, Button, TextField, DialogActions } from '@mui/material';
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import Iconify from '../../../components/iconify';
-import { ColorSinglePicker } from '../../../components/color-utils';
-import FormProvider, { RHFTextField, RHFSwitch } from '../../../components/hook-form';
+import FormProvider, { RHFTextField } from '../../../components/hook-form';
+import { useLocales } from '../../../locales';
 
 const getInitialValues = (event, range) => {
   const initialEvent = {
     title: '',
-    description: '',
-    color: '#1890FF',
+    color: event.color,
     allDay: false,
     start: range ? new Date(range.start).toISOString() : new Date().toISOString(),
     end: range ? new Date(range.end).toISOString() : new Date().toISOString(),
+    day: event.day
   };
 
   if (event || range) {
@@ -33,23 +31,20 @@ CalendarForm.propTypes = {
   range: PropTypes.object,
   onCancel: PropTypes.func,
   onDeleteEvent: PropTypes.func,
-  onCreateUpdateEvent: PropTypes.func,
-  colorOptions: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default function CalendarForm({
   event,
   range,
-  colorOptions,
-  onCreateUpdateEvent,
   onDeleteEvent,
   onCancel,
 }) {
-  const hasEventData = !!event;
+  const baseI18NKey = 'calendarForm';
+  const { translate } = useLocales();
 
   const EventSchema = Yup.object().shape({
-    title: Yup.string().max(255).required('Title is required'),
-    description: Yup.string().max(5000),
+    title: Yup.string().max(255).required(translate(`${baseI18NKey}.event_schema.required_title`)),
+    day: Yup.string().max(10).required(translate(`${baseI18NKey}.event_schema.required_day`))
   });
 
   const methods = useForm({
@@ -58,46 +53,24 @@ export default function CalendarForm({
   });
 
   const {
-    reset,
-    watch,
     control,
     handleSubmit,
-    formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
-
-  const onSubmit = async (data) => {
-    try {
-      const newEvent = {
-        title: data.title,
-        description: data.description,
-        color: data.color,
-        allDay: data.allDay,
-        start: data.start,
-        end: data.end,
-      };
-      onCreateUpdateEvent(newEvent);
-      onCancel();
-      reset();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const isDateError =
-    !values.allDay && values.start && values.end
-      ? isBefore(new Date(values.end), new Date(values.start))
-      : false;
-
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={handleSubmit(onDeleteEvent)}>
       <Stack spacing={3} sx={{ px: 3 }}>
-        <RHFTextField name="title" label="Title" />
+        <RHFTextField
+          name="title"
+          label={translate(`${baseI18NKey}.form.title.label`)}
+          disabled 
+        />
 
-        <RHFTextField name="description" label="Description" multiline rows={3} />
-
-        <RHFSwitch name="allDay" label="All day" />
+        <RHFTextField
+          name="day"
+          label={translate(`${baseI18NKey}.form.day.label`)}
+          disabled 
+        />
 
         <Controller
           name="start"
@@ -105,9 +78,10 @@ export default function CalendarForm({
           render={({ field }) => (
             <MobileDateTimePicker
               {...field}
+              disabled
               onChange={(newValue) => field.onChange(newValue)}
-              label="Start date"
-              inputFormat="dd/MM/yyyy hh:mm a"
+              label={translate(`${baseI18NKey}.form.start_date.label`)}
+              inputFormat="hh:mm a"
               renderInput={(params) => <TextField {...params} fullWidth />}
             />
           )}
@@ -119,52 +93,31 @@ export default function CalendarForm({
           render={({ field }) => (
             <MobileDateTimePicker
               {...field}
+              disabled
               onChange={(newValue) => field.onChange(newValue)}
-              label="End date"
-              inputFormat="dd/MM/yyyy hh:mm a"
+              label={translate(`${baseI18NKey}.form.end_date.label`)}
+              inputFormat="hh:mm a"
               renderInput={(params) => (
                 <TextField
                   {...params}
                   fullWidth
-                  error={!!isDateError}
-                  helperText={isDateError && 'End date must be later than start date'}
                 />
               )}
-            />
-          )}
-        />
-
-        <Controller
-          name="color"
-          control={control}
-          render={({ field }) => (
-            <ColorSinglePicker
-              value={field.value}
-              onChange={field.onChange}
-              colors={colorOptions}
             />
           )}
         />
       </Stack>
 
       <DialogActions>
-        {hasEventData && (
-          <Tooltip title="Delete Event">
-            <IconButton onClick={onDeleteEvent}>
-              <Iconify icon="eva:trash-2-outline" />
-            </IconButton>
-          </Tooltip>
-        )}
-
         <Box sx={{ flexGrow: 1 }} />
 
         <Button variant="outlined" color="inherit" onClick={onCancel}>
-          Cancel
+          {translate(`${baseI18NKey}.dialog.cancel_button`)}
         </Button>
-
-        <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-          {hasEventData ? 'Update' : 'Add'}
-        </LoadingButton>
+        
+        <Button type="submit" variant="outlined" color='error' startIcon={<Iconify icon="eva:trash-2-outline" />}>
+          {translate(`${baseI18NKey}.dialog.delete_button`)}
+        </Button>
       </DialogActions>
     </FormProvider>
   );

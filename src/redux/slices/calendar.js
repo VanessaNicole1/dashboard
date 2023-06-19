@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from '../../utils/axios';
 
 // ----------------------------------------------------------------------
-
+// TODO: This is great example how to manage dispatch
 const initialState = {
   isLoading: false,
   error: null,

@@ -1,95 +1,223 @@
-import FullCalendar from '@fullcalendar/react';
-import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
-import listPlugin from '@fullcalendar/list';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import timelinePlugin from '@fullcalendar/timeline';
-import esLocale from '@fullcalendar/core/locales/es';
-import enLocale from '@fullcalendar/core/locales/en-au';
-import { Card, Button, Container, DialogTitle, Dialog } from '@mui/material';
-import { useState, useRef, useEffect, useCallback } from 'react';
+import FullCalendar from "@fullcalendar/react";
+import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
+import listPlugin from "@fullcalendar/list";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import timelinePlugin from "@fullcalendar/timeline";
+import esLocale from "@fullcalendar/core/locales/es";
+import enLocale from "@fullcalendar/core/locales/en-au";
+import {
+  Card,
+  Button,
+  Container,
+  DialogTitle,
+  Dialog,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Alert,
+} from "@mui/material";
+import { useState, useRef, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocales } from "../../../locales";
-import useResponsive from '../../../hooks/useResponsive';
-import { useSettingsContext } from '../../../components/settings';
-import Iconify from '../../../components/iconify';
-import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
-import { PATH_DASHBOARD } from '../../../routes/paths';
-import { useSnackbar } from '../../../components/snackbar';
-import { useDispatch } from '../../../redux/store';
-import { getEvents, createEvent, updateEvent, deleteEvent } from '../../../redux/slices/calendar';
-
-
+import useResponsive from "../../../hooks/useResponsive";
+import { useSettingsContext } from "../../../components/settings";
+import Iconify from "../../../components/iconify";
+import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
+import { PATH_DASHBOARD } from "../../../routes/paths";
+import { useSnackbar } from "../../../components/snackbar";
 import {
   CalendarForm,
   StyledCalendar,
-  CalendarToolbar
-} from '../../../sections/dashboard/calendar';
-import { generateUniqueIdentifier } from '../../../utils/numberGenerator';
-import StickyNote from '../../../components/sticky-note/StickyNote';
-
+  CalendarToolbar,
+} from "../../../sections/dashboard/calendar";
+import { generateUniqueIdentifier } from "../../../utils/numberGenerator";
+import StickyNote from "../../../components/sticky-note/StickyNote";
+import { getSchedules, updateSchedule } from "../../../services/schedule";
+import { useAuthContext } from "../../../auth/useAuthContext";
+import {
+  findTeacherActivePeriods,
+  getTeacherEvents,
+} from "../../../services/teacher";
+import { getObjectNestedValueByString } from "../../../utils/object";
+import { updateTeacherConfigEvent } from "../../../services/teacherConfigEvent";
+import { manualHideErrorSnackbarOptions } from "../../../utils/snackBar";
 
 const COLOR_OPTIONS = [
-  '#00AB55', // theme.palette.primary.main,
-  '#1890FF', // theme.palette.info.main,
-  '#54D62C', // theme.palette.success.main,
-  '#FFC107', // theme.palette.warning.main,
-  '#FF4842', // theme.palette.error.main
-  '#04297A', // theme.palette.info.darker
-  '#7A0C2E', // theme.palette.error.darker
+  "#00AB55",
+  "#1890FF",
+  "#54D62C",
+  "#FFC107",
+  "#FF4842"
 ];
 
+const CONFIG_EVENTS_COLORS = [
+  "#FF4842",
+  "#92E5E6"
+];
 
-export default function SchedulePage () {
-  const baseI18NKey = 'schedule';
+export default function SchedulePage() {
+  const baseI18NKey = "schedule";
+  const oneHourInMiliseconds = 60 * 60 * 1000;
   const calendarRef = useRef(null);
+  const isDesktop = useResponsive("up", "sm");
   const { enqueueSnackbar } = useSnackbar();
-  const isDesktop = useResponsive('up', 'sm');
+  const { user } = useAuthContext();
 
   const [openForm, setOpenForm] = useState(false);
-  const [date, setDate] = useState(new Date());
-  const [selectedRange, setSelectedRange] = useState(null);
-  const [selectedEventId, setSelectedEventId] = useState(null);
 
   const [calendarEvents, setCalendarEvents] = useState([]);
   const [subjects, setSubjects] = useState([]);
+  const [eventsConfig, setEventsConfig] = useState([]);
+  const [teacherActivePeriods, setTeacherActivePeriods] = useState([]);
 
-  const getTeacherSubjects = () => {
-    const data = [
-      { title: "Programación", id: "1" },
-      { title: "Compiladores", id: "2" },
-      { title: "Inteligencia Artificial", id: "3" },
-      { title: "Control Automatizado", id: "5" },
-      { title: "AD2", id: "4" },
-    ];
+  const [selectedActivePeriod, setSelectedActivePeriod] = useState();
+  const [selectedEvent, setSelectedEvent] = useState();
 
-    return data.map((subject, index) => {
-      const color = COLOR_OPTIONS[index]
-      return {
-        ...subject,
-        textColor: color
-      }
-    });
+  const { translate, currentLang } = useLocales();
+  const currentCalendarLocale = currentLang.value === "es" ? esLocale : enLocale;
+  const { themeStretch } = useSettingsContext();
+
+  const getTeacherSchedules = async (periodId) => {
+    const schedules = await getSchedules(periodId, user.id);
+    return schedules;
+  };
+
+  const getTeacherConfigEvents = async (periodId) => {
+    const teacherEvents = await getTeacherEvents(periodId, user.id);
+    return teacherEvents;
   };
 
   const daysMapping = {
-    1: 'LUNES',
-    2: 'MARTES',
-    3: 'MIERCOLES',
-    4: 'JUEVES',
-    5: 'VIERNES'
-  }
+    1: "LUNES",
+    2: "MARTES",
+    3: "MIERCOLES",
+    4: "JUEVES",
+    5: "VIERNES",
+  };
 
-  const dispatch = useDispatch();
-  const { translate, currentLang } = useLocales();
-  const currentCalendarLocale = currentLang.value === 'es' ? esLocale : enLocale;
-  const { themeStretch } = useSettingsContext();
+  const getCalendarDateByDay = (dayName) => {
+    const daysMappingToDates = {
+      LUNES: "13",
+      MARTES: "14",
+      MIERCOLES: "15",
+      JUEVES: "16",
+      VIERNES: "17",
+    };
+
+    return new Date(`2023-06-${daysMappingToDates[dayName]}`);
+  };
+
+  const getCalendarEventsByMetadata = (metadata, color, eventTitle) => {
+    const events = [];
+
+    if (!metadata?.days) {
+      return events;
+    }
+
+    metadata.days.forEach((day) => {
+      const currentStartDate = getCalendarDateByDay(day.name);
+
+      day.times.forEach((time) => {
+        const [startTimeHour, startTimeMinutes] = time.start.split(":");
+        currentStartDate.setHours(+startTimeHour);
+        currentStartDate.setMinutes(+startTimeMinutes);
+        const currentEndDate = new Date(
+          currentStartDate.getTime() + oneHourInMiliseconds
+        );
+
+        const calendarEvent = {
+          id: generateUniqueIdentifier(),
+          title: eventTitle,
+          start: new Date(currentStartDate.getTime()),
+          end: currentEndDate,
+          textColor: color,
+        };
+
+        events.push(calendarEvent);
+      });
+    });
+
+    return events;
+  };
+
+  const getStickyNotesAndEvents = (
+    elements,
+    titleEventKey,
+    objectKey,
+    COLORS
+  ) => {
+    const stickyNotes = [];
+    let events = [];
+
+    elements.forEach((element, index) => {
+      const elementMetadata = element.metadata;
+      const color = elementMetadata?.color || COLORS[index];
+      const title = getObjectNestedValueByString(element, titleEventKey);
+
+      events = [
+        ...events,
+        ...getCalendarEventsByMetadata(elementMetadata, color, title),
+      ];
+
+      const note = {
+        ...getObjectNestedValueByString(element, objectKey),
+        title,
+        id: element.id,
+        textColor: color,
+      };
+
+      stickyNotes.push(note);
+    });
+
+    return [stickyNotes, events];
+  };
 
   useEffect(() => {
-    const teacherSubjects = getTeacherSubjects();
+    const fetchTeacherActivePeriods = async () => {
+      const activePeriods = await findTeacherActivePeriods(user.id);
+      if (activePeriods.length > 0) {
+        setSelectedActivePeriod(activePeriods[0].id);
+        setTeacherActivePeriods(activePeriods);
+      }
+    };
 
-    setSubjects(teacherSubjects);
+    fetchTeacherActivePeriods();
   }, []);
+
+  useEffect(() => {
+    const fetchCalendarEvents = async () => {
+      const [teacherSchedules, teacherConfigEvents] = await Promise.all([
+        getTeacherSchedules(selectedActivePeriod),
+        getTeacherConfigEvents(selectedActivePeriod),
+      ]);
+      const [teacherSubjects, teacherCalendarEvents] = getStickyNotesAndEvents(
+        teacherSchedules,
+        "subject.name",
+        "subject",
+        COLOR_OPTIONS
+      );
+      const [teacherExternalEvents, teacherCalendarConfigEvents] =
+        getStickyNotesAndEvents(
+          teacherConfigEvents,
+          "eventName",
+          "",
+          CONFIG_EVENTS_COLORS
+        );
+
+      setCalendarEvents([
+        ...teacherCalendarEvents,
+        ...teacherCalendarConfigEvents,
+      ]);
+      setSubjects(teacherSubjects);
+      setEventsConfig(teacherExternalEvents);
+    };
+
+    if (selectedActivePeriod) {
+      fetchCalendarEvents();
+    }
+  }, [selectedActivePeriod]);
 
   useEffect(() => {
     changeToWeekView();
@@ -99,20 +227,19 @@ export default function SchedulePage () {
     const calendarEl = calendarRef.current;
     if (calendarEl) {
       const calendarApi = calendarEl.getApi();
-
-      const newView = isDesktop ? 'timeGridWeek' : 'listWeek';
+      const newView = isDesktop ? "timeGridWeek" : "listWeek";
       calendarApi.changeView(newView);
     }
   };
 
   const removeCurrentDayBackground = (calendarView) => {
     const { view } = calendarView;
-    if (view.type === 'timeGridWeek') {
-      const elements = document.querySelectorAll('.fc-day-today');
+    if (view.type === "timeGridWeek") {
+      const elements = document.querySelectorAll(".fc-day-today");
 
       if (elements) {
-        elements.forEach(element => {
-          element.classList.remove('fc-day-today')
+        elements.forEach((element) => {
+          element.classList.remove("fc-day-today");
         });
       }
     }
@@ -128,77 +255,62 @@ export default function SchedulePage () {
         const id = eventEl.getAttribute("data-id");
         return {
           title,
-          id
+          id,
         };
-      }
+      },
     });
-  }
+  };
 
   const handleViewDidMount = (calendarView) => {
     removeCurrentDayBackground(calendarView);
     createDraggableEvents();
-  }
+  };
 
   const handleOpenModal = () => {
     setOpenForm(true);
   };
 
   const handleDropEvent = ({ event }) => {
-    const updatedEvents = calendarEvents.map(currentEvent => {
+    const updatedEvents = calendarEvents.map((currentEvent) => {
       if (currentEvent.id === event.id) {
         return {
           ...currentEvent,
-          start: event.start
-        }
+          start: event.start,
+          end: new Date(event.start.getTime() + oneHourInMiliseconds),
+        };
       }
       return currentEvent;
-    })
+    });
 
     setCalendarEvents(updatedEvents);
   };
 
   const handleSelectEvent = ({ event }) => {
-    const selectedEvent = {
+    const currentEvent = {
       id: event.id,
+      title: event.title,
       allDay: event.allDay,
       start: event.start,
-      end: event.end
-    }
-    console.log('Handle Selected Event', selectedEvent);
+      end: event.end,
+      color: event.textColor,
+      day: daysMapping[event.start.getDay()]
+    };
+    setSelectedEvent(currentEvent);
     handleOpenModal();
-    setSelectedEventId(event.id);
   };
 
   const handleCloseModal = () => {
     setOpenForm(false);
-    setSelectedRange(null);
-    setSelectedEventId(null);
-  };
-
-  const handleCreateUpdateEvent = (newEvent) => {
-    if (selectedEventId) {
-      dispatch(updateEvent(selectedEventId, newEvent));
-      enqueueSnackbar('Update success!');
-    } else {
-      dispatch(createEvent(newEvent));
-      enqueueSnackbar('Create success!');
-    }
   };
 
   const handleDeleteEvent = () => {
-    try {
-      if (selectedEventId) {
-        handleCloseModal();
-        dispatch(deleteEvent(selectedEventId));
-        enqueueSnackbar('Delete success!');
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    const updatedCalendarEvents = calendarEvents.filter(calendarEvent => calendarEvent.id !== selectedEvent.id);
+    setCalendarEvents(updatedCalendarEvents);
+    handleCloseModal();
   };
 
   const handleDropExternalEvent = (data) => {
-    const { draggedEl: eventElement, date: eventDate} = data
+    const { draggedEl: eventElement, date: eventDate } = data;
     const title = eventElement.getAttribute("title");
     const color = eventElement.getAttribute("data-color");
 
@@ -206,19 +318,136 @@ export default function SchedulePage () {
       id: generateUniqueIdentifier(),
       title,
       start: eventDate,
-      textColor: color
-    }
-    
-    setCalendarEvents([...calendarEvents, calendarEvent]);
-  }
+      end: new Date(eventDate.getTime() + oneHourInMiliseconds),
+      textColor: color,
+    };
 
-  const handleSave = () => {
-    console.log(calendarEvents);
+    setCalendarEvents([...calendarEvents, calendarEvent]);
   };
 
-  const handlePrint = () => {
-    const calendarApi = calendarRef.current.getApi();
-    window.print();
+  const getFormattedHours = (hours, minutes) => `${hours}:${minutes}`;
+
+  const getCalendarEventTimeRange = (calendarEvent) => {
+    const { start } = calendarEvent;
+    const startHour = start.getHours();
+    const minutes = start.getMinutes();
+    const startHourTime = getFormattedHours(startHour, minutes);
+    const endHourTime = getFormattedHours(startHour + 1, minutes);
+    return {
+      start: startHourTime,
+      end: endHourTime,
+    };
+  };
+
+  const getDataByCalendarEvents = (
+    elements,
+    elementCalendarEvents,
+    nameKey
+  ) => {
+    const data = [];
+
+    for (const element of elements) {
+      const dataObject = { ...element };
+      dataObject.days = [];
+
+      const title = dataObject[nameKey];
+
+      for (const calendarEvent of elementCalendarEvents) {
+        const { title: calendarEventTitle, start } = calendarEvent;
+
+        if (title === calendarEventTitle) {
+          const currentDay = daysMapping[start.getDay()];
+          const currentTimeRange = getCalendarEventTimeRange(calendarEvent);
+          const dataObjectDayIndex = dataObject.days.findIndex(
+            (dataObjectDay) => dataObjectDay.name === currentDay
+          );
+
+          if (dataObjectDayIndex !== -1) {
+            dataObject.days[dataObjectDayIndex].times.push(currentTimeRange);
+          } else {
+            const newDay = {
+              name: currentDay,
+              times: [currentTimeRange],
+            };
+            dataObject.days.push(newDay);
+          }
+        }
+      }
+      data.push(dataObject);
+    }
+    return data;
+  };
+
+  const handleSave = async () => {
+    const calendarScheduleEvents = [];
+    const calendarEventsConfig = [];
+    const scheduleEventsNames = subjects.map((subject) => subject.name);
+    const eventsConfigNames = eventsConfig.map(
+      (eventConfig) => eventConfig.eventName
+    );
+
+    calendarEvents.forEach((event) => {
+      const eventName = event.title;
+
+      if (scheduleEventsNames.includes(eventName)) {
+        calendarScheduleEvents.push(event);
+      }
+
+      if (eventsConfigNames.includes(eventName)) {
+        calendarEventsConfig.push(event);
+      }
+    });
+
+    const schedules = getDataByCalendarEvents(
+      subjects,
+      calendarScheduleEvents,
+      "title"
+    );
+    const configEvents = getDataByCalendarEvents(
+      eventsConfig,
+      calendarEventsConfig,
+      "eventName"
+    );
+
+    const updateSchedulePromises = [];
+    const updateConfigEventPromises = [];
+
+    for (const schedule of schedules) {
+      const metadata = {
+        days: schedule.days,
+        color: schedule.textColor,
+      };
+      const updateScheduleRequest = updateSchedule(schedule.id, metadata);
+      updateSchedulePromises.push(updateScheduleRequest);
+    }
+
+    for (const configEvent of configEvents) {
+      const metadata = {
+        days: configEvent.days,
+        color: configEvent.textColor,
+      };
+      const updateConfigEventRequest = updateTeacherConfigEvent(
+        configEvent.id,
+        metadata
+      );
+      updateConfigEventPromises.push(updateConfigEventRequest);
+    }
+
+    try {
+      await Promise.all([
+        ...updateSchedulePromises,
+        ...updateConfigEventPromises,
+      ]);
+      const successfulText = translate(`${baseI18NKey}.handleSave.success`);
+      enqueueSnackbar(successfulText, { variant: 'success', autoHideDuration: 5000 });
+    } catch (error) {
+      const errorText = translate(`${baseI18NKey}.handleSave.error`);
+      enqueueSnackbar(errorText, manualHideErrorSnackbarOptions);
+    }
+  };
+
+  const handlePeriodChange = (e) => {
+    setSelectedActivePeriod(e.target.value);
   };
 
   return (
@@ -227,112 +456,153 @@ export default function SchedulePage () {
         <title>{translate(`${baseI18NKey}.helmet.title`)}</title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'xl'}>
+      <Container maxWidth={themeStretch ? false : "xl"}>
         <CustomBreadcrumbs
-          heading="Calendar"
+          heading={translate(`${baseI18NKey}.breacrumb.heading`)}
           links={[
             {
-              name: 'Dashboard',
+              name: "Dashboard",
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Calendar',
+              name: translate(`${baseI18NKey}.breacrumb.schedule_link`),
             },
           ]}
           action={
-            <Button
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-              onClick={handleSave}
-            >
-              New Event
-            </Button>
+            selectedActivePeriod && (
+              <Button
+                variant="contained"
+                startIcon={<Iconify icon="material-symbols:save-outline" />}
+                onClick={handleSave}
+              >
+                {translate(`${baseI18NKey}.breacrumb.action_button`)}
+              </Button>
+            )
           }
         />
 
-        <Card>  
-
-          <button type="button" onClick={handlePrint}>Print Calendar</button>  
-
-          <div style={{ margin: '10px'}}>
-            <strong>Materias Asignadas:</strong>
-
-            <div
-              id="external-events"
-              style={{
-                padding: "10px",
-                width: "100%",
-                display: 'flex',
-                flexDirection: isDesktop ? 'row': 'column',
-                justifyContent: 'space-between', 
-              }}
+        {teacherActivePeriods.length > 0 ? (
+          <FormControl fullWidth sx={{ marginBottom: 2 }}>
+            <InputLabel id="demo-simple-select-label">{translate(`${baseI18NKey}.select.label`)}</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={selectedActivePeriod}
+              label="Periodo"
+              onChange={handlePeriodChange}
             >
-              {subjects.map(event => (
-                <StickyNote
-                  className="fc-event"
-                  data-id={event.id}
-                  content={event.title}
-                  title={event.title}
-                  key={event.id}
-                  color={event.textColor}
-                />
+              {teacherActivePeriods.map((period) => (
+                <MenuItem key={period.id} value={period.id}>
+                  {period.displayName}
+                </MenuItem>
               ))}
+            </Select>
+          </FormControl>
+        ) : (
+          <Alert severity="warning">
+            {translate(`${baseI18NKey}.alert.text`)}
+          </Alert>
+        )}
+
+        {selectedActivePeriod && (
+          <Card>
+            <div style={{ margin: "10px" }}>
+              <strong>Materias Asignadas:</strong>
+
+              <div
+                id="external-events"
+                style={{
+                  padding: "10px",
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: isDesktop ? "row" : "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                {subjects.map((event) => (
+                  <StickyNote
+                    className="fc-event"
+                    data-id={event.id}
+                    content={event.title}
+                    title={event.title}
+                    key={event.id}
+                    color={event.textColor}
+                  />
+                ))}
+
+                {eventsConfig.map((event) => (
+                  <StickyNote
+                    className="fc-event"
+                    data-id={event.id}
+                    content={event.title}
+                    title={event.title}
+                    key={event.id}
+                    color={event.textColor}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
 
-          <StyledCalendar>
-            <CalendarToolbar />
+            <StyledCalendar>
+              <CalendarToolbar />
 
-            <FullCalendar
-              editable
-              droppable
-              expandRows
-              selectable
-              allDayMaintainDuration
-              eventResizableFromStart
-              rerenderDelay={10}
-              weekends={false}
-              allDaySlot={false}
-              locale={currentCalendarLocale}
-              ref={calendarRef}
-              initialDate={date}
-              initialView='timeGridWeek'
-              dayMaxEventRows={3}
-              eventDisplay="block"
-              events={calendarEvents}
-              headerToolbar={false}
-              eventDrop={handleDropEvent}
-              eventClick={handleSelectEvent}
-              height={isDesktop ? 720 : 'auto'}
-              slotMinTime="07:30:00"
-              slotMaxTime="17:30:00"
-              slotDuration="01:00:00"
-              plugins={[
-                listPlugin,
-                dayGridPlugin,
-                timelinePlugin,
-                timeGridPlugin,
-                interactionPlugin,
-              ]}
-              dayHeaderFormat={{weekday: 'long' }}
-              viewDidMount={handleViewDidMount}
-              drop={handleDropExternalEvent}
-            />
-          </StyledCalendar>
-        </Card>
+              <FullCalendar
+                editable
+                droppable
+                expandRows
+                selectable
+                allDayMaintainDuration
+                eventResizableFromStart
+                rerenderDelay={10}
+                weekends={false}
+                allDaySlot={false}
+                locale={currentCalendarLocale}
+                ref={calendarRef}
+                validRange={{
+                  start: "2023-06-12",
+                  end: "2023-06-17",
+                }}
+                initialView="timeGridWeek"
+                dayMaxEventRows={3}
+                eventDisplay="block"
+                events={calendarEvents}
+                headerToolbar={false}
+                eventDrop={handleDropEvent}
+                eventClick={handleSelectEvent}
+                height={isDesktop ? 720 : "auto"}
+                slotMinTime="07:30:00"
+                slotMaxTime="17:30:00"
+                slotDuration="01:00:00"
+                plugins={[
+                  listPlugin,
+                  dayGridPlugin,
+                  timelinePlugin,
+                  timeGridPlugin,
+                  interactionPlugin,
+                ]}
+                dayHeaderFormat={{ weekday: "long" }}
+                viewDidMount={handleViewDidMount}
+                drop={handleDropExternalEvent}
+              />
+            </StyledCalendar>
+          </Card>
+        )}
       </Container>
 
-      <Dialog fullWidth maxWidth="xs" open={openForm} onClose={handleCloseModal}>
-        <DialogTitle>{true ? 'Edit Event' : 'Add Event'}</DialogTitle>
+      <Dialog
+        fullWidth
+        maxWidth="xs"
+        open={openForm}
+        onClose={handleCloseModal}
+      >
+        <DialogTitle>{translate(`${baseI18NKey}.dialog.title`)}</DialogTitle>
 
         <CalendarForm
-          range={selectedRange}
+          event={selectedEvent}
           onCancel={handleCloseModal}
-          onCreateUpdateEvent={handleCreateUpdateEvent}
           onDeleteEvent={handleDeleteEvent}
-          colorOptions={COLOR_OPTIONS}
         />
       </Dialog>
     </>
   );
-};
+}

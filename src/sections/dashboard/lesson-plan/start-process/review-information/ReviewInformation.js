@@ -19,6 +19,7 @@ import Iconify from '../../../../../components/iconify/Iconify';
 import { useLocales } from '../../../../../locales';
 import { getUser } from '../../../../../services/user';
 import { validateGradesMatch } from '../../../../../services/grade';
+import { removeDuplicatesByKey } from '../../../../../utils/array';
 
 ReviewInformation.propTypes = {
   generalInformation: PropTypes.object,
@@ -37,6 +38,7 @@ export default function ReviewInformation({
   onNextStep,
   onGoToStep
 }) {
+  const uniqueTeachersCount = teachers && removeDuplicatesByKey(teachers, 'email').length;
   const [activateAlert, setActivateAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('')
   const [manager, setManager] = useState();
@@ -198,7 +200,7 @@ export default function ReviewInformation({
                   color={theme.palette.text.secondary}
                   content={
                     <div>
-                      { `${teachers.length} `}
+                      { `${uniqueTeachersCount} `}
                       <Box
                           component='span'
                           sx={{ color: 'text.secondary', typography: 'body2' }}

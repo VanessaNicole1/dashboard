@@ -60,8 +60,8 @@ export default function CreateLessonPlanProcessPage() {
       degree: {
         name: degree
       },
-      minimumNumberOfStudentsToEvaluate: {
-        minimumNumber: studentsNumber
+      minimumStudents: {
+        minimumStudentsToEvaluate: studentsNumber
       },
       students,
       teachers
