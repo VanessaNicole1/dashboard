@@ -1,11 +1,5 @@
-// ----------------------------------------------------------------------
-
-// IF THIS TRANSLATION IS INCORRECT PLEASE IGNORE THIS AS THIS TRANSLATION IS FOR DEMO PURPOSES ONLY
-// We are happy if you can help improve the translation by sending an email to support@minimals.cc.
-
-// ----------------------------------------------------------------------
-
 const en = {
+  Schedule: "Schedule",
   demo: {
     title: `English`,
     introduction: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
@@ -433,6 +427,53 @@ const en = {
   other_cases: `other cases`,
   item_by_roles: `item by roles`,
   only_admin_can_see_this_item: `Only admin can see this item`,
+  schedule: {
+    helmet: {
+      title: 'Schedule - Lesson Plan'
+    },
+    handleSave: {
+      success: 'Schedule successfully updated.',
+      error: 'There was an error trying to update the schedule.'
+    },
+    breacrumb: {
+      heading: 'Class Schedule.',
+      schedule_link: 'Class Schedule',
+      action_button: 'Update Schedule'
+    },
+    select: {
+      label: 'Period'
+    },
+    alert: {
+      text: 'Dear teacher, you have not been assigned to any subjects in the active periods.'
+    },
+    dialog: {
+      title: 'Delete event'
+    }
+  },
+  calendarForm: {
+    event_schema: {
+      required_title: 'Title is required.',
+      required_day: 'Day is required.'
+    },
+    form: {
+      title: {
+        label: 'Title'
+      },
+      day: {
+        label: 'Day'
+      },
+      start_date: {
+        label: 'Start hour'
+      },
+      end_date: {
+        label: 'End hour'
+      }
+    },
+    dialog: {
+      cancel_button: 'Cancel',
+      delete_button: 'Delete'
+    }
+  }
 };
 
 export default en;

@@ -10,3 +10,25 @@ export const getSchedule = async (id) => {
     }
   }
 };
+
+export const getSchedules = async (periodId, userId) => {
+  try  {
+    const { data } = await axios.get( `/schedules/period/${periodId}`, { params: { userId } });
+    return data;
+  } catch (error) {
+    return {
+      message: "Couldn't retrieve schedule"
+    }
+  }
+};
+
+export const updateSchedule = async (scheduleId, metadata) => {
+  try {
+    const { data } = await axios.patch(`/schedules/${scheduleId}`, { metadata });
+    return data;
+  } catch (error) {
+    return {
+      message: 'Something was wrong trying to update the schedule'
+    };
+  }
+}

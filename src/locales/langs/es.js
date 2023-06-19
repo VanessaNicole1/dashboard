@@ -1,11 +1,5 @@
-// ----------------------------------------------------------------------
-
-// IF THIS TRANSLATION IS INCORRECT PLEASE IGNORE THIS AS THIS TRANSLATION IS FOR DEMO PURPOSES ONLY
-// We are happy if you can help improve the translation by sending an email to support@minimals.cc.
-
-// ----------------------------------------------------------------------
-
 const en = {
+  Schedule: "Calendario",
   demo: {
     title: `English`,
     introduction: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
@@ -422,6 +416,53 @@ const en = {
   other_cases: `other cases`,
   item_by_roles: `item by roles`,
   only_admin_can_see_this_item: `Only admin can see this item`,
+  schedule: {
+    helmet: {
+      title: 'Carga académica - Plan de Clases'
+    },
+    handleSave: {
+      success: 'Horario correctamente actualizado.',
+      error: 'Hubo un error al actulizar el horario.'
+    },
+    breacrumb: {
+      heading: 'Horario de Clases.',
+      schedule_link: 'Horario de Clases',
+      action_button: 'Actualizar horario'
+    },
+    select: {
+      label: 'Periodo'
+    },
+    alert: {
+      text: 'Estimado docente, usted no ha sido asignado a ninguna materia en los periodos activos.'
+    },
+    dialog: {
+      title: 'Eliminar Evento'
+    }
+  },
+  calendarForm: {
+    event_schema: {
+      required_title: 'El título es requerido.',
+      required_day: 'El día es requerido.'
+    },
+    form: {
+      title: {
+        label: 'Titulo'
+      },
+      day: {
+        label: 'Día'
+      },
+      start_date: {
+        label: 'Hora de inicio'
+      },
+      end_date: {
+        label: 'Hora de fin'
+      }
+    },
+    dialog: {
+      cancel_button: 'Cancelar',
+      delete_button: 'Eliminar'
+    }
+  }
 };
 
 export default en;
