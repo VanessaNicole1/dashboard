@@ -2,7 +2,7 @@ import axios from "../utils/axios";
 
 export const getSchedule = async (id) => {
   try  {
-    const { data: schedule } = await axios.get( `/schedule/${id}`);
+    const { data: schedule } = await axios.get( `/schedules/${id}`);
     return schedule;
   } catch (error) {
     return {
@@ -30,5 +30,16 @@ export const updateSchedule = async (scheduleId, metadata) => {
     return {
       message: 'Something was wrong trying to update the schedule'
     };
+  }
+}
+
+export const getSchedulesByTeacher = async (id) => {
+  try {
+    const { data: schedules } = await axios.get(`/schedules/teacher/${id}`);
+    return schedules;
+  } catch (error) {
+    return {
+      message: "Couldn't retrieve schedule"
+    }
   }
 }
