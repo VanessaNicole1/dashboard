@@ -1,6 +1,6 @@
-import { Card, Grid, Stack, TextField, Typography } from "@mui/material";
+import { Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useCallback, useEffect, useState } from "react";
@@ -17,11 +17,26 @@ import FilePanel from "./FilePanel";
 import { PATH_DASHBOARD } from "../../../../routes/paths";
 import { _files } from "./_files";
 import FileNewFolderDialog from "./file/FileNewFolderDialog";
+import { getSchedules } from "../../../../services/schedule";
+import { getStudents } from "../../../../services/student";
+import { useAuthContext } from "../../../../auth/useAuthContext";
+import { findTeacherActivePeriods } from "../../../../services/teacher";
 
 export default function LessonPlanNewFormForm() {
+  const { user } = useAuthContext();
+
   const [openUploadFile, setOpenUploadFile] = useState(false);
+  const [teacherActivePeriods, setTeacherActivePeriods] = useState([]);
+  const [uniqueSchedules, setUniqueSchedules] = useState([]);
+  const [schedules, setSchedules] = useState([]);
+  const [grades, setGrades] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [selectedActivePeriod, setSelectedActivePeriod] = useState('');
+  const [selectedSubject, setSelectedSubject] = useState('');
+  const [selectedGrade, setSelectedGrade] = useState('');
 
   const newLessonPlanSchema = Yup.object().shape({
+    // period: Yup.string().required('Period is required'),
     // subject: Yup.string().required('Schedule is required'),
     // grade: Yup.string().required('Schedule is required'),
     // date: Yup.date().required('Date is required'),
@@ -36,6 +51,7 @@ export default function LessonPlanNewFormForm() {
   });
 
   const defaultValues = {
+    period: "",
     subject: "",
     grade: "",
     date: "",
@@ -65,9 +81,48 @@ export default function LessonPlanNewFormForm() {
   const values = watch();
 
   useEffect(() => {
-    
-  }, [])
-  
+    const fetchTeacherActivePeriods = async () => {
+      const activePeriods = await findTeacherActivePeriods(user.id);
+      if (activePeriods.length > 0) {
+        setSelectedActivePeriod(activePeriods[0].id);
+        setTeacherActivePeriods(activePeriods);
+      }
+    };
+
+    fetchTeacherActivePeriods();
+  }, [user]);
+
+  useEffect(() => {
+    if (selectedActivePeriod) {
+      const fetchSchedules = async () => {
+        const currentSchedules = await getSchedules(selectedActivePeriod, user.id);
+        setSchedules(currentSchedules);
+        const uniqueCurrentSchedules = currentSchedules.filter(
+          (obj, index) =>
+          currentSchedules.findIndex((schedule) => schedule.subject.id === obj.subject.id) === index
+        );
+        setUniqueSchedules(uniqueCurrentSchedules);
+      }
+      fetchSchedules();
+    }
+  }, [selectedActivePeriod]);
+
+  useEffect(() => {
+    const currentGradesBySubject = schedules.filter((schedule) => schedule.subject.name === selectedSubject);
+    setGrades(currentGradesBySubject);
+  }, [selectedSubject]);
+
+  useEffect(() => {
+    if (selectedGrade) {
+      setValue("students", []);
+      const fetchStudents = async () => {
+        const currentSchedule = schedules.filter((schedule) => schedule.id === selectedGrade);
+        const currentStudents = await getStudents({gradeId: currentSchedule[0].grade.id});
+        setStudents(currentStudents);
+      }
+      fetchStudents();
+    }
+  }, [selectedGrade]);
 
   const onSubmit = (data) => {
     console.log("DATA", data);
@@ -76,10 +131,6 @@ export default function LessonPlanNewFormForm() {
   const handleCloseUploadFile = () => {
     setOpenUploadFile(false);
   };
-
-  const students = [];
-  const subjects = [];
-  const grades = [];
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -105,6 +156,21 @@ export default function LessonPlanNewFormForm() {
     setValue('resources', []);
   };
 
+  const handlePeriodChange = (e) => {
+    setSelectedActivePeriod(e.target.value);
+    setValue("period", e.target.value, { shouldValidate: true });
+  };
+
+  const handleSubjectChange = (e) => {
+    setSelectedSubject(e.target.value);
+    setValue("subject", e.target.value, { shouldValidate: true });
+  }
+
+  const handleGradeChange = (e) => {
+    setSelectedGrade(e.target.value);
+    setValue("grade", e.target.value, { shouldValidate: true });
+  }
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
@@ -112,15 +178,31 @@ export default function LessonPlanNewFormForm() {
           <Card sx={{ p: 3 }}>
             <Stack spacing={3}>
               <RHFSelect
+                native
+                name="period"
+                label="Period"
+                onChange={handlePeriodChange}
+                value={selectedActivePeriod}
+              >
+                <option value="" />
+                {teacherActivePeriods.map((period) => (
+                  <option key={period.id} value={period.id}>
+                    {period.displayName}
+                  </option>
+                ))}
+              </RHFSelect>
+              <RHFSelect
                 control={control}
                 native
                 name="subject"
                 label="Subject"
+                onChange={handleSubjectChange}
+                value={selectedSubject}
               >
                 <option value="" />
-                {subjects.map((subject) => (
-                  <option key={subject.id} value={subject.gradeId}>
-                    {subject.startHour}
+                {uniqueSchedules.map((schedule) => (
+                  <option key={schedule.id} value={schedule.name}>
+                    {schedule.subject.name}
                   </option>
                 ))}
               </RHFSelect>
@@ -129,11 +211,13 @@ export default function LessonPlanNewFormForm() {
                 native
                 name="grade"
                 label="Grade"
+                onChange={handleGradeChange}
+                value={selectedGrade}
               >
                 <option value="" />
                 {grades.map((grade) => (
-                  <option key={grade.id} value={grade.gradeId}>
-                    {grade.startHour}
+                  <option key={grade.grade.id} value={grade.id}>
+                    { `${grade.grade.number} "${grade.grade.parallel}"`}
                   </option>
                 ))}
               </RHFSelect>
