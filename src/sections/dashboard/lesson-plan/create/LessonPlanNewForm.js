@@ -1,26 +1,29 @@
-import { Card, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Card, Grid, Stack, TextField, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useCallback, useEffect, useState } from "react";
-import { DatePicker } from "@mui/x-date-pickers";
+import { DatePicker, DateTimePicker } from "@mui/x-date-pickers";
 import FormProvider from "../../../../components/hook-form/FormProvider";
 import {
   RHFAutocomplete,
   RHFEditor,
+  RHFRadioGroup,
   RHFSelect,
   RHFTextField,
   RHFUpload,
 } from "../../../../components/hook-form";
-import FilePanel from "./FilePanel";
-import { PATH_DASHBOARD } from "../../../../routes/paths";
-import { _files } from "./_files";
 import FileNewFolderDialog from "./file/FileNewFolderDialog";
 import { getSchedules } from "../../../../services/schedule";
 import { getStudents } from "../../../../services/student";
 import { useAuthContext } from "../../../../auth/useAuthContext";
 import { findTeacherActivePeriods } from "../../../../services/teacher";
+
+const NOTIFICATION_OPTION = [
+  { label: 'Notify now', value: 'yes' },
+  { label: 'Notify after', value: 'no' },
+];
 
 export default function LessonPlanNewFormForm() {
   const { user } = useAuthContext();
@@ -34,35 +37,44 @@ export default function LessonPlanNewFormForm() {
   const [selectedActivePeriod, setSelectedActivePeriod] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
   const [selectedGrade, setSelectedGrade] = useState('');
+  const [selectedNotification, setSelectedNotification] = useState(true);
+  const [selectedStudent, setSelectedStudent] = useState([]);
 
   const newLessonPlanSchema = Yup.object().shape({
-    // period: Yup.string().required('Period is required'),
-    // subject: Yup.string().required('Schedule is required'),
-    // grade: Yup.string().required('Schedule is required'),
-    // date: Yup.date().required('Date is required'),
-    // topic: Yup.string().required('Topic is required'),
-    // description: Yup.string().required('Description is required'),
-    // content: Yup.string().required('Content is required'),
-    // cover: Yup.mixed().required('Cover is required'),
-    // students: Yup.array().min(2, 'Must have at least 2 tags'),
-    // purposeOfClass: Yup.string().required('Purpose of the class is required'),
-    // bibliography: Yup.string().required('Bibliography is required'),
+    period: Yup.string().required('Period is required'),
+    subject: Yup.string().required('Schedule is required'),
+    grade: Yup.string().required('Schedule is required'),
+    date: Yup.date().required('Date is required'),
+    topic: Yup.string().required('Topic is required'),
+    description: Yup.string().required('Description is required'),
+    content: Yup.string().required('Content is required'),
+    students: Yup.array().min(2, 'Must have at least 2 tags'),
+    purposeOfClass: Yup.string().required('Purpose of the class is required'),
+    bibliography: Yup.string().required('Bibliography is required'),
     resources: Yup.array(),
-  });
+    notification: Yup.string().required('Notification is required'),
+    notificationDate: Yup.date().when(['notification', 'date'], (notification, date, schema) => {
+      if (notification === 'no') {
+        return schema.min(date, 'End Date must be after Start Date')
+        .typeError('End Date is required')
+      }
+    }).required('Notification Date is required').typeError('This is an error')
+  })
 
   const defaultValues = {
     period: "",
     subject: "",
     grade: "",
-    date: "",
+    date: new Date(),
     topic: "",
     description: "",
     content: "",
-    cover: [],
     students: [],
     purposeOfClass: "",
     bibliography: "",
     resources: [],
+    notification: "yes",
+    notificationDate: new Date()
   };
 
   const methods = useForm({
@@ -157,19 +169,57 @@ export default function LessonPlanNewFormForm() {
   };
 
   const handlePeriodChange = (e) => {
+    setValue("grade", '', { shouldValidate: true });
+    setValue("students", [], { shouldValidate: true });
+    setValue("subject", '', { shouldValidate: true });
+    setSchedules([]);
+    setSelectedStudent([]);
+    setSelectedSubject('');
+    setStudents([]);
     setSelectedActivePeriod(e.target.value);
     setValue("period", e.target.value, { shouldValidate: true });
   };
 
   const handleSubjectChange = (e) => {
+    setValue("grade", '', { shouldValidate: true });
+    setValue("students", [], { shouldValidate: true });
+    setSelectedStudent([]);
+    setStudents([]);
     setSelectedSubject(e.target.value);
     setValue("subject", e.target.value, { shouldValidate: true });
   }
 
   const handleGradeChange = (e) => {
+    setValue("students", [], { shouldValidate: true });
+    setSelectedStudent([]);
+    setStudents([]);
     setSelectedGrade(e.target.value);
     setValue("grade", e.target.value, { shouldValidate: true });
   }
+
+  const selectedNotificationValue = useWatch({
+    control,
+    name: 'notification',
+  });
+
+  function removeDuplicates(arr) {
+    return arr.filter((obj, index) => {
+      const firstIndex = arr.findIndex((item) => JSON.stringify(item) === JSON.stringify(obj));
+      return index === firstIndex;
+    });
+  }
+
+  const handleStudentChange = (event, newValue) => {
+    const validValues = removeDuplicates(newValue);
+    setValue("students", validValues, { shouldValidate: true });
+    setSelectedStudent(validValues);
+  }
+  
+
+  useEffect(() => {
+    const notificationValue = selectedNotificationValue === 'no' && true;
+    setSelectedNotification(notificationValue);
+  }, [selectedNotificationValue]);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -286,24 +336,6 @@ export default function LessonPlanNewFormForm() {
                   onUpload={() => console.log("ON UPLOAD")}
                 />
               </Stack>
-
-              {/* <div>
-              <FilePanel
-                title="Resources"
-                link={PATH_DASHBOARD.fileManager}
-                onOpen={handleOpenUploadFile}
-                sx={{ mt: 2 }}
-              />
-              <Stack spacing={2}>
-                {_files.slice(0, 5).map((file) => (
-                  <FileGeneralRecentCard
-                    key={file.id}
-                    file={file}
-                    onDelete={() => console.log('DELETE', file.id)}
-                  />
-                ))}
-              </Stack>
-            </div> */}
             </Stack>
           </Card>
         </Grid>
@@ -311,13 +343,18 @@ export default function LessonPlanNewFormForm() {
           <Card sx={{ p: 3 }}>
             <Stack spacing={3}>
               <RHFAutocomplete
+                control={control}
+                value={selectedStudent}
                 name="students"
                 label="Students"
                 multiple
                 freeSolo
+                onChange={handleStudentChange}
                 options={students.map(
-                  (student) => `${student.user.name} ${student.user.lastName}`
+                  (student) => ({id: student.id, displayName: `${student.user.name} ${student.user.lastName}`})
                 )}
+                getOptionLabel={(option) => option.displayName}
+                // setcustomkey={(option) => option.id}
                 ChipProps={{ size: "small" }}
               />
               <RHFTextField name="purposeOfClass" label="Purpose of Class" />
@@ -328,6 +365,38 @@ export default function LessonPlanNewFormForm() {
                 multiline
                 rows={3}
               />
+              <Stack spacing={1}>
+                  <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                    Notify students
+                  </Typography>
+
+                  <RHFRadioGroup control={control} row spacing={4} name="notification" options={NOTIFICATION_OPTION} />
+              </Stack>
+
+              {selectedNotification && (
+                <Controller
+                    name="notificationDate"
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <DateTimePicker
+                        views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                        label="Notification Date"
+                        value={field.value}
+                        onChange={(newValue) => {
+                          field.onChange(newValue);
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            fullWidth
+                            error={!!error}
+                            helperText={error?.message}
+                          />
+                        )}
+                      />
+                    )}
+                  />
+              )}
             </Stack>
           </Card>
           <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
