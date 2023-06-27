@@ -222,6 +222,24 @@ export default function LessonPlanNewForm() {
                 options={TAGS_OPTION.map((option) => option)}
                 ChipProps={{ size: 'small' }}
               />
+
+              {/* <div>
+              <FilePanel
+                title="Resources"
+                link={PATH_DASHBOARD.fileManager}
+                onOpen={handleOpenUploadFile}
+                sx={{ mt: 2 }}
+              />
+              <Stack spacing={2}>
+                {_files.slice(0, 5).map((file) => (
+                  <FileGeneralRecentCard
+                    key={file.id}
+                    file={file}
+                    onDelete={() => console.log('DELETE', file.id)}
+                  />
+                ))}
+              </Stack>
+            </div> */}
             </Stack>
           </Card>
 
