@@ -19,6 +19,9 @@ import { getSchedules } from "../../../../services/schedule";
 import { getStudents } from "../../../../services/student";
 import { useAuthContext } from "../../../../auth/useAuthContext";
 import { findTeacherActivePeriods } from "../../../../services/teacher";
+import { createLessonPlan } from "../../../../services/lesson-plan";
+import { manualHideErrorSnackbarOptions } from "../../../../utils/snackBar";
+import { useSnackbar } from '../../../../components/snackbar';
 
 const NOTIFICATION_OPTION = [
   { label: 'Notify now', value: 'yes' },
@@ -27,6 +30,8 @@ const NOTIFICATION_OPTION = [
 
 export default function LessonPlanNewFormForm() {
   const { user } = useAuthContext();
+  const { enqueueSnackbar } = useSnackbar();
+
 
   const [openUploadFile, setOpenUploadFile] = useState(false);
   const [teacherActivePeriods, setTeacherActivePeriods] = useState([]);
@@ -39,6 +44,7 @@ export default function LessonPlanNewFormForm() {
   const [selectedGrade, setSelectedGrade] = useState('');
   const [selectedNotification, setSelectedNotification] = useState(true);
   const [selectedStudent, setSelectedStudent] = useState([]);
+  const [fields, setFields] = useState(true);
 
   const newLessonPlanSchema = Yup.object().shape({
     period: Yup.string().required('Period is required'),
@@ -96,7 +102,6 @@ export default function LessonPlanNewFormForm() {
     const fetchTeacherActivePeriods = async () => {
       const activePeriods = await findTeacherActivePeriods(user.id);
       if (activePeriods.length > 0) {
-        setSelectedActivePeriod(activePeriods[0].id);
         setTeacherActivePeriods(activePeriods);
       }
     };
@@ -105,6 +110,11 @@ export default function LessonPlanNewFormForm() {
   }, [user]);
 
   useEffect(() => {
+    if (selectedActivePeriod && selectedActivePeriod.length > 0) {
+      setFields(false);
+    } else {
+      setFields(true);
+    }
     if (selectedActivePeriod) {
       const fetchSchedules = async () => {
         const currentSchedules = await getSchedules(selectedActivePeriod, user.id);
@@ -135,10 +145,6 @@ export default function LessonPlanNewFormForm() {
       fetchStudents();
     }
   }, [selectedGrade]);
-
-  const onSubmit = (data) => {
-    console.log("DATA", data);
-  };
 
   const handleCloseUploadFile = () => {
     setOpenUploadFile(false);
@@ -214,12 +220,32 @@ export default function LessonPlanNewFormForm() {
     setValue("students", validValues, { shouldValidate: true });
     setSelectedStudent(validValues);
   }
-  
 
   useEffect(() => {
     const notificationValue = selectedNotificationValue === 'no' && true;
     setSelectedNotification(notificationValue);
   }, [selectedNotificationValue]);
+
+  const onSubmit = async (data) => {
+    const { notification, grade: schedule, period, resources } = data;
+    let { notificationDate } = data;
+    if (notification === 'yes') {
+      notificationDate = null;
+    }
+    data = {
+      ...data,
+      notificationDate,
+      scheduleId: schedule,
+      periodId: period,
+      date: data.date.toISOString()
+    }
+    const lessonPlanResponse = await createLessonPlan(data, resources);
+
+    if (lessonPlanResponse.errorMessage) {
+      enqueueSnackbar(lessonPlanResponse.errorMessage, manualHideErrorSnackbarOptions);
+    }
+    enqueueSnackbar(lessonPlanResponse.message, { variant: 'success', autoHideDuration: 5000 });
+  };
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -248,6 +274,7 @@ export default function LessonPlanNewFormForm() {
                 label="Subject"
                 onChange={handleSubjectChange}
                 value={selectedSubject}
+                disabled={fields}
               >
                 <option value="" />
                 {uniqueSchedules.map((schedule) => (
@@ -263,6 +290,7 @@ export default function LessonPlanNewFormForm() {
                 label="Grade"
                 onChange={handleGradeChange}
                 value={selectedGrade}
+                disabled={fields}
               >
                 <option value="" />
                 {grades.map((grade) => (
@@ -289,16 +317,18 @@ export default function LessonPlanNewFormForm() {
                         helperText={error?.message}
                       />
                     )}
+                    disabled={fields}
                   />
                 )}
               />
-              <RHFTextField name="topic" label="Topic" />
+              <RHFTextField name="topic" disabled={fields} label="Topic"  />
 
               <RHFTextField
                 name="description"
                 label="Description"
                 multiline
                 rows={3}
+                disabled={fields}
               />
 
               <Stack spacing={1}>
@@ -331,9 +361,11 @@ export default function LessonPlanNewFormForm() {
                   name="resources"
                   maxSize={3145728}
                   onDrop={handleDrop}
+                  type="file"
                   onRemove={handleRemoveFile}
                   onRemoveAll={handleRemoveAllFiles}
                   onUpload={() => console.log("ON UPLOAD")}
+                  disabled={fields}
                 />
               </Stack>
             </Stack>
@@ -356,14 +388,16 @@ export default function LessonPlanNewFormForm() {
                 getOptionLabel={(option) => option.displayName}
                 // setcustomkey={(option) => option.id}
                 ChipProps={{ size: "small" }}
+                disabled={fields}
               />
-              <RHFTextField name="purposeOfClass" label="Purpose of Class" />
+              <RHFTextField name="purposeOfClass" disabled={fields} label="Purpose of Class" />
               <RHFTextField
                 name="bibliography"
                 label="Bibliography"
                 fullWidth
                 multiline
                 rows={3}
+                disabled={fields}
               />
               <Stack spacing={1}>
                   <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
@@ -393,6 +427,7 @@ export default function LessonPlanNewFormForm() {
                             helperText={error?.message}
                           />
                         )}
+                        disabled={fields}
                       />
                     )}
                   />
@@ -406,6 +441,7 @@ export default function LessonPlanNewFormForm() {
               variant="contained"
               size="large"
               loading={isSubmitting}
+              disabled={fields}
             >
               Save
             </LoadingButton>
