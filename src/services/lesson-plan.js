@@ -15,6 +15,11 @@ export const getLessonPlans = async () => {
 
 export const createLessonPlan = async (data, resources) => {
   try {
+    const studentIds = data.students.map((student) => student.id);
+    data = {
+      ...data,
+      students: studentIds
+    }
     const formData = new FormData();
     resources.forEach(element => {
       formData.append('files', element);
