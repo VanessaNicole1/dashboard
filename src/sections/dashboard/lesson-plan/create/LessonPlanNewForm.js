@@ -1,11 +1,12 @@
-import { Card, Grid, Stack, TextField, Typography } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import { Controller, useForm, useWatch } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import { useCallback, useEffect, useState } from "react";
-import { DatePicker, DateTimePicker } from "@mui/x-date-pickers";
-import FormProvider from "../../../../components/hook-form/FormProvider";
+import { Card, Grid, Stack, TextField, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+import { useCallback, useEffect, useState } from 'react';
+import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
+import { useNavigate } from 'react-router-dom';
+import FormProvider from '../../../../components/hook-form/FormProvider';
 import {
   RHFAutocomplete,
   RHFEditor,
@@ -13,15 +14,16 @@ import {
   RHFSelect,
   RHFTextField,
   RHFUpload,
-} from "../../../../components/hook-form";
-import FileNewFolderDialog from "./file/FileNewFolderDialog";
-import { getSchedules } from "../../../../services/schedule";
-import { getStudents } from "../../../../services/student";
-import { useAuthContext } from "../../../../auth/useAuthContext";
-import { findTeacherActivePeriods } from "../../../../services/teacher";
-import { createLessonPlan } from "../../../../services/lesson-plan";
-import { manualHideErrorSnackbarOptions } from "../../../../utils/snackBar";
+} from '../../../../components/hook-form';
+import FileNewFolderDialog from './file/FileNewFolderDialog';
+import { getSchedules } from '../../../../services/schedule';
+import { getStudents } from '../../../../services/student';
+import { useAuthContext } from '../../../../auth/useAuthContext';
+import { findTeacherActivePeriods } from '../../../../services/teacher';
+import { createLessonPlan } from '../../../../services/lesson-plan';
+import { manualHideErrorSnackbarOptions } from '../../../../utils/snackBar';
 import { useSnackbar } from '../../../../components/snackbar';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 const NOTIFICATION_OPTION = [
   { label: 'Notify now', value: 'yes' },
@@ -31,7 +33,7 @@ const NOTIFICATION_OPTION = [
 export default function LessonPlanNewFormForm() {
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
-
+  const navigate = useNavigate();
 
   const [openUploadFile, setOpenUploadFile] = useState(false);
   const [teacherActivePeriods, setTeacherActivePeriods] = useState([]);
@@ -54,7 +56,7 @@ export default function LessonPlanNewFormForm() {
     topic: Yup.string().required('Topic is required'),
     description: Yup.string().required('Description is required'),
     content: Yup.string().required('Content is required'),
-    students: Yup.array().min(2, 'Must have at least 2 tags'),
+    students: Yup.array().min(1, 'Must have at least 2 tags'),
     purposeOfClass: Yup.string().required('Purpose of the class is required'),
     bibliography: Yup.string().required('Bibliography is required'),
     resources: Yup.array(),
@@ -243,8 +245,10 @@ export default function LessonPlanNewFormForm() {
 
     if (lessonPlanResponse.errorMessage) {
       enqueueSnackbar(lessonPlanResponse.errorMessage, manualHideErrorSnackbarOptions);
+    } else {
+      enqueueSnackbar(lessonPlanResponse.message, { variant: 'success', autoHideDuration: 5000 });
+      navigate(PATH_DASHBOARD.lessonPlan.listTeacherPlans);
     }
-    enqueueSnackbar(lessonPlanResponse.message, { variant: 'success', autoHideDuration: 5000 });
   };
 
   return (
