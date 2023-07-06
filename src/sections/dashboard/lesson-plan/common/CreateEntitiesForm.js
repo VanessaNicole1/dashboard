@@ -25,6 +25,7 @@ import FormProvider from '../../../../components/hook-form/FormProvider';
 import Iconify from '../../../../components/iconify/Iconify';
 import CreateEntityTable from './CreateEntityTable';
 import { useLocales } from '../../../../locales';
+import { generateUniqueIdentifier } from '../../../../utils/numberGenerator';
 
 const CustomWidthTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -125,7 +126,6 @@ export default function CreateEntitiesForm({
       );
       const uniqueEntitiesGrades = ['all', ...new Set(entitiesGrades)];
       setGrades(uniqueEntitiesGrades);
-      console.log(validateEntitiesInfo.message);
       enqueueSnackbar(validateEntitiesInfo.message, { variant: 'success', autoHideDuration: 5000 })
     }
   };
@@ -159,7 +159,7 @@ export default function CreateEntitiesForm({
   const onCompleteCSVParsing = (results, acceptedFile) => {
     const csvData = results.data.map((element) => ({
       ...element,
-      id: element.email,
+      id: `${element.email}${generateUniqueIdentifier()}`,
     }));
 
     if (csvData.length === 0) {
