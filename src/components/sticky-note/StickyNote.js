@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { Card, Typography } from "@mui/material";
+import { Card, Stack, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import useResponsive from "../../hooks/useResponsive";
 
@@ -23,12 +23,13 @@ const CenteredWord = styled("span")({
 StickyNote.propTypes = {
   title: PropTypes.string,
   content: PropTypes.string,
+  description: PropTypes.string,
   identifier: PropTypes.string,
   className: PropTypes.string,
   color: PropTypes.string,
 };
 
-function StickyNote({ title, content, identifier, className, color }) {
+function StickyNote({ title, content, description = "", identifier, className, color }) {
   const isDesktop = useResponsive('up', 'sm');
   const words = isDesktop ? content.split(" "): [content];
 
@@ -40,11 +41,21 @@ function StickyNote({ title, content, identifier, className, color }) {
       data-color={color}
       title={title}
     >
-      <Typography variant="body2" align="center">
-        {words.map((word, index) => (
-          <CenteredWord key={index}>{word}</CenteredWord>
-        ))}
-      </Typography>
+      <div style={{display: 'flex', flexDirection: 'column'}}>
+        <Typography variant="body2" align="center">
+          {words.map((word, index) => (
+            <CenteredWord key={index}>{word}</CenteredWord>
+          ))}
+        </Typography>
+        {
+          description && (
+            <Typography variant="caption" align="center">
+              {description}
+            </Typography>
+          )
+        }
+      </div>
+      
     </StickyNoteCard>
   );
 }

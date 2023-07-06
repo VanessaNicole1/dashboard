@@ -146,19 +146,22 @@ export default function SchedulePage() {
     elements,
     titleEventKey,
     objectKey,
-    COLORS
+    COLORS,
+    type = 'SUBJECTS'
   ) => {
     const stickyNotes = [];
     let events = [];
 
     elements.forEach((element, index) => {
+      const getGradeName = type === "SUBJECTS" ? `${element.grade.number} CICLO ${element.grade.parallel}`: '';
       const elementMetadata = element.metadata;
       const color = elementMetadata?.color || COLORS[index];
       const title = getObjectNestedValueByString(element, titleEventKey);
+      const eventTitle = type === 'SUBJECTS' ? `${title} - ${getGradeName}`: title;
 
       events = [
         ...events,
-        ...getCalendarEventsByMetadata(elementMetadata, color, title),
+        ...getCalendarEventsByMetadata(elementMetadata, color, eventTitle),
       ];
 
       const note = {
@@ -167,6 +170,10 @@ export default function SchedulePage() {
         id: element.id,
         textColor: color,
       };
+
+      if (type === 'SUBJECTS') {
+        note.description = getGradeName;
+      }
 
       stickyNotes.push(note);
     });
@@ -198,12 +205,14 @@ export default function SchedulePage() {
         "subject",
         COLOR_OPTIONS
       );
+      
       const [teacherExternalEvents, teacherCalendarConfigEvents] =
         getStickyNotesAndEvents(
           teacherConfigEvents,
           "eventName",
           "",
-          CONFIG_EVENTS_COLORS
+          CONFIG_EVENTS_COLORS,
+          "EXTERNAL_EVENTS"
         );
 
       setCalendarEvents([
@@ -381,14 +390,15 @@ export default function SchedulePage() {
   const handleSave = async () => {
     const calendarScheduleEvents = [];
     const calendarEventsConfig = [];
-    const scheduleEventsNames = subjects.map((subject) => subject.name);
+    const getSubjectGrade = (subject) => `${subject.title} - ${subject.description}`;
+    const scheduleEventsNames = subjects.map((subject) => getSubjectGrade(subject));
     const eventsConfigNames = eventsConfig.map(
       (eventConfig) => eventConfig.eventName
     );
 
     calendarEvents.forEach((event) => {
       const eventName = event.title;
-
+    
       if (scheduleEventsNames.includes(eventName)) {
         calendarScheduleEvents.push(event);
       }
@@ -399,7 +409,7 @@ export default function SchedulePage() {
     });
 
     const schedules = getDataByCalendarEvents(
-      subjects,
+      subjects.map(subject => ({...subject, title: getSubjectGrade(subject)})),
       calendarScheduleEvents,
       "title"
     );
@@ -522,9 +532,10 @@ export default function SchedulePage() {
                 {subjects.map((event) => (
                   <StickyNote
                     className="fc-event"
+                    description={event.description}
                     data-id={event.id}
                     content={event.title}
-                    title={event.title}
+                    title={`${event.title} - ${event.description}`}
                     key={event.id}
                     color={event.textColor}
                   />
