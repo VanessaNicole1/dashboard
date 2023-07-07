@@ -166,14 +166,14 @@ const en = {
       },
     },
   },
-  lesson_plan_list_page: {
+lesson_plan_list_page: {
     helmet: "Lesson Plan: List",
     heading: "Lesson Plans List",
     dashboard: "Dashboard",
     lesson_plan: "Lesson Plan",
     list: "List",
     table: {
-      created_date: "Created Date",
+      created_date: "Date",
       grade: "Grade",
       teacher: "Teacher",
       subject: "Subject",
