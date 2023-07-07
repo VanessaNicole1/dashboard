@@ -43,3 +43,14 @@ export const getSchedulesByTeacher = async (id) => {
     }
   }
 }
+
+export const getLessonPlansByUser = async (userId, filterSchedule) => {
+  try  {
+    const { data } = await axios.get( `/schedules/lesson-plans/${userId}`, {params: filterSchedule});
+    return data;
+  } catch (error) {
+    return {
+      message: "Couldn't retrieve schedule"
+    }
+  }
+}
