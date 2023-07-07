@@ -179,7 +179,7 @@ export default function ProcessesListPage() {
       <Helmet>
         <title> {translate("period_list_page.helmet")}</title>
       </Helmet>
-
+      
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading={translate("period_list_page.heading")}
@@ -189,7 +189,6 @@ export default function ProcessesListPage() {
             { name: 'List' },
           ]}
         />
-
         <Card>
           <Tabs
             value={filterStatus}
@@ -203,9 +202,7 @@ export default function ProcessesListPage() {
               <Tab key={tab} label={tab} value={tab} />
             ))}
           </Tabs>
-
           <Divider />
-
           <PeriodToolbar
             isFiltered={isFiltered}
             filterContent={filterContent}
@@ -215,7 +212,6 @@ export default function ProcessesListPage() {
             onFilterManager={handleFilterManager}
             onResetFilter={handleResetFilter}
           />
-
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <Scrollbar>
               <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
@@ -227,7 +223,6 @@ export default function ProcessesListPage() {
                   numSelected={selected.length}
                   onSort={onSort}
                 />
-
                 <TableBody>
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -244,18 +239,15 @@ export default function ProcessesListPage() {
                         onViewSubjects={() => handleViewSubjects(row.id)}
                       />
                     ))}
-
                   <TableEmptyRows
                     height={denseHeight}
                     emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
                   />
-
                   <TableNoData isNotFound={isNotFound} />
                 </TableBody>
               </Table>
             </Scrollbar>
-          </TableContainer>Periodos
-
+          </TableContainer>
           <TablePaginationCustom
             count={dataFiltered.length}
             page={page}
