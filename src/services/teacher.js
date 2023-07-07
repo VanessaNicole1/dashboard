@@ -64,3 +64,14 @@ export const findTeacherActivePeriods = async (userId) => {
     }
   }
 }
+
+export const findTeacherPeriods = async (userId) => {
+  try  {
+    const { data } = await axios.get(`/teachers/${userId}/periods`);
+    return data;
+  } catch (error) {
+    return {
+      message: "Couldn't retrieve teacher active periods"
+    }
+  }
+}
