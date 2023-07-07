@@ -1,29 +1,26 @@
 import PropTypes from 'prop-types';
 import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/material';
 import Iconify from '../../../../components/iconify';
-import { useLocales } from '../../../../locales';
 
-LessonPlanToobar.propTypes = {
+LesoonPlanToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterContent: PropTypes.string,
-  filterGrade: PropTypes.string,
-  onFilterContent: PropTypes.func,
-  onFilterGrade: PropTypes.func,
+  filterPeriod: PropTypes.string,
+  onFilterName: PropTypes.func,
+  onFilterPeriod: PropTypes.func,
   onResetFilter: PropTypes.func,
-  optionsGrade: PropTypes.arrayOf(PropTypes.string),
+  optionsPeriods: PropTypes.arrayOf(PropTypes.object),
 };
 
-export default function LessonPlanToobar({
+export default function LesoonPlanToolbar({
   isFiltered,
   filterContent,
-  filterGrade,
-  optionsGrade,
-  onFilterContent,
-  onFilterGrade,
+  filterPeriod,
+  optionsPeriods,
+  onFilterName,
+  onFilterPeriod,
   onResetFilter,
 }) {
-  const { translate } = useLocales(); 
-
   return (
     <Stack
       spacing={2}
@@ -37,9 +34,9 @@ export default function LessonPlanToobar({
       <TextField
         fullWidth
         select
-        label={translate('sections.lesson_plan_toolbar.grade')}
-        value={filterGrade}
-        onChange={onFilterGrade}
+        label="Period"
+        value={filterPeriod}
+        onChange={onFilterPeriod}
         SelectProps={{
           MenuProps: {
             PaperProps: {
@@ -50,14 +47,14 @@ export default function LessonPlanToobar({
           },
         }}
         sx={{
-          maxWidth: { sm: 240 },
+          maxWidth: { sm: 305 },
           textTransform: 'capitalize',
         }}
       >
-        {optionsGrade.map((option) => (
+        {optionsPeriods.map((option) => (
           <MenuItem
-            key={option}
-            value={option}
+            key={option.id}
+            value={option.id}
             sx={{
               mx: 1,
               borderRadius: 0.75,
@@ -65,7 +62,7 @@ export default function LessonPlanToobar({
               textTransform: 'capitalize',
             }}
           >
-            { option === 'all' ? translate('sections.toolbar_custom.all_option'): option}
+            {option.name}
           </MenuItem>
         ))}
       </TextField>
@@ -73,8 +70,8 @@ export default function LessonPlanToobar({
       <TextField
         fullWidth
         value={filterContent}
-        onChange={onFilterContent}
-        placeholder={translate('sections.toolbar_custom.search')}
+        onChange={onFilterName}
+        placeholder="Search..."
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -96,4 +93,4 @@ export default function LessonPlanToobar({
       )}
     </Stack>
   );
-};
+}

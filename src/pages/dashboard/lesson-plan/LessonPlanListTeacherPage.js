@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { paramCase } from 'change-case';
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  Tab,
+  Tabs,
   Card,
   Table,
   Divider,
@@ -10,13 +12,10 @@ import {
   Container,
   TableContainer,
 } from '@mui/material';
-
-import { PATH_DASHBOARD } from '../../../routes/paths';
-
+import { useAuthContext } from '../../../auth/useAuthContext';
 import Scrollbar from '../../../components/scrollbar';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
-
 import {
   useTable,
   getComparator,
@@ -26,25 +25,17 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from '../../../components/table';
+import { PATH_DASHBOARD } from '../../../routes/paths';
+import { useLocales } from "../../../locales";
+import { getLessonPlansByUser } from '../../../services/schedule';
+import { findTeacherPeriods } from '../../../services/teacher';
+import { getMonth , getFullYears } from '../../../sections/dashboard/period/list/utils/date.utils';
+import LessonPlanToobar from '../../../sections/dashboard/lesson-plan/list/LessonPlanToolbar';
+import LessonPlanTableRow from '../../../sections/dashboard/lesson-plan/list/LessonPlanTableRow';
 
-import { LessonPlanTableRow, LessonPlanTableToolbar } from '../../../sections/dashboard/lesson-plan/list';
-import { useLocales } from '../../../locales';
-import { useAuthContext } from '../../../auth/useAuthContext';
-import { getSchedule } from '../../../services/schedule';
+const STATUS_OPTIONS = ['all', 'marked', 'unmarked'];
 
-
-export default function LessonPlanListTeacherPage () {
-  const { translate } = useLocales();
-  const { user } = useAuthContext();
-
-  const TABLE_HEAD = [
-    { id: 'date', label: translate('lesson_plan_list_page.table.created_date'), align: 'center' },
-    { id: 'grade', label: translate('lesson_plan_list_page.table.grade'), align: 'center' },
-    { id: 'teacher', label: translate('lesson_plan_list_page.table.teacher'), align: 'center' },
-    { id: 'subject', label: translate('lesson_plan_list_page.table.subject'), align: 'center'},
-    { id: '', label: translate('lesson_plan_list_page.table.actions'), align: 'center' },
-  ];
-
+export default function LessonPlanListTeacherPage() {
   const {
     dense,
     page,
@@ -52,34 +43,15 @@ export default function LessonPlanListTeacherPage () {
     orderBy,
     rowsPerPage,
     setPage,
-    //
     selected,
     setSelected,
-    onSelectRow,
-    //
     onSort,
     onChangeDense,
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
 
-  useEffect(() => {
-    // const fetchLessonPlans = async () => {
-    //   const lessonPlans = await getLessonPlans();
-    //   setTableData(lessonPlans);
-    // };
-    const fetchSchedule = async () => {
-      const schedule = await getSchedule(user.id);
-      // const simpleGrades = grades.map(grade => grade.displayName);
-      // simpleGrades.unshift('all');
-      // setSimpleGrades(simpleGrades);
-    }
-
-    // fetchLessonPlans();
-    fetchSchedule();
-  }, [user]);
-
-  const [simpleGrades, setSimpleGrades] = useState(['all']);
+  const { user } = useAuthContext();
 
   const { themeStretch } = useSettingsContext();
 
@@ -87,44 +59,85 @@ export default function LessonPlanListTeacherPage () {
 
   const [tableData, setTableData] = useState([]);
 
-  const [filterContent, setFilterContent] = useState('');
+  const [filterContent, setFilterName] = useState('');
 
-  const [filterGrade, setFilterGrade] = useState('all');
+  const [filterPeriod, setFilterPeriod] = useState('0');
 
-  // const [filterStatus, setFilterStatus] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
 
-  const dataFiltered = applyFilter({
-    inputData: tableData,
-    comparator: getComparator(order, orderBy),
-    filterContent,
-    filterGrade,
-    // filterStatus,
-  });
+  const [dataFiltered, setDataFiltered] = useState([]);
+
+  const [currentPeriods, setPeriods] = useState([{id: '0', name: 'all'}]);
+
+  const { translate } = useLocales();
+
+  useEffect(() => {
+    const fetchPeriods = async () => {
+      const periods = await findTeacherPeriods(user.id);
+      const currentActivePeriods = periods.map((period) => ({id: period.id, name: `${getMonth(period.startDate)} ${getFullYears(period.startDate)} - ${getMonth(period.endDate)} ${getFullYears(period.endDate)}`}))
+      currentActivePeriods.unshift({id: '0', name: 'all'});
+      setPeriods(currentActivePeriods);
+    }
+
+    const fetchLessonPlans = async () => {
+      const currentSchedules = await getLessonPlansByUser(user.id);
+      setTableData(currentSchedules);
+    } 
+    
+    fetchPeriods();
+    fetchLessonPlans();
+  }, [user]);
+  
+  useEffect(() => {
+    const updateDataFiltered = async () => {
+      const filterApplied = await applyFilter({
+        inputData: tableData,
+        comparator: getComparator(order, orderBy),
+        filterContent,
+        filterStatus,
+        filterPeriod,
+        user,
+      });
+
+      setDataFiltered(filterApplied);
+    };
+
+    updateDataFiltered();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterContent, tableData, filterPeriod, filterStatus]);
+
+  const TABLE_HEAD = [
+    { id: 'period', label: 'Period', align: 'center' },
+    { id: 'grade', label: 'Grade', align: 'left' },
+    { id: 'subject', label: 'Subject', align: 'left' },
+    { id: 'status', label: 'Status', align: 'left' },
+    { id: 'Actions', label: 'Actions', align: 'center' },
+  ];
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const denseHeight = dense ? 52 : 72;
 
-  const isFiltered = filterContent !== '' || filterGrade !== 'all'; // || filterStatus !== 'all'
+  const isFiltered = filterContent !== '' || filterPeriod !== '0' || filterStatus !== 'all';
 
   const isNotFound =
     (!dataFiltered.length && !!filterContent) ||
-    (!dataFiltered.length && !!filterGrade)
-    // (!dataFiltered.length && !!filterStatus);
+    (!dataFiltered.length && !!filterPeriod) ||
+    (!dataFiltered.length && !!filterStatus);
 
-  // const handleFilterStatus = (event, newValue) => {
-  //   setPage(0);
-  //   setFilterStatus(newValue);
-  // };
-
-  const handleFilterContent = (event) => {
+  const handleFilterStatus = (event, newValue) => {
     setPage(0);
-    setFilterContent(event.target.value);
+    setFilterStatus(newValue);
   };
 
-  const handleFilterGrade = (event) => {
+  const handleFilterName = (event) => {
     setPage(0);
-    setFilterGrade(event.target.value);
+    setFilterName(event.target.value);
+  };
+
+  const handleFilterPeriod = (event) => {
+    setPage(0);
+    setFilterPeriod(event.target.value);
   };
 
   const handleDeleteRow = (id) => {
@@ -143,30 +156,33 @@ export default function LessonPlanListTeacherPage () {
     navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
   };
 
+  const handleViewLessonPlan = (id) => {
+    navigate(PATH_DASHBOARD.teachers.listTeachers, {state: { periodId: id, links: [{ name: translate('period_list_page.list'), href: PATH_DASHBOARD.lessonPlan.listProcesses }]}});
+  };
+
   const handleResetFilter = () => {
-    setFilterContent('');
-    setFilterGrade('all');
-    // setFilterStatus('all');
+    setFilterName('');
+    setFilterPeriod('0');
+    setFilterStatus('all');
   };
 
   return (
     <>
       <Helmet>
-        <title>{translate('lesson_plan_list_page.helmet')}</title>
+        <title> Lesson Plans</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={translate('lesson_plan_list_page.heading')}
+          heading='Lesson Plans'
           links={[
-            { name: translate('lesson_plan_list_page.dashboard'), href: PATH_DASHBOARD.root },
-            { name: translate('lesson_plan_list_page.lesson_plan'), href: PATH_DASHBOARD.lessonPlan.root },
-            { name: translate('lesson_plan_list_page.list') },
+            { name: 'Dashboard', href: PATH_DASHBOARD.root },
+            { name: 'Process', href: PATH_DASHBOARD.lessonPlan.listProcesses },
+            { name: 'List' },
           ]}
         />
-
         <Card>
-          {/* <Tabs
+          <Tabs
             value={filterStatus}
             onChange={handleFilterStatus}
             sx={{
@@ -177,20 +193,20 @@ export default function LessonPlanListTeacherPage () {
             {STATUS_OPTIONS.map((tab) => (
               <Tab key={tab} label={tab} value={tab} />
             ))}
-          </Tabs> */}
+          </Tabs>
 
           <Divider />
 
-          <LessonPlanTableToolbar
+          <LessonPlanToobar
             isFiltered={isFiltered}
             filterContent={filterContent}
-            filterGrade={filterGrade}
-            optionsGrade={simpleGrades}
-            onFilterContent={handleFilterContent}
-            onFilterGrade={handleFilterGrade}
+            filterPeriod={filterPeriod}
+            optionsPeriods={currentPeriods}
+            onFilterName={handleFilterName}
+            onFilterPeriod={handleFilterPeriod}
             onResetFilter={handleResetFilter}
           />
-          
+
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <Scrollbar>
               <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
@@ -202,7 +218,6 @@ export default function LessonPlanListTeacherPage () {
                   numSelected={selected.length}
                   onSort={onSort}
                 />
-
                 <TableBody>
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -211,30 +226,25 @@ export default function LessonPlanListTeacherPage () {
                         key={row.id}
                         row={row}
                         selected={selected.includes(row.id)}
-                        onSelectRow={() => onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
                         onEditRow={() => handleEditRow(row.name)}
                       />
                     ))}
-
                   <TableEmptyRows
                     height={denseHeight}
                     emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
                   />
-
                   <TableNoData isNotFound={isNotFound} />
                 </TableBody>
               </Table>
             </Scrollbar>
           </TableContainer>
-
           <TablePaginationCustom
             count={dataFiltered.length}
             page={page}
             rowsPerPage={rowsPerPage}
             onPageChange={onChangePage}
             onRowsPerPageChange={onChangeRowsPerPage}
-            //
             dense={dense}
             onChangeDense={onChangeDense}
           />
@@ -242,10 +252,9 @@ export default function LessonPlanListTeacherPage () {
       </Container>
     </>
   );
-};
+}
 
-
-function applyFilter({ inputData, comparator, filterContent, filterStatus, filterGrade }) {
+async function applyFilter({ inputData, comparator, filterContent, filterStatus, filterPeriod, user }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -257,20 +266,44 @@ function applyFilter({ inputData, comparator, filterContent, filterStatus, filte
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (filterContent) {
-    inputData = inputData.filter((lessonPlan) => {
-      const { schedule } = lessonPlan;
-      const teacherDisplayName = schedule.teacher.user.displayName;
-      const subjectName = schedule.subject.name;
-      return teacherDisplayName.toLowerCase().includes(filterContent.toLowerCase()) || subjectName.toLowerCase().includes(filterContent.toLowerCase());
+    inputData = inputData.filter((content) => {
+      const {subject, grade} = content;
+      return (
+        subject.name.toLowerCase().includes(filterContent.toLowerCase()) ||
+        grade.parallel.toLowerCase().includes(filterContent.toLowerCase()) ||
+        grade.number.toLowerCase().includes(filterContent.toLowerCase())
+      )
     });
   }
 
-  // if (filterStatus !== 'all') {
-  //   inputData = inputData.filter((user) => user.status === filterStatus);
-  // }
+  if (filterStatus === 'marked') {
+    inputData = await getLessonPlansByUser(user.id, {hasQualified: 'true'});
+  }
 
-  if (filterGrade !== 'all') {
-    inputData = inputData.filter((lessonPlan) => lessonPlan.schedule.grade.displayName === filterGrade);
+  if (filterStatus === 'unmarked') {
+    inputData = inputData.filter((lessonPlan) => lessonPlan.hasQualified === false);
+  }
+  
+  if (filterPeriod !== '0') {
+    const lessonPlans = await getLessonPlansByUser(user.id, {periodId: filterPeriod});
+    inputData = lessonPlans;
+  }
+
+  if (filterStatus === 'marked' && filterPeriod !== '0') {
+    const test = await getLessonPlansByUser(user.id, {periodId: filterPeriod, hasQualified: 'true'});
+    inputData = test;
+  }
+
+  if (filterPeriod !== '0' && filterContent) {
+    const currentLessons = await getLessonPlansByUser(user.id, {periodId: filterPeriod});
+    inputData = currentLessons.filter((content) => {
+      const {subject, grade} = content;
+      return (
+        subject.name.toLowerCase().includes(filterContent.toLowerCase()) ||
+        grade.parallel.toLowerCase().includes(filterContent.toLowerCase()) ||
+        grade.number.toLowerCase().includes(filterContent.toLowerCase())
+      )
+    });
   }
 
   return inputData;
