@@ -14,7 +14,7 @@ export const createPeriod = async (period) => {
 
 export const getPeriods = async (filterPeriod) => {
   try  {
-    const { data: periods } = await axios.post('/periods', filterPeriod);
+    const { data: periods } = await axios.get('/periods', filterPeriod);
     return periods;
   } catch (error) {
     return {

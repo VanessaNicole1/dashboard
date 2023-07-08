@@ -1,26 +1,44 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
+  Button,
   TableRow,
   MenuItem,
   TableCell,
   IconButton,
 } from '@mui/material';
+import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
+import ConfirmDialog from '../../../../components/confirm-dialog';
+import { getFullYears, getMonth } from '../../period/list/utils/date.utils';
 
-LessonPlanTableRow.propTypes = {
+PeriodTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
-  onSelectRow: PropTypes.func,
 };
 
-export default function LessonPlanTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { date, schedule } = row;
+export default function PeriodTableRow({ row, selected, onEditRow, onDeleteRow }) {
+  const { period, grade, subject, hasQualified } = row;
+
+  const { startDate, endDate } = period;
+
+  const startDateFormat = `${getMonth(startDate)} - ${getFullYears(startDate)}`;
+  const endDateFormat = `${getMonth(endDate)} - ${getFullYears(endDate)}`;
+
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   const [openPopover, setOpenPopover] = useState(null);
+
+  const handleOpenConfirm = () => {
+    setOpenConfirm(true);
+  };
+
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false);
+  };
 
   const handleOpenPopover = (event) => {
     setOpenPopover(event.currentTarget);
@@ -33,29 +51,25 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onSelectR
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell align="center">{date}</TableCell>
+        <TableCell align="center">{ `${startDateFormat} - ${endDateFormat}`}</TableCell>
 
-        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {schedule.grade.displayName}
+        <TableCell align="left">
+          { `${grade.number} "${grade.parallel}"` }
         </TableCell>
 
-        <TableCell align="center">
-          {schedule.teacher.user.name} {schedule.teacher.user.lastName}
+        <TableCell align="left">
+          {subject.name}
         </TableCell>
 
-        <TableCell align="center">
-          {schedule.subject.name}
-        </TableCell>
-
-        {/* <TableCell align="left">
+        <TableCell align="left">
           <Label
             variant="soft"
-            color={(status === 'banned' && 'error') || 'success'}
+            color={(hasQualified !== (true) && 'error') || 'success'}
             sx={{ textTransform: 'capitalize' }}
           >
-            {status}
+            {hasQualified !== (true) ? 'Unmarked' : 'Marked' }
           </Label>
-        </TableCell> */}
+        </TableCell>
 
         <TableCell align="center">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
@@ -68,16 +82,57 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onSelectR
         open={openPopover}
         onClose={handleClosePopover}
         arrow="right-top"
-        sx={{ width: 140 }}
+        sx={{ width: 160 }}
       >
+        {
+          period.isActive && <MenuItem
+          onClick={() => {
+            handleOpenConfirm();
+            handleClosePopover();
+          }}
+          sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="eva:trash-2-outline" />
+            Delete
+          </MenuItem>
+        }
 
-        <MenuItem
-          onClick={() => {}}
-        >
-          <Iconify icon="ic:baseline-remove-red-eye" />
-          View
-        </MenuItem>
+        {
+          period.isActive && <MenuItem
+          onClick={() => {
+            onEditRow();
+            handleClosePopover();
+          }}
+          >
+            <Iconify icon="eva:edit-fill" />
+            Edit
+          </MenuItem>
+        }
+
+{
+          !period.isActive && <MenuItem
+          onClick={() => {
+            handleOpenConfirm();
+            handleClosePopover();
+          }}
+          >
+            <Iconify icon="carbon:view" />
+            View
+          </MenuItem>
+        }
       </MenuPopover>
+
+      <ConfirmDialog
+        open={openConfirm}
+        onClose={handleCloseConfirm}
+        title="Delete"
+        content="Are you sure want to delete?"
+        action={
+          <Button variant="contained" color="error" onClick={onDeleteRow}>
+            Delete
+          </Button>
+        }
+      />
     </>
   );
-};
+}
