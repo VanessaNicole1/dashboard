@@ -19,7 +19,6 @@ import {
   ListItemButton,
 } from '@mui/material';
 import { fToNow } from '../../../utils/formatTime';
-import { _notifications } from '../../../_mock/arrays';
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import MenuPopover from '../../../components/menu-popover';
@@ -28,7 +27,7 @@ import { IconButtonAnimate } from '../../../components/animate';
 export default function NotificationsPopover() {
   const [openPopover, setOpenPopover] = useState(null);
 
-  const [notifications, setNotifications] = useState(_notifications);
+  const [notifications, setNotifications] = useState([]);
 
   const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
 
