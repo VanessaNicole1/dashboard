@@ -48,7 +48,6 @@ const navConfig = [
         children: [
           { title: 'about', path: PATH_DASHBOARD.lessonPlan.purpose, roles: [ROLES.manager, ROLES.teacher, ROLES.student] },
           { title: 'start_process', path: PATH_DASHBOARD.lessonPlan.startProcess, roles: [ROLES.manager] },
-          { title: 'all_plans', path: PATH_DASHBOARD.lessonPlan.listAllPlans, roles: [ROLES.manager] }, 
           { title: 'teacher_plans', path: PATH_DASHBOARD.lessonPlan.listTeacherPlans, roles: [ROLES.teacher] },
           { title: 'create', path: PATH_DASHBOARD.lessonPlan.create, roles: [ROLES.teacher] },
           { title: 'list', path: PATH_DASHBOARD.lessonPlan.listStudentPlans, roles: [ROLES.student] },
