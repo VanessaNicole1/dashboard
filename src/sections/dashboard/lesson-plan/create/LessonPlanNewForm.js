@@ -30,7 +30,7 @@ const NOTIFICATION_OPTION = [
   { label: 'Notify after', value: 'no' },
 ];
 
-export default function LessonPlanNewFormForm() {
+export default function LessonPlanNewForm() {
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
