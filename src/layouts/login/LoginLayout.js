@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { Typography, Stack } from '@mui/material';
-import Logo from '../../components/logo';
 import Image from '../../components/image';
 import { StyledRoot, StyledSectionBg, StyledSection, StyledContent } from './styles';
 
@@ -13,14 +12,6 @@ LoginLayout.propTypes = {
 export default function LoginLayout({ children, illustration, title }) {
   return (
     <StyledRoot>
-      <Logo
-        sx={{
-          zIndex: 9,
-          position: 'absolute',
-          mt: { xs: 1.5, md: 5 },
-          ml: { xs: 2, md: 5 },
-        }}
-      />
 
       <StyledSection>
         <Typography variant="h3" sx={{ mb: 10, maxWidth: 480, textAlign: 'center' }}>
