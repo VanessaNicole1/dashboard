@@ -40,3 +40,12 @@ export const createLessonPlan = async (data, resources) => {
     return { errorMessage: error.message }
   }
 }
+
+export const deleteLessonPlan = async (id) => {
+  try {
+    const data = await axios.delete(`/lesson-plans/${id}`)
+    return data;
+  } catch (error) {
+    return { errorMessage: error.message }
+  }
+}
