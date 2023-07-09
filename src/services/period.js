@@ -33,3 +33,12 @@ export const getActivePeriods = async () => {
     }
   }
 };
+
+export const deletePeriod = async (id) => {
+  try {
+    const data = await axios.delete(`/periods/${id}`)
+    return data;
+  } catch (error) {
+    return { errorMessage: error.message }
+  }
+}
