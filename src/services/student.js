@@ -31,6 +31,28 @@ export const createStudent = async (data) => {
   }
 }
 
+export const findStudentActivePeriods = async (userId) => {
+  try  {
+    const { data } = await axios.get(`/students/${userId}/active-periods`);
+    return data;
+  } catch (error) {
+    return {
+      message: "Couldn't retrieve student active periods"
+    }
+  }
+}
+
+export const findStudentLessonPlans = async (isValidated, userId, periodId ) => {
+  try  {
+    const { data } = await axios.get(`/students/lesson-plans`, { params: { isValidated, userId, periodId } });
+    return data;
+  } catch (error) {
+    return {
+      message: "Couldn't retrieve student active periods"
+    }
+  }
+}
+
 export const validateStudents = async (data) => {
   try {
     await axios.post('/students/validate', { students: data })

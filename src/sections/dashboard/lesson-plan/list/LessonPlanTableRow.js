@@ -13,14 +13,14 @@ import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import { getFullYears, getMonth } from '../../period/list/utils/date.utils';
 
-PeriodTableRow.propTypes = {
+LessonPlanTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
 };
 
-export default function PeriodTableRow({ row, selected, onEditRow, onDeleteRow }) {
+export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteRow }) {
   const { period, grade, subject, hasQualified } = row;
 
   const { startDate, endDate } = period;
