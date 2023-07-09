@@ -112,7 +112,7 @@ export default function Router () {
           },
           { path: 'student/list',
             element: (
-              <RoleBasedGuard hasContent roles={[ROLES.manager]}>
+              <RoleBasedGuard hasContent roles={[ROLES.student]}>
                 <LessonPlanListStudentPage />
               </RoleBasedGuard>
             )

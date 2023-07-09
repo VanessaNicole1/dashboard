@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/material';
 import Iconify from '../../../../components/iconify';
 
-LesoonPlanToolbar.propTypes = {
+LessonPlanToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterContent: PropTypes.string,
   filterPeriod: PropTypes.string,
@@ -12,7 +12,7 @@ LesoonPlanToolbar.propTypes = {
   optionsPeriods: PropTypes.arrayOf(PropTypes.object),
 };
 
-export default function LesoonPlanToolbar({
+export default function LessonPlanToolbar({
   isFiltered,
   filterContent,
   filterPeriod,
@@ -47,7 +47,7 @@ export default function LesoonPlanToolbar({
           },
         }}
         sx={{
-          maxWidth: { sm: 305 },
+          maxWidth: { sm: 380 },
           textTransform: 'capitalize',
         }}
       >
