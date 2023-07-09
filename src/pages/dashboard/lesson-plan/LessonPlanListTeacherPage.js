@@ -32,6 +32,7 @@ import { findTeacherPeriods } from '../../../services/teacher';
 import { getMonth , getFullYears } from '../../../sections/dashboard/period/list/utils/date.utils';
 import LessonPlanToobar from '../../../sections/dashboard/lesson-plan/list/LessonPlanToolbar';
 import LessonPlanTableRow from '../../../sections/dashboard/lesson-plan/list/LessonPlanTableRow';
+import { deleteLessonPlan } from '../../../services/lesson-plan';
 
 const STATUS_OPTIONS = ['all', 'marked', 'unmarked'];
 
@@ -140,11 +141,12 @@ export default function LessonPlanListTeacherPage() {
     setFilterPeriod(event.target.value);
   };
 
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
+  const handleDeleteRow = async (id) => {
+    await deleteLessonPlan(id);
+    navigate(PATH_DASHBOARD.lessonPlan.listTeacherPlans);
     setSelected([]);
-    setTableData(deleteRow);
-
+    const currentLessons = await getLessonPlansByUser(user.id);
+    setTableData(currentLessons);
     if (page > 0) {
       if (dataInPage.length < 2) {
         setPage(page - 1);
