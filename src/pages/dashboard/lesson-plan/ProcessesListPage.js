@@ -27,7 +27,7 @@ import {
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import PeriodTableRow from '../../../sections/dashboard/period/list/PeriodTableRow';
 import { useLocales } from "../../../locales";
-import { getPeriods } from '../../../services/period';
+import { deletePeriod, getPeriods } from '../../../services/period';
 import { getUsers } from '../../../services/user';
 import PeriodToolbar from '../../../sections/dashboard/period/list/PeriodToolbar';
 
@@ -136,16 +136,17 @@ export default function ProcessesListPage() {
     setFilterManager(event.target.value);
   };
 
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
+  const handleDeleteRow = async (id) => {
+    await deletePeriod(id);
     setSelected([]);
-    setTableData(deleteRow);
-
+    const currentPeriods = await await getPeriods();
+    setTableData(currentPeriods);
     if (page > 0) {
       if (dataInPage.length < 2) {
         setPage(page - 1);
       }
     }
+    navigate(PATH_DASHBOARD.lessonPlan.listProcesses);
   };
 
   const handleEditRow = (id) => {

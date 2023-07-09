@@ -143,7 +143,6 @@ export default function LessonPlanListTeacherPage() {
 
   const handleDeleteRow = async (id) => {
     await deleteLessonPlan(id);
-    navigate(PATH_DASHBOARD.lessonPlan.listTeacherPlans);
     setSelected([]);
     const currentLessons = await getLessonPlansByUser(user.id);
     setTableData(currentLessons);
@@ -152,6 +151,7 @@ export default function LessonPlanListTeacherPage() {
         setPage(page - 1);
       }
     }
+    navigate(PATH_DASHBOARD.lessonPlan.listTeacherPlans);
   };
 
   const handleEditRow = (id) => {
