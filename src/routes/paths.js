@@ -51,6 +51,7 @@ export const PATH_DASHBOARD = {
     listStudentPlans: path(ROOTS_DASHBOARD, '/lesson-plan/student/list'),
     listStudentPendings: path(ROOTS_DASHBOARD, '/lesson-plan/student/pendings'),
     listProcesses: path(ROOTS_DASHBOARD, '/lesson-plan/process-list'),
+    edit: (id) => path(ROOTS_DASHBOARD, `/lesson-plan/${id}/edit`),
   },
   roles: {
     root: path(ROOTS_DASHBOARD, '/roles'),

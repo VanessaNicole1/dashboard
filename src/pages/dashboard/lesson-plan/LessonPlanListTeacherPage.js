@@ -155,7 +155,7 @@ export default function LessonPlanListTeacherPage() {
   };
 
   const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
+    navigate(PATH_DASHBOARD.lessonPlan.edit(id));
   };
 
   const handleViewLessonPlan = (id) => {
@@ -229,7 +229,7 @@ export default function LessonPlanListTeacherPage() {
                         row={row}
                         selected={selected.includes(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.name)}
+                        onEditRow={() => handleEditRow(row.id)}
                       />
                     ))}
                   <TableEmptyRows

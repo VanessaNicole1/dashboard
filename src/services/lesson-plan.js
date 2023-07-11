@@ -49,3 +49,23 @@ export const deleteLessonPlan = async (id) => {
     return { errorMessage: error.message }
   }
 }
+
+export const getLessonPlan = async (id) => {
+  try {
+    const {data: lessonPlan} = await axios.get(`/lesson-plans/${id}`);
+    return lessonPlan;
+  } catch (error) {
+    return { errorMessage: error.message }
+  }
+}
+
+export const removeResource = async (id, name) => {
+  console.log('Id', id);
+  console.log('Name', name);
+  try {
+    const data = await axios.post(`lesson-plans/resource/${id}`, {name});
+    return data;
+  } catch (error) {
+    return { errorMessage: error.message }
+  }
+}
