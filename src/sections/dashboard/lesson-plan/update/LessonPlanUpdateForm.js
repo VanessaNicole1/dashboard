@@ -4,7 +4,7 @@ import { LoadingButton } from '@mui/lab';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -14,6 +14,7 @@ import {
   RHFEditor,
   RHFSelect,
   RHFTextField,
+  RHFUpload,
 } from '../../../../components/hook-form';
 import { getSchedules } from '../../../../services/schedule';
 import { getStudents } from '../../../../services/student';
@@ -25,6 +26,7 @@ import { useSnackbar } from '../../../../components/snackbar';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import FilePanel from './FilePanel';
 import FileGeneralRecentCard from './FileGeneralRecentCard';
+import FileNewFolderDialog from '../create/file/FileNewFolderDialog';
 
 LessonPlanUpdateForm.propTypes = {
   lessonPlanId: PropTypes.string,
@@ -153,7 +155,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       students: [],
       purposeOfClass: currentLessonlPlan?.purposeOfClass || '',
       bibliography: currentLessonlPlan?.bibliography || '',
-      resources: currentLessonlPlan?.resources || [],
+      resources: [],
       notificationDate: currentLessonlPlan?.notificationDate || '',
       
     }),
@@ -203,9 +205,38 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
   }
 
   const handleRemoveResources = async (e) => {
+    console.log('E', e);
     await removeResource(currentLessonlPlan.id, e);
   }
 
+  const handleCloseUploadFile = () => {
+    setOpenUploadFile(false);
+  };
+
+  const handleDrop = useCallback(
+    (acceptedFiles) => {
+      const files = values.resources || [];
+
+      const newFiles = acceptedFiles.map((file) =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        })
+      );
+
+      setValue("resources", [...files, ...newFiles], { shouldValidate: true });
+      console.log('values.resources', values.resources);
+    },
+    [setValue, values.resources]
+  );
+
+  const handleRemoveFile = (inputFile) => {
+    const filtered = values.resources && values.resources?.filter((file) => file !== inputFile);
+    setValue('resources', filtered);
+  };
+
+  const handleRemoveAllFiles = () => {
+    setValue('resources', []);
+  };
 
   const onSubmit = async (data) => {
     const { notification, grade: schedule, period, resources } = data;
@@ -325,22 +356,52 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
               </Stack>
 
               <Stack spacing={1}>
-              <FilePanel
+              {/* <FilePanel
                 title="Resources"
                 link={PATH_DASHBOARD.fileManager}
                 onOpen={handleOpenUploadFile}
                 sx={{ mt: 2 }}
-              />
+              /> */}
+                <Typography
+                  variant="subtitle2"
+                  sx={{ color: "text.secondary" }}
+                >
+                  Resources uploaded
+                </Typography>
 
               { currentResources &&
                 <Stack spacing={2}>
                 {currentResources.map((file) => (
                   <FileGeneralRecentCard
-                    key={file}
+                    key={file.url}
                     file={file}
-                    onDelete={() => handleRemoveResources(file)}
+                    onDelete={() => handleRemoveResources(file.url)}
                   />
                 ))}
+
+                <Typography
+                  variant="subtitle2"
+                  sx={{ color: "text.secondary" }}
+                >
+                  Resources
+                </Typography>
+
+                <RHFUpload
+                  multiple
+                  thumbnail
+                  accept={{
+                    "text/csv": [".csv"],
+                    "text/pdf": [".pdf"],
+                    "text/jpg": [".jpg"],
+                  }}
+                  name="resources"
+                  maxSize={3145728}
+                  onDrop={handleDrop}
+                  type="file"
+                  onRemove={handleRemoveFile}
+                  onRemoveAll={handleRemoveAllFiles}
+                  onUpload={() => console.log("ON UPLOAD")}
+                />
               </Stack>
               }
               </Stack>
@@ -419,6 +480,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
           </Stack>
         </Grid>
       </Grid>
+        <FileNewFolderDialog open={openUploadFile} onClose={handleCloseUploadFile} />
     </FormProvider>
   );
 }

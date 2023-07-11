@@ -14,7 +14,7 @@ import FileThumbnail from '../../../../components/file-thumbnail';
 
 FileGeneralRecentCard.propTypes = {
   sx: PropTypes.object,
-  file: PropTypes.string,
+  file: PropTypes.object,
   onDelete: PropTypes.func,
 };
 
@@ -23,11 +23,9 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other  })
 
   const isDesktop = useResponsive('up', 'sm');
 
-  const test = false;
-
   const handleOpenDetails = () => {
   };
-  const filename = file;
+  const filename = file.url;
   const fileExtension = filename.split('.').pop();
   return (
     <>
@@ -53,7 +51,6 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other  })
         {...other}
       >
         <FileThumbnail file={fileExtension} />
-
         <Stack
           onClick={handleOpenDetails}
           sx={{
@@ -63,7 +60,7 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other  })
           }}
         >
           <Typography variant="subtitle2" noWrap>
-            {file}
+            {file.name}
           </Typography>
 
           <Stack
@@ -72,11 +69,11 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other  })
             alignItems="center"
             sx={{ typography: 'caption', color: 'text.disabled', mt: 0.5 }}
           >
-            {/* <Box> {fData(file.size)} </Box> */}
+            <Box> {fData(file.size)} </Box>
 
             <Box sx={{ width: 2, height: 2, borderRadius: '50%', bgcolor: 'currentColor' }} />
 
-            {/* <Box> {fDateTime(file.dateModified)} </Box> */}
+            <Box> {fDateTime(file.createdDate)} </Box>
           </Stack>
         </Stack>
         <MenuItem
