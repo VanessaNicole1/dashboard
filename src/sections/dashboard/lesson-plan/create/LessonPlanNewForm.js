@@ -177,9 +177,9 @@ export default function LessonPlanNewForm() {
   };
 
   const handlePeriodChange = (e) => {
-    setValue("grade", '', { shouldValidate: true });
-    setValue("students", [], { shouldValidate: true });
-    setValue("subject", '', { shouldValidate: true });
+    setValue("grade", '');
+    setValue("students", []);
+    setValue("subject", '');
     setSchedules([]);
     setSelectedStudent([]);
     setSelectedSubject('');
@@ -193,6 +193,7 @@ export default function LessonPlanNewForm() {
     setValue("students", [], { shouldValidate: true });
     setSelectedStudent([]);
     setStudents([]);
+    console.log('EEEE', e.target.value);
     setSelectedSubject(e.target.value);
     setValue("subject", e.target.value, { shouldValidate: true });
   }
@@ -201,6 +202,7 @@ export default function LessonPlanNewForm() {
     setValue("students", [], { shouldValidate: true });
     setSelectedStudent([]);
     setStudents([]);
+    console.log('Selected Grade', e.target.value);
     setSelectedGrade(e.target.value);
     setValue("grade", e.target.value, { shouldValidate: true });
   }
@@ -250,6 +252,8 @@ export default function LessonPlanNewForm() {
       navigate(PATH_DASHBOARD.lessonPlan.listTeacherPlans);
     }
   };
+
+  console.log('GRADES', grades);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
