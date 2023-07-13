@@ -20,11 +20,10 @@ import { getSchedules } from '../../../../services/schedule';
 import { getStudents } from '../../../../services/student';
 import { useAuthContext } from '../../../../auth/useAuthContext';
 import { findTeacherActivePeriods } from '../../../../services/teacher';
-import { createLessonPlan, getLessonPlan, removeResource } from '../../../../services/lesson-plan';
+import { getLessonPlan, removeResource, updateLessonPlan } from '../../../../services/lesson-plan';
 import { manualHideErrorSnackbarOptions } from '../../../../utils/snackBar';
 import { useSnackbar } from '../../../../components/snackbar';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-import FilePanel from './FilePanel';
 import FileGeneralRecentCard from './FileGeneralRecentCard';
 import FileNewFolderDialog from '../create/file/FileNewFolderDialog';
 
@@ -47,11 +46,12 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
   const [selectedScheduleByGrade, setSelectedScheduleByGrade] = useState('');
   const [openUploadFile, setOpenUploadFile] = useState(false);
   const [currentResources, setCurrentResources] = useState([]);
-  const [deleteResource, setDeleteResource] = useState(false);
+  const [students, setStudents] = useState([]);
+  const [currentSelectedStudents, setCurrentSelectedStudents] = useState([]);
+  const [startPeriod, setStartPeriod] = useState(new Date());
 
   const today = dayjs();
   const tomorrow = dayjs().add(1, 'day');
-
 
   useEffect(() => {
     if (currentLessonlPlan) {
@@ -82,13 +82,23 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
   useEffect(() => {
     if (currentLessonlPlan) {
       const resources = currentLessonlPlan?.resources;
-      setCurrentResources(resources);
+      if (resources) {
+        setCurrentResources(resources);
+      }
       const currentPeriod = currentLessonlPlan?.schedule?.grade?.degree?.period.id;
       setSelectedActivePeriod(currentPeriod);
     }
   }, [currentLessonlPlan]);
 
   useEffect(() => {
+    const periodStartDate = currentLessonlPlan?.schedule?.grade?.degree?.period?.startDate;
+    setStartPeriod(periodStartDate);
+  }, [currentLessonlPlan]);
+
+  useEffect(() => {
+    if (selectedActivePeriod && selectedActivePeriod.length < 0) {
+      setValue("period", '', { shouldValidate: true });
+    }
     if (selectedActivePeriod) {
       const fetchSchedules = async () => {
         const currentSchedules = await getSchedules(selectedActivePeriod, user.id);
@@ -121,7 +131,36 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
     const currentGradesBySubject = schedules.filter((schedule) => schedule.subject.name === selectedSubject);
     setGrades(currentGradesBySubject);
   }, [selectedSubject]);
-  
+
+  useEffect(() => {
+    const currentGrade = currentLessonlPlan?.schedule?.grade;
+    if (currentGrade) {
+      const fetchCurrentStudents = async () => {
+        const currentStudents = await getStudents({gradeId: currentGrade?.id});
+        setStudents(currentStudents);
+      }
+      fetchCurrentStudents();
+      const validationsTracking = currentLessonlPlan?.validationsTracking;
+      const allStudents = validationsTracking.map((validationTracking) => validationTracking.student);
+      const newStudentFormat = allStudents.map((student) => ({id: student.id, displayName: `${student.user.name} ${student.user.lastName}`}))
+      setCurrentSelectedStudents(newStudentFormat);
+    }
+  }, [currentLessonlPlan]);
+
+  useEffect(() => {
+    if (selectedScheduleByGrade) {
+      setValue("students", []);
+      const fetchStudents = async () => {
+        const currentSchedule = schedules.filter((schedule) => schedule.id === selectedScheduleByGrade);
+        if (currentSchedule.length > 0) {
+        const currentStudents = await getStudents({gradeId: currentSchedule[0]?.grade.id});
+        setStudents(currentStudents);
+        }
+      }
+      fetchStudents();
+    }
+  }, [selectedScheduleByGrade]);
+
   const newLessonPlanSchema = Yup.object().shape({
     period: Yup.string().required('Period is required'),
     subject: Yup.string().required('Subject is required'),
@@ -130,17 +169,10 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
     topic: Yup.string().required('Topic is required'),
     description: Yup.string().required('Description is required'),
     content: Yup.string().required('Content is required'),
-    students: Yup.array().min(1, 'Must have at least 2 students'),
+    students: Yup.array().min(1, 'Must have at least 1 students'),
     purposeOfClass: Yup.string().required('Purpose of the class is required'),
     bibliography: Yup.string().required('Bibliography is required'),
-    resources: Yup.array(),
-    notification: Yup.string().required('Notification is required'),
-    notificationDate: Yup.date().when(['notification', 'date'], (notification, date, schema) => {
-      if (notification === 'no') {
-        return schema.min(date, 'End Date must be after Start Date')
-        .typeError('End Date is required')
-      }
-    }).required('Notification Date is required').typeError('This is an error')
+    notificationDate: Yup.date().required('Notification Date is required'),
   });
 
   const defaultValues = useMemo(
@@ -152,12 +184,11 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       topic: currentLessonlPlan?.topic || '',
       description: currentLessonlPlan?.description || '',
       content: currentLessonlPlan?.content || '',
-      students: [],
+      students: currentSelectedStudents || [],
       purposeOfClass: currentLessonlPlan?.purposeOfClass || '',
       bibliography: currentLessonlPlan?.bibliography || '',
       resources: [],
       notificationDate: currentLessonlPlan?.notificationDate || '',
-      
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentLessonlPlan]
@@ -179,15 +210,13 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
 
   const values = watch();
 
-  const handleOpenUploadFile = () => {
-    setOpenUploadFile(true);
-  };
-
   const handlePeriodChange = (e) => {
     setValue("grade", '');
     setValue("students", []);
     setValue("subject", '');
     setSchedules([]);
+    setCurrentSelectedStudents([]);
+    setStudents([]);
     setSelectedActivePeriod(e.target.value);
     setValue("period", e.target.value, { shouldValidate: true });
   };
@@ -195,17 +224,21 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
   const handleSubjectChange = (e) => {
     setValue("grade", '');
     setValue("students", []);
+    setCurrentSelectedStudents([]);
+    setStudents([]);
     setSelectedSubject(e.target.value);
     setValue("subject", e.target.value, { shouldValidate: true });
   }
 
   const handleGradeChange = (e) => {
+    setValue("students", []);
+    setCurrentSelectedStudents([]);
+    setStudents([]);
     setSelectedScheduleByGrade(e.target.value);
     setValue("grade", e.target.value, { shouldValidate: true });
   }
 
   const handleRemoveResources = async (e) => {
-    console.log('E', e);
     await removeResource(currentLessonlPlan.id, e);
   }
 
@@ -224,7 +257,6 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       );
 
       setValue("resources", [...files, ...newFiles], { shouldValidate: true });
-      console.log('values.resources', values.resources);
     },
     [setValue, values.resources]
   );
@@ -238,20 +270,50 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
     setValue('resources', []);
   };
 
+  function removeDuplicates(arr) {
+    return arr.filter((obj, index) => {
+      const firstIndex = arr.findIndex((item) => JSON.stringify(item) === JSON.stringify(obj));
+      return index === firstIndex;
+    });
+  }
+
+  const handleStudentChange = (event, newValue) => {
+    const validValues = removeDuplicates(newValue);
+    setValue("students", validValues);
+    setCurrentSelectedStudents(validValues);
+  }
+
+  const isWeekend = (date) => {
+    const currentDate = new Date(date);
+    const currentDay = currentDate.getDay();
+    return currentDay === 0 || currentDay === 6;
+  };
+
+  // const isInCurrentMonth = (date) => {
+  //   const currentDate = new Date(date);
+  //   const currentMonth = currentDate.getMonth();
+  //   const monthPeriod = new Date(startPeriod).getMonth();
+  //   console.log('currentMonth', currentMonth);
+  //   console.log('monthPeriod', monthPeriod);
+
+  //   return currentMonth < dayjs().get('month');
+  // };
+
+  // const isInCurrentMonth = (date) => {
+  //   console.log('date!!!!!!!!!!!!!!!', date.get('month'));
+  //   return date.get('month') === dayjs().get('month')
+  // };
+
   const onSubmit = async (data) => {
-    const { notification, grade: schedule, period, resources } = data;
-    let { notificationDate } = data;
-    if (notification === 'yes') {
-      notificationDate = null;
-    }
+    const { grade: schedule, period, resources } = data;
     data = {
       ...data,
-      notificationDate,
+      notificationDate: data.notificationDate.toISOString(),
       scheduleId: schedule,
       periodId: period,
       date: data.date.toISOString()
     }
-    const lessonPlanResponse = await createLessonPlan(data, resources);
+    const lessonPlanResponse = await updateLessonPlan(currentLessonlPlan.id, data, resources);
 
     if (lessonPlanResponse.errorMessage) {
       enqueueSnackbar(lessonPlanResponse.errorMessage, manualHideErrorSnackbarOptions);
@@ -260,7 +322,6 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       navigate(PATH_DASHBOARD.lessonPlan.listTeacherPlans);
     }
   };
-  const students = [];
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -317,9 +378,9 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
                 control={control}
                 render={({ field, fieldState: { error } }) => (
                   <DatePicker
+                    shouldDisableDate={isWeekend}
+                    // shouldDisableMonth={isInCurrentMonth}
                     label="Date"
-                    defaultValue={today}
-                    minDate={tomorrow}
                     value={field.value}
                     onChange={(newValue) => {
                       field.onChange(newValue);
@@ -356,12 +417,6 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
               </Stack>
 
               <Stack spacing={1}>
-              {/* <FilePanel
-                title="Resources"
-                link={PATH_DASHBOARD.fileManager}
-                onOpen={handleOpenUploadFile}
-                sx={{ mt: 2 }}
-              /> */}
                 <Typography
                   variant="subtitle2"
                   sx={{ color: "text.secondary" }}
@@ -411,21 +466,21 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
         <Grid item xs={12} md={4}>
           <Card sx={{ p: 3 }}>
             <Stack spacing={3}>
-              {/* <RHFAutocomplete
+              <RHFAutocomplete
                 control={control}
-                value=''
+                value={currentSelectedStudents}
                 name="students"
                 label="Students"
                 multiple
                 freeSolo
-                onChange={() => {}}
+                onChange={handleStudentChange}
                 options={students.map(
                   (student) => ({id: student.id, displayName: `${student.user.name} ${student.user.lastName}`})
                 )}
                 getOptionLabel={(option) => option.displayName}
                 // setcustomkey={(option) => option.id}
                 ChipProps={{ size: "small" }}
-              /> */}
+              />
               <RHFTextField name="purposeOfClass" label="Purpose of Class" />
               <RHFTextField
                 name="bibliography"
@@ -445,9 +500,10 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <DateTimePicker
-                        defaultValue={today}
+                        shouldDisableDate={isWeekend}
+                        views={['year', 'month', 'day', 'hours']}
                         minDate={tomorrow}
-                        views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                        defaultValue={today}
                         label="Notification Date"
                         value={field.value}
                         onChange={(newValue) => {

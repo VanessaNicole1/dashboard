@@ -41,6 +41,34 @@ export const createLessonPlan = async (data, resources) => {
   }
 }
 
+export const updateLessonPlan = async (lessonPlanId, data, resources) => {
+  try {
+    const studentsIds = data.students.map((student) => student.id);
+    data = {
+      ...data,
+      students: studentsIds,
+    }
+    const formData = new FormData();
+    resources.forEach(resource => {
+      formData.append('files', resource);
+    });
+    delete data.resources;
+
+    for (const key in data) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (data.hasOwnProperty(key)) {
+        formData.append(key, data[key]);
+      }
+    }
+    await axios.patch(`/lesson-plans/${lessonPlanId}`, formData);
+    return {
+      message: 'Lesson Plan updated successfully'
+    }
+  } catch (error) {
+    return { errorMessage: error.message }
+  }
+}
+
 export const deleteLessonPlan = async (id) => {
   try {
     const data = await axios.delete(`/lesson-plans/${id}`)

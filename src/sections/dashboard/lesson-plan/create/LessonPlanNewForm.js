@@ -50,13 +50,13 @@ export default function LessonPlanNewForm() {
 
   const newLessonPlanSchema = Yup.object().shape({
     period: Yup.string().required('Period is required'),
-    subject: Yup.string().required('Schedule is required'),
-    grade: Yup.string().required('Schedule is required'),
+    subject: Yup.string().required('Subject is required'),
+    grade: Yup.string().required('Grade is required'),
     date: Yup.date().required('Date is required'),
     topic: Yup.string().required('Topic is required'),
     description: Yup.string().required('Description is required'),
     content: Yup.string().required('Content is required'),
-    students: Yup.array().min(1, 'Must have at least 2 tags'),
+    students: Yup.array().min(1, 'Must have at least 2 students'),
     purposeOfClass: Yup.string().required('Purpose of the class is required'),
     bibliography: Yup.string().required('Bibliography is required'),
     resources: Yup.array(),
@@ -250,7 +250,7 @@ export default function LessonPlanNewForm() {
       navigate(PATH_DASHBOARD.lessonPlan.listTeacherPlans);
     }
   };
-
+  
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
