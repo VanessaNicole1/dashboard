@@ -173,6 +173,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
     purposeOfClass: Yup.string().required('Purpose of the class is required'),
     bibliography: Yup.string().required('Bibliography is required'),
     notificationDate: Yup.date().required('Notification Date is required'),
+    deadlineDate: Yup.date()
   });
 
   const defaultValues = useMemo(
@@ -189,6 +190,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       bibliography: currentLessonlPlan?.bibliography || '',
       resources: [],
       notificationDate: currentLessonlPlan?.notificationDate || '',
+      deadlineDate: currentLessonlPlan?.maximumValidationDate || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentLessonlPlan]
@@ -490,37 +492,35 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
                 rows={3}
               />
               <Stack spacing={1}>
-                  <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                    Notify students
-                  </Typography>
-              </Stack>
-              {true && (
+                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                    Deadline Date
+                </Typography>
                 <Controller
-                    name="notificationDate"
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <DateTimePicker
-                        shouldDisableDate={isWeekend}
-                        views={['year', 'month', 'day', 'hours']}
-                        minDate={tomorrow}
-                        defaultValue={today}
-                        label="Notification Date"
-                        value={field.value}
-                        onChange={(newValue) => {
-                          field.onChange(newValue);
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            fullWidth
-                            error={!!error}
-                            helperText={error?.message}
-                          />
-                        )}
-                      />
-                    )}
-                  />
-              )}
+                  name="deadlineDate"
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <DateTimePicker
+                      minDate={tomorrow}
+                      defaultValue={today}
+                      shouldDisableDate={isWeekend}
+                      views={['year', 'month', 'day', 'hours']}
+                      label="Deadline Date"
+                      value={field.value}
+                      onChange={(newValue) => {
+                        field.onChange(newValue);
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          fullWidth
+                          error={!!error}
+                          helperText={error?.message}
+                        />
+                      )}
+                    />
+                  )}
+                />
+              </Stack>
             </Stack>
           </Card>
           <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>

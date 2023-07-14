@@ -88,8 +88,6 @@ export const getLessonPlan = async (id) => {
 }
 
 export const removeResource = async (id, name) => {
-  console.log('Id', id);
-  console.log('Name', name);
   try {
     const data = await axios.post(`lesson-plans/resource/${id}`, {name});
     return data;

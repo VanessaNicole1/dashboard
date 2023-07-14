@@ -47,6 +47,7 @@ export default function LessonPlanNewForm() {
   const [selectedNotification, setSelectedNotification] = useState(true);
   const [selectedStudent, setSelectedStudent] = useState([]);
   const [fields, setFields] = useState(true);
+  const [currentDeadlineDate, setDeadlineDate] = useState(new Date());
 
   const newLessonPlanSchema = Yup.object().shape({
     period: Yup.string().required('Period is required'),
@@ -66,7 +67,8 @@ export default function LessonPlanNewForm() {
         return schema.min(date, 'End Date must be after Start Date')
         .typeError('End Date is required')
       }
-    }).required('Notification Date is required').typeError('This is an error')
+    }).required('Notification Date is required').typeError('This is an error'),
+    // deadlineDate: Yup.date(),
   })
 
   const defaultValues = {
@@ -82,7 +84,8 @@ export default function LessonPlanNewForm() {
     bibliography: "",
     resources: [],
     notification: "yes",
-    notificationDate: new Date()
+    notificationDate: new Date(),
+    deadlineDate: new Date(),
   };
 
   const methods = useForm({
@@ -210,6 +213,26 @@ export default function LessonPlanNewForm() {
     name: 'notification',
   });
 
+  const notificationDateValue = useWatch({
+    control,
+    name: 'notificationDate',
+  });
+
+  useEffect(() => {
+    if (!selectedNotification) {
+      const currentDate = new Date();
+      const nextDate = new Date(currentDate);
+      nextDate.setDate(currentDate.getDate() + 7);
+      setDeadlineDate(nextDate);
+    } else {
+      setValue("deadlineDate", '');
+      const currentNotificationDate = new Date(notificationDateValue);
+      const nextNotificationDate = new Date(currentNotificationDate);
+      nextNotificationDate.setDate(currentNotificationDate.getDate() + 7);
+      setDeadlineDate(nextNotificationDate);
+    }
+  }, [selectedNotification, notificationDateValue]);
+
   function removeDuplicates(arr) {
     return arr.filter((obj, index) => {
       const firstIndex = arr.findIndex((item) => JSON.stringify(item) === JSON.stringify(obj));
@@ -224,9 +247,18 @@ export default function LessonPlanNewForm() {
   }
 
   useEffect(() => {
-    const notificationValue = selectedNotificationValue === 'no' && true;
-    setSelectedNotification(notificationValue);
+    if (selectedNotificationValue === 'no') {
+      setSelectedNotification(true);
+    } else {
+      setSelectedNotification(false);
+    }
   }, [selectedNotificationValue]);
+
+  const isWeekend = (date) => {
+    const currentDate = new Date(date);
+    const currentDay = currentDate.getDay();
+    return currentDay === 0 || currentDay === 6;
+  };
 
   const onSubmit = async (data) => {
     const { notification, grade: schedule, period, resources } = data;
@@ -239,8 +271,10 @@ export default function LessonPlanNewForm() {
       notificationDate,
       scheduleId: schedule,
       periodId: period,
-      date: data.date.toISOString()
+      date: data.date.toISOString(),
+      deadlineDate: new Date(currentDeadlineDate)
     }
+
     const lessonPlanResponse = await createLessonPlan(data, resources);
 
     if (lessonPlanResponse.errorMessage) {
@@ -417,7 +451,8 @@ export default function LessonPlanNewForm() {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <DateTimePicker
-                        views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                        shouldDisableDate={isWeekend}
+                        views={['year', 'month', 'day', 'hours']}
                         label="Notification Date"
                         value={field.value}
                         onChange={(newValue) => {
@@ -436,6 +471,31 @@ export default function LessonPlanNewForm() {
                     )}
                   />
               )}
+              <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                  Deadline Date
+                </Typography>
+              <Controller
+                name="deadlineDate"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <DateTimePicker
+                    shouldDisableDate={isWeekend}
+                    views={['year', 'month', 'day', 'hours']}
+                    label="Deadline Date"
+                    value={currentDeadlineDate}
+                    onChange={setDeadlineDate}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        error={!!error}
+                        helperText={error?.message}
+                      />
+                    )}
+                    disabled
+                  />
+                )}
+              />
             </Stack>
           </Card>
           <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
