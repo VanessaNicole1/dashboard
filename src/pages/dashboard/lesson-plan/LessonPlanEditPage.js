@@ -1,14 +1,10 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Container } from "@mui/material";
 import { useSettingsContext } from "../../../components/settings";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs/CustomBreadcrumbs";
 import { PATH_DASHBOARD } from "../../../routes/paths";
 import LessonPlanUpdateForm from "../../../sections/dashboard/lesson-plan/update/LessonPlanUpdateForm";
-import { getUser } from "../../../services/user";
-import { useAuthContext } from "../../../auth/useAuthContext";
-import { getLessonPlan } from "../../../services/lesson-plan";
 
 export default function LessonPlanEditPage () {
   const { themeStretch } = useSettingsContext();
