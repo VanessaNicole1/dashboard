@@ -211,8 +211,8 @@ export default function LessonPlanNewForm() {
   };
 
   const handleSubjectChange = (e) => {
-    setValue("grade", '', { shouldValidate: true });
-    setValue("students", [], { shouldValidate: true });
+    setValue("grade", '');
+    setValue("students", []);
     setSelectedStudent([]);
     setStudents([]);
     setSelectedSubject(e.target.value);
@@ -220,7 +220,7 @@ export default function LessonPlanNewForm() {
   }
 
   const handleGradeChange = (e) => {
-    setValue("students", [], { shouldValidate: true });
+    setValue("students", []);
     setSelectedStudent([]);
     setStudents([]);
     setSelectedGrade(e.target.value);
