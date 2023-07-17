@@ -25,16 +25,18 @@ import { createLessonPlan } from '../../../../services/lesson-plan';
 import { manualHideErrorSnackbarOptions } from '../../../../utils/snackBar';
 import { useSnackbar } from '../../../../components/snackbar';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-
-const NOTIFICATION_OPTION = [
-  { label: 'Notify now', value: 'yes' },
-  { label: 'Notify after', value: 'no' },
-];
+import { useLocales } from '../../../../locales';
 
 export default function LessonPlanNewForm() {
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const { translate } = useLocales();
+
+  const NOTIFICATION_OPTION = [
+    { label: translate('lesson_plans_create_form.notify_now'), value: 'yes' },
+    { label: translate('lesson_plans_create_form.notify_after'), value: 'no' },
+  ];
 
   const [openUploadFile, setOpenUploadFile] = useState(false);
   const [teacherActivePeriods, setTeacherActivePeriods] = useState([]);
@@ -298,7 +300,7 @@ export default function LessonPlanNewForm() {
               <RHFSelect
                 native
                 name="period"
-                label="Period"
+                label={translate('lesson_plans_create_form.period')}
                 onChange={handlePeriodChange}
                 value={selectedActivePeriod}
               >
@@ -313,7 +315,7 @@ export default function LessonPlanNewForm() {
                 control={control}
                 native
                 name="subject"
-                label="Subject"
+                label={translate('lesson_plans_create_form.subject')}
                 onChange={handleSubjectChange}
                 value={selectedSubject}
                 disabled={fields}
@@ -329,7 +331,7 @@ export default function LessonPlanNewForm() {
                 control={control}
                 native
                 name="grade"
-                label="Grade"
+                label={translate('lesson_plans_create_form.grade')}
                 onChange={handleGradeChange}
                 value={selectedGrade}
                 disabled={fields}
@@ -346,7 +348,7 @@ export default function LessonPlanNewForm() {
                 control={control}
                 render={({ field, fieldState: { error } }) => (
                   <DatePicker
-                    label="Date"
+                    label={translate('lesson_plans_create_form.date')}
                     value={field.value}
                     onChange={(newValue) => {
                       field.onChange(newValue);
@@ -363,11 +365,11 @@ export default function LessonPlanNewForm() {
                   />
                 )}
               />
-              <RHFTextField name="topic" disabled={fields} label="Topic"  />
+              <RHFTextField name="topic" disabled={fields} label={translate('lesson_plans_create_form.topic')}  />
 
               <RHFTextField
                 name="description"
-                label="Description"
+                label={translate('lesson_plans_create_form.description')}
                 multiline
                 rows={3}
                 disabled={fields}
@@ -378,7 +380,7 @@ export default function LessonPlanNewForm() {
                   variant="subtitle2"
                   sx={{ color: "text.secondary" }}
                 >
-                  Content
+                  {translate('lesson_plans_create_form.content')}
                 </Typography>
 
                 <RHFEditor simple name="content" />
@@ -389,7 +391,7 @@ export default function LessonPlanNewForm() {
                   variant="subtitle2"
                   sx={{ color: "text.secondary" }}
                 >
-                  Resources
+                  {translate('lesson_plans_create_form.resources')}
                 </Typography>
 
                 <RHFUpload
@@ -420,7 +422,7 @@ export default function LessonPlanNewForm() {
                 control={control}
                 value={selectedStudent}
                 name="students"
-                label="Students"
+                label={translate('lesson_plans_create_form.students')}
                 multiple
                 freeSolo
                 onChange={handleStudentChange}
@@ -432,10 +434,10 @@ export default function LessonPlanNewForm() {
                 ChipProps={{ size: "small" }}
                 disabled={fields}
               />
-              <RHFTextField name="purposeOfClass" disabled={fields} label="Purpose of Class" />
+              <RHFTextField name="purposeOfClass" disabled={fields} label={translate('lesson_plans_create_form.purpose')} />
               <RHFTextField
                 name="bibliography"
-                label="Bibliography"
+                label={translate('lesson_plans_create_form.biblio')}
                 fullWidth
                 multiline
                 rows={3}
@@ -443,7 +445,7 @@ export default function LessonPlanNewForm() {
               />
               <Stack spacing={1}>
                   <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                    Notify students
+                    {translate('lesson_plans_create_form.notify_students')}
                   </Typography>
 
                   <RHFRadioGroup control={control} row spacing={4} name="notification" options={NOTIFICATION_OPTION} />
@@ -460,7 +462,7 @@ export default function LessonPlanNewForm() {
                         shouldDisableDate={isWeekend}
                         format="do MMMM yyyy HH"
                         views={['year', 'month', 'day', 'hours']}
-                        label="Notification Date"
+                        label={translate('lesson_plans_create_form.notify_date')}
                         value={field.value}
                         
                         onChange={(newValue) => {
@@ -479,8 +481,8 @@ export default function LessonPlanNewForm() {
                     )}
                   />
               )}
-              <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                  Deadline Date
+                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                    {translate('lesson_plans_create_form.deadline')}
                 </Typography>
               <Controller
                 name="deadlineDate"
@@ -492,7 +494,7 @@ export default function LessonPlanNewForm() {
                     shouldDisableDate={isWeekend}
                     format="do MMMM yyyy HH"
                     views={['year', 'month', 'day', 'hours']}
-                    label="Deadline Date"
+                    label={translate('lesson_plans_create_form.deadline')}
                     value={currentDeadlineDate}
                     onChange={setDeadlineDate}
                     renderInput={(params) => (
@@ -518,7 +520,7 @@ export default function LessonPlanNewForm() {
               loading={isSubmitting}
               disabled={fields}
             >
-              Save
+              {translate('lesson_plans_create_form.save')}
             </LoadingButton>
           </Stack>
         </Grid>

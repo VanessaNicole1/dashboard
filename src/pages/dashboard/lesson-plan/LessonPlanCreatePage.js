@@ -4,30 +4,33 @@ import { useSettingsContext } from "../../../components/settings";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs/CustomBreadcrumbs";
 import { PATH_DASHBOARD } from "../../../routes/paths";
 import LessonPlanNewForm from "../../../sections/dashboard/lesson-plan/create/LessonPlanNewForm";
+import { useLocales } from "../../../locales";
 
 export default function LessonPlanCreatePage () {
   const { themeStretch } = useSettingsContext();
 
+  const { translate } = useLocales();
+
   return (
     <>
       <Helmet>
-        <title> Lesson Plan: New Lesson Plan | Minimal UI</title>
+        <title> {translate('lesson_plan_create_page.title')} </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Create a new Lesson Plan"
+          heading={translate('lesson_plan_create_page.heading')}
           links={[
             {
-              name: 'Dashboard',
+              name: translate('lesson_plan_create_page.links.dashboard'),
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Blog',
+              name: translate('lesson_plan_create_page.links.plans'),
               href: PATH_DASHBOARD.blog.root,
             },
             {
-              name: 'Create',
+              name: translate('lesson_plan_create_page.links.create'),
             },
           ]}
         />

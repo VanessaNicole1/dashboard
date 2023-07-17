@@ -5,31 +5,33 @@ import { useSettingsContext } from "../../../components/settings";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs/CustomBreadcrumbs";
 import { PATH_DASHBOARD } from "../../../routes/paths";
 import LessonPlanUpdateForm from "../../../sections/dashboard/lesson-plan/update/LessonPlanUpdateForm";
+import { useLocales } from "../../../locales";
 
 export default function LessonPlanEditPage () {
   const { themeStretch } = useSettingsContext();
   const { id } = useParams();
+  const { translate } = useLocales();
 
   return (
     <>
       <Helmet>
-        <title> Lesson Plan: Update Lesson Plan</title>
+        <title> {translate('lesson_plan_update_page.title')} </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Update a new Lesson Plan"
+          heading={translate('lesson_plan_update_page.heading')}
           links={[
             {
-              name: 'Dashboard',
+              name: translate('lesson_plan_update_page.links.dashboard'),
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Lesson Plan',
+              name: translate('lesson_plan_update_page.links.plans'),
               href: PATH_DASHBOARD.lessonPlan.root,
             },
             {
-              name: 'Edit',
+              name: translate('lesson_plan_update_page.links.update'),
             },
           ]}
         />
