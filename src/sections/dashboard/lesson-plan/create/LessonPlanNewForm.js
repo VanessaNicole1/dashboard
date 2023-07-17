@@ -26,6 +26,7 @@ import { manualHideErrorSnackbarOptions } from '../../../../utils/snackBar';
 import { useSnackbar } from '../../../../components/snackbar';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { useLocales } from '../../../../locales';
+import { getPeriod } from '../../../../services/period';
 
 export default function LessonPlanNewForm() {
   const { user } = useAuthContext();
@@ -51,6 +52,7 @@ export default function LessonPlanNewForm() {
   const [selectedStudent, setSelectedStudent] = useState([]);
   const [fields, setFields] = useState(true);
   const [currentDeadlineDate, setDeadlineDate] = useState(new Date());
+  const [totalStudentsValidate, setTotalStudentsValidate] = useState(1);
 
   const today = dayjs();
   const tomorrow = dayjs().add(1, 'day');
@@ -63,7 +65,7 @@ export default function LessonPlanNewForm() {
     topic: Yup.string().required('Topic is required'),
     description: Yup.string().required('Description is required'),
     content: Yup.string().required('Content is required'),
-    students: Yup.array().min(1, 'Must have at least 2 students'),
+    students: Yup.array().min(totalStudentsValidate, `Must have at least ${totalStudentsValidate} students`),
     purposeOfClass: Yup.string().required('Purpose of the class is required'),
     bibliography: Yup.string().required('Bibliography is required'),
     resources: Yup.array(),
@@ -137,6 +139,17 @@ export default function LessonPlanNewForm() {
         setUniqueSchedules(uniqueCurrentSchedules);
       }
       fetchSchedules();
+    }
+  }, [selectedActivePeriod]);
+
+  useEffect(() => {
+    if (selectedActivePeriod) {
+      const fetchPeriod = async () => {
+        const currentPeriod = await getPeriod(selectedActivePeriod);
+        const totalStudents = currentPeriod.periodConfig.minimumStudentsToEvaluate;
+        setTotalStudentsValidate(totalStudents);
+      }
+      fetchPeriod();
     }
   }, [selectedActivePeriod]);
 
