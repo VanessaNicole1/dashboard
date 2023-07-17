@@ -28,6 +28,7 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 import FileGeneralRecentCard from './FileGeneralRecentCard';
 import FileNewFolderDialog from '../create/file/FileNewFolderDialog';
 import { useLocales } from '../../../../locales';
+import { getPeriod } from '../../../../services/period';
 
 LessonPlanUpdateForm.propTypes = {
   lessonPlanId: PropTypes.string,
@@ -60,6 +61,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
   const [startPeriod, setStartPeriod] = useState(new Date());
   const [currentDeadlineNotification, setCurrentDeadlineNotification] = useState(true);
   const [changeResources, setChangeResources] = useState(false);
+  const [totalStudentsValidate, setTotalStudentsValidate] = useState(1);
 
   const today = dayjs();
   const tomorrow = dayjs().add(1, 'day');
@@ -126,6 +128,17 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
   }, [selectedActivePeriod]);
 
   useEffect(() => {
+    if (selectedActivePeriod) {
+      const fetchPeriod = async () => {
+        const currentPeriod = await getPeriod(selectedActivePeriod);
+        const totalStudents = currentPeriod.periodConfig.minimumStudentsToEvaluate;
+        setTotalStudentsValidate(totalStudents);
+      }
+      fetchPeriod();
+    }
+  }, [selectedActivePeriod]);
+
+  useEffect(() => {
     if (currentLessonlPlan) {
       const currentSelectedSubject = currentLessonlPlan?.schedule?.subject?.name;
       setSelectedSubject(currentSelectedSubject);
@@ -181,7 +194,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
     topic: Yup.string().required('Topic is required'),
     description: Yup.string().required('Description is required'),
     content: Yup.string().required('Content is required'),
-    students: Yup.array().min(1, 'Must have at least 1 students'),
+    students: Yup.array().min(totalStudentsValidate, `Must have at least ${totalStudentsValidate} students`),
     purposeOfClass: Yup.string().required('Purpose of the class is required'),
     bibliography: Yup.string().required('Bibliography is required'),
     deadlineNotification: Yup.string(),
