@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Card, Grid, Stack, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useEffect, useState, useMemo, useCallback } from 'react';
@@ -15,6 +15,7 @@ import {
   RHFSelect,
   RHFTextField,
   RHFUpload,
+  RHFRadioGroup,
 } from '../../../../components/hook-form';
 import { getSchedules } from '../../../../services/schedule';
 import { getStudents } from '../../../../services/student';
@@ -30,6 +31,11 @@ import FileNewFolderDialog from '../create/file/FileNewFolderDialog';
 LessonPlanUpdateForm.propTypes = {
   lessonPlanId: PropTypes.string,
 };
+
+const DEADLINE_NOTIFICATION_OPTION = [
+  { label: 'No', value: 'no' },
+  { label: 'Yes', value: 'yes' },
+];
 
 export default function LessonPlanUpdateForm({lessonPlanId}) {
   const { user } = useAuthContext();
@@ -49,6 +55,8 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
   const [students, setStudents] = useState([]);
   const [currentSelectedStudents, setCurrentSelectedStudents] = useState([]);
   const [startPeriod, setStartPeriod] = useState(new Date());
+  const [currentDeadlineNotification, setCurrentDeadlineNotification] = useState(true);
+  const [changeResources, setChangeResources] = useState(false);
 
   const today = dayjs();
   const tomorrow = dayjs().add(1, 'day');
@@ -66,7 +74,8 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       setCurrentLessonPlan(lessonPlan);
     }
     fetchLessonPlan();
-  }, [lessonPlanId]);
+    setChangeResources(false);
+  }, [lessonPlanId, changeResources]);
 
   useEffect(() => {
     const fetchTeacherActivePeriods = async () => {
@@ -172,7 +181,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
     students: Yup.array().min(1, 'Must have at least 1 students'),
     purposeOfClass: Yup.string().required('Purpose of the class is required'),
     bibliography: Yup.string().required('Bibliography is required'),
-    notificationDate: Yup.date().required('Notification Date is required'),
+    deadlineNotification: Yup.string(),
     deadlineDate: Yup.date()
   });
 
@@ -189,7 +198,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       purposeOfClass: currentLessonlPlan?.purposeOfClass || '',
       bibliography: currentLessonlPlan?.bibliography || '',
       resources: [],
-      notificationDate: currentLessonlPlan?.notificationDate || '',
+      deadlineNotification: "no",
       deadlineDate: currentLessonlPlan?.maximumValidationDate || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -242,6 +251,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
 
   const handleRemoveResources = async (e) => {
     await removeResource(currentLessonlPlan.id, e);
+    setChangeResources(true);
   }
 
   const handleCloseUploadFile = () => {
@@ -291,6 +301,21 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
     return currentDay === 0 || currentDay === 6;
   };
 
+  const selectedDeadlineNotificationValue = useWatch({
+    control,
+    name: 'deadlineNotification',
+  });
+
+  useEffect(() => {
+    if (selectedDeadlineNotificationValue === 'yes') {
+      setCurrentDeadlineNotification(false);
+    } else {
+      setValue("deadlineDate", currentLessonlPlan.maximumValidationDate);
+      setCurrentDeadlineNotification(true);
+    }
+  }, [selectedDeadlineNotificationValue]);
+  
+
   // const isInCurrentMonth = (date) => {
   //   const currentDate = new Date(date);
   //   const currentMonth = currentDate.getMonth();
@@ -310,7 +335,6 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
     const { grade: schedule, period, resources } = data;
     data = {
       ...data,
-      notificationDate: data.notificationDate.toISOString(),
       scheduleId: schedule,
       periodId: period,
       date: data.date.toISOString()
@@ -492,9 +516,12 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
                 rows={3}
               />
               <Stack spacing={1}>
-                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                    Deadline Date
-                </Typography>
+                  <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                    Change deadline notification
+                  </Typography>
+                  <RHFRadioGroup control={control} row spacing={4} name="deadlineNotification" options={DEADLINE_NOTIFICATION_OPTION} />
+              </Stack>
+              <Stack spacing={1}>
                 <Controller
                   name="deadlineDate"
                   control={control}
@@ -503,6 +530,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
                       minDate={tomorrow}
                       defaultValue={today}
                       shouldDisableDate={isWeekend}
+                      disabled={currentDeadlineNotification}
                       views={['year', 'month', 'day', 'hours']}
                       label="Deadline Date"
                       value={field.value}

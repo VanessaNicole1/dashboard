@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import { useCallback, useEffect, useState } from 'react';
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 import FormProvider from '../../../../components/hook-form/FormProvider';
 import {
   RHFAutocomplete,
@@ -48,6 +49,9 @@ export default function LessonPlanNewForm() {
   const [selectedStudent, setSelectedStudent] = useState([]);
   const [fields, setFields] = useState(true);
   const [currentDeadlineDate, setDeadlineDate] = useState(new Date());
+
+  const today = dayjs();
+  const tomorrow = dayjs().add(1, 'day');
 
   const newLessonPlanSchema = Yup.object().shape({
     period: Yup.string().required('Period is required'),
@@ -451,10 +455,14 @@ export default function LessonPlanNewForm() {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <DateTimePicker
+                        minDate={tomorrow}
+                        defaultValue={today}
                         shouldDisableDate={isWeekend}
+                        format="do MMMM yyyy HH"
                         views={['year', 'month', 'day', 'hours']}
                         label="Notification Date"
                         value={field.value}
+                        
                         onChange={(newValue) => {
                           field.onChange(newValue);
                         }}
@@ -479,7 +487,10 @@ export default function LessonPlanNewForm() {
                 control={control}
                 render={({ field, fieldState: { error } }) => (
                   <DateTimePicker
+                    minDate={tomorrow}
+                    defaultValue={today}
                     shouldDisableDate={isWeekend}
+                    format="do MMMM yyyy HH"
                     views={['year', 'month', 'day', 'hours']}
                     label="Deadline Date"
                     value={currentDeadlineDate}
