@@ -58,24 +58,24 @@ export default function LessonPlanNewForm() {
   const tomorrow = dayjs().add(1, 'day');
 
   const newLessonPlanSchema = Yup.object().shape({
-    period: Yup.string().required('Period is required'),
-    subject: Yup.string().required('Subject is required'),
-    grade: Yup.string().required('Grade is required'),
-    date: Yup.date().required('Date is required'),
-    topic: Yup.string().required('Topic is required'),
-    description: Yup.string().required('Description is required'),
-    content: Yup.string().required('Content is required'),
-    students: Yup.array().min(totalStudentsValidate, `Must have at least ${totalStudentsValidate} students`),
-    purposeOfClass: Yup.string().required('Purpose of the class is required'),
-    bibliography: Yup.string().required('Bibliography is required'),
+    period: Yup.string().required(translate('lesson_plans_create_form.period_required')),
+    subject: Yup.string().required(translate('lesson_plans_create_form.subject_required')),
+    grade: Yup.string().required(translate('lesson_plans_create_form.grade_required')),
+    date: Yup.date().required(translate('lesson_plans_create_form.date_required')),
+    topic: Yup.string().required(translate('lesson_plans_create_form.topic_required')),
+    description: Yup.string().required(translate('lesson_plans_create_form.desc_required')),
+    content: Yup.string().required(translate('lesson_plans_create_form.content_required')),
+    students: Yup.array().min(totalStudentsValidate, translate('lesson_plans_create_form.students_required', { number: totalStudentsValidate })),
+    purposeOfClass: Yup.string().required(translate('lesson_plans_create_form.purpose_required')),
+    bibliography: Yup.string().required(translate('lesson_plans_create_form.biblio_required')),
     resources: Yup.array(),
-    notification: Yup.string().required('Notification is required'),
+    notification: Yup.string().required(translate('lesson_plans_create_form.notification_required')),
     notificationDate: Yup.date().when(['notification', 'date'], (notification, date, schema) => {
       if (notification === 'no') {
-        return schema.min(date, 'End Date must be after Start Date')
-        .typeError('End Date is required')
+        return schema.min(date, translate('lesson_plans_create_form.end_after_start'))
+        .typeError(translate('lesson_plans_create_form.end_date_required'))
       }
-    }).required('Notification Date is required').typeError('This is an error'),
+    }).required(translate('lesson_plans_create_form.end_date_required')),
     // deadlineDate: Yup.date(),
   })
 

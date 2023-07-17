@@ -187,16 +187,16 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
   }, [selectedScheduleByGrade]);
 
   const newLessonPlanSchema = Yup.object().shape({
-    period: Yup.string().required('Period is required'),
-    subject: Yup.string().required('Subject is required'),
-    grade: Yup.string().required('Grade is required'),
-    date: Yup.date().required('Date is required'),
-    topic: Yup.string().required('Topic is required'),
-    description: Yup.string().required('Description is required'),
-    content: Yup.string().required('Content is required'),
+    period: Yup.string().required(translate('lesson_plans_update_form.period_required')),
+    subject: Yup.string().required(translate('lesson_plans_update_form.subject_required')),
+    grade: Yup.string().required(translate('lesson_plans_update_form.grade_required')),
+    date: Yup.date().required(translate('lesson_plans_update_form.date_required')),
+    topic: Yup.string().required(translate('lesson_plans_update_form.topic_required')),
+    description: Yup.string().required(translate('lesson_plans_update_form.desc_required')),
+    content: Yup.string().required(translate('lesson_plans_update_form.content_required')),
     students: Yup.array().min(totalStudentsValidate, `Must have at least ${totalStudentsValidate} students`),
-    purposeOfClass: Yup.string().required('Purpose of the class is required'),
-    bibliography: Yup.string().required('Bibliography is required'),
+    purposeOfClass: Yup.string().required(translate('lesson_plans_update_form.purpose_required')),
+    bibliography: Yup.string().required(translate('lesson_plans_update_form.biblio_required')),
     deadlineNotification: Yup.string(),
     deadlineDate: Yup.date()
   });
