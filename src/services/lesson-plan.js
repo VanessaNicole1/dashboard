@@ -95,14 +95,3 @@ export const removeResource = async (id, name) => {
     return { errorMessage: error.message }
   }
 }
-
-export const findLessonPlanById = async (lessonPlanId) => {
-  try {
-    const response = await axios.get(`/lesson-plans/${lessonPlanId}`);
-    return response.data;
-  } catch (error) {
-    return {
-      errorMessage: 'Error'
-    }
-  }
-};
