@@ -1,4 +1,3 @@
-// ----------------------------------------------------------------------
 
 function path(root, sublink) {
   return `${root}${sublink}`;
@@ -6,8 +5,6 @@ function path(root, sublink) {
 
 const ROOTS_AUTH = '/auth';
 const ROOTS_DASHBOARD = '/dashboard';
-
-// ----------------------------------------------------------------------
 
 export const PATH_AUTH = {
   root: ROOTS_AUTH,
@@ -49,7 +46,7 @@ export const PATH_DASHBOARD = {
     listAllPlans: path(ROOTS_DASHBOARD, '/lesson-plan/all'),
     listTeacherPlans: path(ROOTS_DASHBOARD, '/lesson-plan/teacher/list'),
     listStudentPlans: path(ROOTS_DASHBOARD, '/lesson-plan/student/list'),
-    listStudentPendings: path(ROOTS_DASHBOARD, '/lesson-plan/student/pendings'),
+    studentValidate: path(ROOTS_DASHBOARD, '/lesson-plan/student/validate'),
     listProcesses: path(ROOTS_DASHBOARD, '/lesson-plan/process-list'),
     edit: (id) => path(ROOTS_DASHBOARD, `/lesson-plan/${id}/edit`),
   },

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   TableRow,
@@ -9,19 +10,28 @@ import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import { getFullYears, getMonth } from '../../period/list/utils/date.utils';
 import { getFancyDate } from '../../../../utils/date';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 LessonPlanStudentTableRow.propTypes = {
   row: PropTypes.object
 };
 
-export default function LessonPlanStudentTableRow({ row }) {
+// TODO: Add i18n.
+
+export default function LessonPlanStudentTableRow({ row }) { 
   const getDateFormat = (date) => `${getMonth(date)} - ${getFullYears(date)}`
 
-  const { isValidated, period, grade, teacher, subject, creationDate } = row;
+  const { isValidated, period, grade, teacher, subject, creationDate, lessonPlanId } = row;
   const { startDate, endDate } = period;
 
   const startDateFormat = getDateFormat(startDate);
   const endDateFormat = getDateFormat(endDate);
+
+  const navigate = useNavigate();
+
+  const handleValidate = () => {
+    navigate(`${PATH_DASHBOARD.lessonPlan.studentValidate}/${lessonPlanId}`);
+  };
 
   return (
     <TableRow hover >
@@ -55,7 +65,7 @@ export default function LessonPlanStudentTableRow({ row }) {
 
       <TableCell align="center">
         <Tooltip title="Validar">
-          <IconButton>
+          <IconButton onClick={handleValidate}>
             <Iconify icon="ic:outline-rate-review" />
           </IconButton>
         </Tooltip>

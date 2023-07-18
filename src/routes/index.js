@@ -10,7 +10,6 @@ import LessonPlanAboutPage from "../pages/dashboard/lesson-plan/LessonPlanAboutP
 import LessonPlanCreatePage from "../pages/dashboard/lesson-plan/LessonPlanCreatePage";
 import LessonPlanListPage from "../pages/dashboard/lesson-plan/LessonPlanListPage";
 import LessonPlanListStudentPage from "../pages/dashboard/lesson-plan/LessonPlanListStudentPage";
-import LessonPlanListStudentPendingsPage from "../pages/dashboard/lesson-plan/LessonPlanListStudentsPendingsPage";
 import LessonPlanListTeacherPage from "../pages/dashboard/lesson-plan/LessonPlanListTeacherPage";
 import LessonPlanProcessPage from "../pages/dashboard/lesson-plan/LessonPlanProcessPage";
 import RolesListPage from "../pages/dashboard/roles/RolesListPage";
@@ -35,6 +34,7 @@ import UserEditPage from "../pages/dashboard/user/UserEditPage";
 import UsersListPage from "../pages/dashboard/user/UsersListPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import LessonPlanEditPage from "../pages/dashboard/lesson-plan/LessonPlanEditPage";
+import { LessonPlanValidateStudentPage } from "../pages/dashboard/lesson-plan/LessonPlanValidateStudentPage";
 
 export default function Router () {
 
@@ -123,13 +123,13 @@ export default function Router () {
               </RoleBasedGuard>
             )
           },
-          { path: 'student/pendings',
+          { path: 'student/validate/:lessonPlanId',
             element: (
-              <RoleBasedGuard hasContent roles={[ROLES.teacher, ROLES.student]}>
-                <LessonPlanListStudentPendingsPage />
+              <RoleBasedGuard hasContent roles={[ROLES.student]}>
+                <LessonPlanValidateStudentPage />
               </RoleBasedGuard>
             )
-          },
+          }
         ]
       },
       { 
