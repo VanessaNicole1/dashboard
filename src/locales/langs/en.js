@@ -204,6 +204,24 @@ lesson_plan_list_page: {
     link_teacher: "Teacher",
     link_create_teacher: "New teacher",
   },
+  lesson_plan_create_page: {
+    title: "Lesson Plan: New Lesson Plan",
+    heading: "Create a lesson plan",
+    links: {
+      dashboard: "Dashboard",
+      plans: "Lesson Plans",
+      create: "Create"
+    }
+  },
+  lesson_plan_update_page: {
+    title: "Lesson Plan: Update Lesson Plan",
+    heading: "Update a lesson plan",
+    links: {
+      dashboard: "Dashboard",
+      plans: "Lesson Plans",
+      update: "Update"
+    }
+  },
   components: {
     table_pagination_custom: {
       form_control: {
@@ -353,6 +371,24 @@ lesson_plan_list_page: {
       roles: 'Roles'
     }
   },
+  teachers_lesson_plans: {
+    helmet: "Lesson Plans | List",
+    heading: "Lesson Plans List",
+    dashboard: "Dashboard",
+    about: "About",
+    list: "List",
+    table: {
+      period: "period",
+      grade: "grade",
+      subject: "subject",
+      status: "status",
+      actions: "Actions"
+    },
+    toolbar: {
+      period: "Period",
+      search: "Search..."
+    }
+  },
   degree_create_form: {
     button_create: "Create degree",
     input_name: "Degree name",
@@ -387,6 +423,69 @@ lesson_plan_list_page: {
   subject_edit_form: {
     name: 'Name',
     button_edit: 'Update Subject'
+  },
+  lesson_plans_create_form: {
+    period: "Period",
+    subject: "Subject",
+    grade: "Grade",
+    date: "Date",
+    topic: "Topic",
+    description: "Description",
+    content: "Content",
+    resources: "Resources",
+    students: "Students",
+    purpose: "Purpose of class",
+    biblio: "Bibliography",
+    notify_students: "Notify students",
+    notify_date: "Notification Date",
+    deadline: "Deadline",
+    notify_now: "Notify now",
+    notify_after: "Notify after",
+    save: "save",
+    period_required: "Period is required",
+    subject_required: "Subject is required",
+    grade_required: "Grade is required",
+    date_required: "Date is required",
+    topic_required: "Topic is required",
+    desc_required: "Description is required",
+    content_required: "Content is required",
+    students_required: "Must have at least {{number}} students",
+    purpose_required: "Purpose is required",
+    biblio_required: "Bibliography is required",
+    notification_required: "Notification is required",
+    end_after_start: "Notification Date must be after Start Date",
+    end_date_required: "Notification Date is required"
+  },
+  lesson_plans_update_form: {
+    period: "Period",
+    subject: "Subject",
+    grade: "Grade",
+    date: "Date",
+    topic: "Topic",
+    description: "Description",
+    content: "Content",
+    resources: "Resources uploaded",
+    new_resources: "Resources",
+    students: "Students",
+    change_deadline: "Change deadline notification",
+    purpose: "Purpose of class",
+    biblio: "Bibliography",
+    notify_students: "Notify students",
+    notify_date: "Notification Date",
+    deadline: "Deadline",
+    change_no: "No",
+    change_yes: "Yes",
+    save: "Update",
+    period_required: 'Period is required',
+    subject_required: 'Subject is required',
+    grade_required: 'Grade is required',
+    date_required: 'Date is required',
+    topic_required: 'Topic is required',
+    desc_required: 'Description is required',
+    content_required: 'Content is required',
+    students_required: 'Students are required',
+    purpose_required: 'Purpose is required',
+    biblio_required: 'Bibliography is required'
   },
   app: `app`,
   user: `user`,

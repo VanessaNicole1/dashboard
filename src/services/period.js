@@ -42,3 +42,12 @@ export const deletePeriod = async (id) => {
     return { errorMessage: error.message }
   }
 }
+
+export const getPeriod = async (id) => {
+  try {
+    const { data: period } = await axios.get(`/periods/${id}`);
+    return period;
+  } catch (error) {
+    return { errorMessage: error.message }
+  }
+}

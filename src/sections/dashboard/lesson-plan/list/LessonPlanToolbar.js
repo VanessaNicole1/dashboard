@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/material';
 import Iconify from '../../../../components/iconify';
+import { useLocales } from '../../../../locales';
 
 LessonPlanToolbar.propTypes = {
   isFiltered: PropTypes.bool,
@@ -21,6 +22,8 @@ export default function LessonPlanToolbar({
   onFilterPeriod,
   onResetFilter,
 }) {
+  const { translate } = useLocales();
+
   return (
     <Stack
       spacing={2}
@@ -34,7 +37,7 @@ export default function LessonPlanToolbar({
       <TextField
         fullWidth
         select
-        label="Period"
+        label={translate('teachers_lesson_plans.toolbar.period')}
         value={filterPeriod}
         onChange={onFilterPeriod}
         SelectProps={{
@@ -62,7 +65,7 @@ export default function LessonPlanToolbar({
               textTransform: 'capitalize',
             }}
           >
-            {option.name}
+            {option.name === 'all' ? translate('sections.toolbar_custom.all_option'): option.name }
           </MenuItem>
         ))}
       </TextField>
@@ -71,7 +74,7 @@ export default function LessonPlanToolbar({
         fullWidth
         value={filterContent}
         onChange={onFilterName}
-        placeholder="Search..."
+        placeholder={translate('teachers_lesson_plans.toolbar.search')}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

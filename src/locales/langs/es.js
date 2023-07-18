@@ -200,6 +200,24 @@ const en = {
     link_teacher: 'Docente',
     link_create_teacher: 'Docente nuevo',
   },
+  lesson_plan_create_page: {
+    title: "Plan de Clase: Nuevo Plan de Clases",
+    heading: "Crear un plan de clase",
+    links: {
+      dashboard: "Dashboard",
+      plans: "Lista de plan de clases",
+      create: "Crear"
+    }
+  },
+  lesson_plan_update_page: {
+    title: "Plan de clase | Actualizar",
+    heading: "Actualizar un plan de clase",
+    links: {
+      dashboard: "Dashboard",
+      plans: "Lista de plan de clases",
+      update: "Actualizar"
+    }
+  },
   components: {
     table_pagination_custom: {
       form_control: {
@@ -334,6 +352,24 @@ const en = {
       roles: 'Roles'
     }
   },
+  teachers_lesson_plans: {
+    helmet: "Planes de Clases | Lista",
+    heading: "Lista de Plan de Clases",
+    dashboard: "Dashboard",
+    about: "Información",
+    list: "Lista",
+    table: {
+      period: "Periodo",
+      grade: "Grado",
+      subject: "Materia",
+      status: "Estado",
+      actions: "Actiones"
+    },
+    toolbar: {
+      period: "Period",
+      search: "Search..."
+    }
+  },
   subjects_list_page: {
     helmet: 'Materias | Lista',
     heading: 'Lista de Materias',
@@ -376,6 +412,67 @@ const en = {
     input_name: 'Nombre',
     last_name_input: 'Apellido',
     email_input: 'Correo',
+  },
+  lesson_plans_create_form: {
+    period: "Periodo",
+    subject: "Materia",
+    grade: "Grado",
+    date: "Fecha",
+    topic: "Tema",
+    description: "Descripción",
+    content: "Contenido",
+    resources: "Recursos",
+    students: "Estudiantes",
+    purpose: "Propósito de la clase",
+    biblio: "Bibliografía",
+    notify_students: "Notificar a los estudiantes",
+    notify_date: "Fecha de notificación",
+    deadline: "Fecha límite de calificación",
+    notify_now: "Notificar ahora",
+    notify_after: "Notificar luego",
+    save: "Guardar",
+    period_required: 'El periodo es requerido',
+    subject_required: 'La materia es requerida',
+    grade_required: 'El grado es requerido',
+    date_required: 'La fecha es requerida',
+    topic_required: 'El tema es requerido',
+    desc_required: 'La descripción es requerida',
+    content_required: 'El contenido es requerido',
+    students_required: "Al menos {{number}} estudiantes deben ser elegidos",
+    purpose_required: 'El propósito de la clase es requerido',
+    biblio_required: 'La bibliografía es requerida',
+    notification_required: "La notificación es requerida",
+    end_after_start: "La fecha de notificación debe ser posterior a la fecha de inicio",
+    end_date_required: "La notificación es requerida"
+  },
+  lesson_plans_update_form: {
+    period: "Periodo",
+    subject: "Materia",
+    grade: "Grado",
+    date: "Fecha",
+    topic: "Tema",
+    description: "Descripción",
+    content: "Contenido",
+    resources: "Recursos compartidos",
+    new_resources: "Recursos",
+    students: "Studiantes",
+    change_deadline: "Extender la fecha de validación",
+    purpose: "Propósito de la clase",
+    biblio: "Bibliografía",
+    deadline: "Fecha límite",
+    change_no: "No",
+    change_yes: "Si",
+    save: "actualizar",
+    period_required: 'El periodo es requerido',
+    subject_required: 'La materia es requerida',
+    grade_required: 'El grado es requerido',
+    date_required: 'La fecha es requerida',
+    topic_required: 'El tema es requerido',
+    desc_required: 'La descripción es requerida',
+    content_required: 'El contenido es requerido',
+    students_required: 'Los estudiantes son requeridos',
+    purpose_required: 'El propósito de la clase es requerido',
+    biblio_required: 'La bibliografía es requerida'
   },
   app: `app`,
   user: `user`,

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { paramCase } from 'change-case';
 import { useNavigate } from 'react-router-dom';
 import {
   Tab,
@@ -108,11 +107,11 @@ export default function LessonPlanListTeacherPage() {
   }, [filterContent, tableData, filterPeriod, filterStatus]);
 
   const TABLE_HEAD = [
-    { id: 'period', label: 'Period', align: 'center' },
-    { id: 'grade', label: 'Grade', align: 'left' },
-    { id: 'subject', label: 'Subject', align: 'left' },
-    { id: 'status', label: 'Status', align: 'left' },
-    { id: 'Actions', label: 'Actions', align: 'center' },
+    { id: 'period', label: translate('teachers_lesson_plans.table.period'), align: 'center' },
+    { id: 'grade', label: translate('teachers_lesson_plans.table.grade'), align: 'left' },
+    { id: 'subject', label: translate('teachers_lesson_plans.table.subject'), align: 'left' },
+    { id: 'status', label: translate('teachers_lesson_plans.table.status'), align: 'left' },
+    { id: 'Actions', label: translate('teachers_lesson_plans.table.actions'), align: 'center' },
   ];
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
@@ -155,7 +154,7 @@ export default function LessonPlanListTeacherPage() {
   };
 
   const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
+    navigate(PATH_DASHBOARD.lessonPlan.edit(id));
   };
 
   const handleViewLessonPlan = (id) => {
@@ -171,16 +170,15 @@ export default function LessonPlanListTeacherPage() {
   return (
     <>
       <Helmet>
-        <title> Lesson Plans</title>
+        <title> {translate('teachers_lesson_plans.helmet')} </title>
       </Helmet>
-
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading='Lesson Plans'
+          heading={translate('teachers_lesson_plans.heading')}
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Process', href: PATH_DASHBOARD.lessonPlan.listProcesses },
-            { name: 'List' },
+            { name: translate('teachers_lesson_plans.dashboard'), href: PATH_DASHBOARD.root },
+            { name: translate('teachers_lesson_plans.about'), href: PATH_DASHBOARD.lessonPlan.listProcesses },
+            { name: translate('teachers_lesson_plans.list') },
           ]}
         />
         <Card>
@@ -229,7 +227,7 @@ export default function LessonPlanListTeacherPage() {
                         row={row}
                         selected={selected.includes(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.name)}
+                        onEditRow={() => handleEditRow(row.id)}
                       />
                     ))}
                   <TableEmptyRows

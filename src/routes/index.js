@@ -34,6 +34,7 @@ import ProcessesListPage from "../pages/dashboard/lesson-plan/ProcessesListPage"
 import UserEditPage from "../pages/dashboard/user/UserEditPage";
 import UsersListPage from "../pages/dashboard/user/UsersListPage";
 import RegisterPage from "../pages/auth/RegisterPage";
+import LessonPlanEditPage from "../pages/dashboard/lesson-plan/LessonPlanEditPage";
 
 export default function Router () {
 
@@ -110,6 +111,11 @@ export default function Router () {
               </RoleBasedGuard>
             ) 
           },
+          { path: ':id/edit', element: (
+            <RoleBasedGuard hasContent roles={[ROLES.manager, ROLES.teacher]}>
+              <LessonPlanEditPage />
+            </RoleBasedGuard>
+          )},
           { path: 'student/list',
             element: (
               <RoleBasedGuard hasContent roles={[ROLES.student]}>

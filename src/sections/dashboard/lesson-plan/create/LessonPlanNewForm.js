@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import { useCallback, useEffect, useState } from 'react';
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 import FormProvider from '../../../../components/hook-form/FormProvider';
 import {
   RHFAutocomplete,
@@ -24,16 +25,19 @@ import { createLessonPlan } from '../../../../services/lesson-plan';
 import { manualHideErrorSnackbarOptions } from '../../../../utils/snackBar';
 import { useSnackbar } from '../../../../components/snackbar';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-
-const NOTIFICATION_OPTION = [
-  { label: 'Notify now', value: 'yes' },
-  { label: 'Notify after', value: 'no' },
-];
+import { useLocales } from '../../../../locales';
+import { getPeriod } from '../../../../services/period';
 
 export default function LessonPlanNewForm() {
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const { translate } = useLocales();
+
+  const NOTIFICATION_OPTION = [
+    { label: translate('lesson_plans_create_form.notify_now'), value: 'yes' },
+    { label: translate('lesson_plans_create_form.notify_after'), value: 'no' },
+  ];
 
   const [openUploadFile, setOpenUploadFile] = useState(false);
   const [teacherActivePeriods, setTeacherActivePeriods] = useState([]);
@@ -47,26 +51,32 @@ export default function LessonPlanNewForm() {
   const [selectedNotification, setSelectedNotification] = useState(true);
   const [selectedStudent, setSelectedStudent] = useState([]);
   const [fields, setFields] = useState(true);
+  const [currentDeadlineDate, setDeadlineDate] = useState(new Date());
+  const [totalStudentsValidate, setTotalStudentsValidate] = useState(1);
+
+  const today = dayjs();
+  const tomorrow = dayjs().add(1, 'day');
 
   const newLessonPlanSchema = Yup.object().shape({
-    period: Yup.string().required('Period is required'),
-    subject: Yup.string().required('Schedule is required'),
-    grade: Yup.string().required('Schedule is required'),
-    date: Yup.date().required('Date is required'),
-    topic: Yup.string().required('Topic is required'),
-    description: Yup.string().required('Description is required'),
-    content: Yup.string().required('Content is required'),
-    students: Yup.array().min(1, 'Must have at least 2 tags'),
-    purposeOfClass: Yup.string().required('Purpose of the class is required'),
-    bibliography: Yup.string().required('Bibliography is required'),
+    period: Yup.string().required(translate('lesson_plans_create_form.period_required')),
+    subject: Yup.string().required(translate('lesson_plans_create_form.subject_required')),
+    grade: Yup.string().required(translate('lesson_plans_create_form.grade_required')),
+    date: Yup.date().required(translate('lesson_plans_create_form.date_required')),
+    topic: Yup.string().required(translate('lesson_plans_create_form.topic_required')),
+    description: Yup.string().required(translate('lesson_plans_create_form.desc_required')),
+    content: Yup.string().required(translate('lesson_plans_create_form.content_required')),
+    students: Yup.array().min(totalStudentsValidate, translate('lesson_plans_create_form.students_required', { number: totalStudentsValidate })),
+    purposeOfClass: Yup.string().required(translate('lesson_plans_create_form.purpose_required')),
+    bibliography: Yup.string().required(translate('lesson_plans_create_form.biblio_required')),
     resources: Yup.array(),
-    notification: Yup.string().required('Notification is required'),
+    notification: Yup.string().required(translate('lesson_plans_create_form.notification_required')),
     notificationDate: Yup.date().when(['notification', 'date'], (notification, date, schema) => {
       if (notification === 'no') {
-        return schema.min(date, 'End Date must be after Start Date')
-        .typeError('End Date is required')
+        return schema.min(date, translate('lesson_plans_create_form.end_after_start'))
+        .typeError(translate('lesson_plans_create_form.end_date_required'))
       }
-    }).required('Notification Date is required').typeError('This is an error')
+    }).required(translate('lesson_plans_create_form.end_date_required')),
+    // deadlineDate: Yup.date(),
   })
 
   const defaultValues = {
@@ -82,7 +92,8 @@ export default function LessonPlanNewForm() {
     bibliography: "",
     resources: [],
     notification: "yes",
-    notificationDate: new Date()
+    notificationDate: new Date(),
+    deadlineDate: new Date(),
   };
 
   const methods = useForm({
@@ -132,6 +143,17 @@ export default function LessonPlanNewForm() {
   }, [selectedActivePeriod]);
 
   useEffect(() => {
+    if (selectedActivePeriod) {
+      const fetchPeriod = async () => {
+        const currentPeriod = await getPeriod(selectedActivePeriod);
+        const totalStudents = currentPeriod.periodConfig.minimumStudentsToEvaluate;
+        setTotalStudentsValidate(totalStudents);
+      }
+      fetchPeriod();
+    }
+  }, [selectedActivePeriod]);
+
+  useEffect(() => {
     const currentGradesBySubject = schedules.filter((schedule) => schedule.subject.name === selectedSubject);
     setGrades(currentGradesBySubject);
   }, [selectedSubject]);
@@ -177,9 +199,9 @@ export default function LessonPlanNewForm() {
   };
 
   const handlePeriodChange = (e) => {
-    setValue("grade", '', { shouldValidate: true });
-    setValue("students", [], { shouldValidate: true });
-    setValue("subject", '', { shouldValidate: true });
+    setValue("grade", '');
+    setValue("students", []);
+    setValue("subject", '');
     setSchedules([]);
     setSelectedStudent([]);
     setSelectedSubject('');
@@ -189,8 +211,8 @@ export default function LessonPlanNewForm() {
   };
 
   const handleSubjectChange = (e) => {
-    setValue("grade", '', { shouldValidate: true });
-    setValue("students", [], { shouldValidate: true });
+    setValue("grade", '');
+    setValue("students", []);
     setSelectedStudent([]);
     setStudents([]);
     setSelectedSubject(e.target.value);
@@ -198,7 +220,7 @@ export default function LessonPlanNewForm() {
   }
 
   const handleGradeChange = (e) => {
-    setValue("students", [], { shouldValidate: true });
+    setValue("students", []);
     setSelectedStudent([]);
     setStudents([]);
     setSelectedGrade(e.target.value);
@@ -209,6 +231,26 @@ export default function LessonPlanNewForm() {
     control,
     name: 'notification',
   });
+
+  const notificationDateValue = useWatch({
+    control,
+    name: 'notificationDate',
+  });
+
+  useEffect(() => {
+    if (!selectedNotification) {
+      const currentDate = new Date();
+      const nextDate = new Date(currentDate);
+      nextDate.setDate(currentDate.getDate() + 7);
+      setDeadlineDate(nextDate);
+    } else {
+      setValue("deadlineDate", '');
+      const currentNotificationDate = new Date(notificationDateValue);
+      const nextNotificationDate = new Date(currentNotificationDate);
+      nextNotificationDate.setDate(currentNotificationDate.getDate() + 7);
+      setDeadlineDate(nextNotificationDate);
+    }
+  }, [selectedNotification, notificationDateValue]);
 
   function removeDuplicates(arr) {
     return arr.filter((obj, index) => {
@@ -224,9 +266,18 @@ export default function LessonPlanNewForm() {
   }
 
   useEffect(() => {
-    const notificationValue = selectedNotificationValue === 'no' && true;
-    setSelectedNotification(notificationValue);
+    if (selectedNotificationValue === 'no') {
+      setSelectedNotification(true);
+    } else {
+      setSelectedNotification(false);
+    }
   }, [selectedNotificationValue]);
+
+  const isWeekend = (date) => {
+    const currentDate = new Date(date);
+    const currentDay = currentDate.getDay();
+    return currentDay === 0 || currentDay === 6;
+  };
 
   const onSubmit = async (data) => {
     const { notification, grade: schedule, period, resources } = data;
@@ -239,8 +290,10 @@ export default function LessonPlanNewForm() {
       notificationDate,
       scheduleId: schedule,
       periodId: period,
-      date: data.date.toISOString()
+      date: data.date.toISOString(),
+      deadlineDate: new Date(currentDeadlineDate)
     }
+
     const lessonPlanResponse = await createLessonPlan(data, resources);
 
     if (lessonPlanResponse.errorMessage) {
@@ -250,7 +303,7 @@ export default function LessonPlanNewForm() {
       navigate(PATH_DASHBOARD.lessonPlan.listTeacherPlans);
     }
   };
-
+  
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
@@ -260,7 +313,7 @@ export default function LessonPlanNewForm() {
               <RHFSelect
                 native
                 name="period"
-                label="Period"
+                label={translate('lesson_plans_create_form.period')}
                 onChange={handlePeriodChange}
                 value={selectedActivePeriod}
               >
@@ -275,7 +328,7 @@ export default function LessonPlanNewForm() {
                 control={control}
                 native
                 name="subject"
-                label="Subject"
+                label={translate('lesson_plans_create_form.subject')}
                 onChange={handleSubjectChange}
                 value={selectedSubject}
                 disabled={fields}
@@ -291,7 +344,7 @@ export default function LessonPlanNewForm() {
                 control={control}
                 native
                 name="grade"
-                label="Grade"
+                label={translate('lesson_plans_create_form.grade')}
                 onChange={handleGradeChange}
                 value={selectedGrade}
                 disabled={fields}
@@ -308,7 +361,7 @@ export default function LessonPlanNewForm() {
                 control={control}
                 render={({ field, fieldState: { error } }) => (
                   <DatePicker
-                    label="Date"
+                    label={translate('lesson_plans_create_form.date')}
                     value={field.value}
                     onChange={(newValue) => {
                       field.onChange(newValue);
@@ -325,11 +378,11 @@ export default function LessonPlanNewForm() {
                   />
                 )}
               />
-              <RHFTextField name="topic" disabled={fields} label="Topic"  />
+              <RHFTextField name="topic" disabled={fields} label={translate('lesson_plans_create_form.topic')}  />
 
               <RHFTextField
                 name="description"
-                label="Description"
+                label={translate('lesson_plans_create_form.description')}
                 multiline
                 rows={3}
                 disabled={fields}
@@ -340,7 +393,7 @@ export default function LessonPlanNewForm() {
                   variant="subtitle2"
                   sx={{ color: "text.secondary" }}
                 >
-                  Content
+                  {translate('lesson_plans_create_form.content')}
                 </Typography>
 
                 <RHFEditor simple name="content" />
@@ -351,7 +404,7 @@ export default function LessonPlanNewForm() {
                   variant="subtitle2"
                   sx={{ color: "text.secondary" }}
                 >
-                  Resources
+                  {translate('lesson_plans_create_form.resources')}
                 </Typography>
 
                 <RHFUpload
@@ -382,7 +435,7 @@ export default function LessonPlanNewForm() {
                 control={control}
                 value={selectedStudent}
                 name="students"
-                label="Students"
+                label={translate('lesson_plans_create_form.students')}
                 multiple
                 freeSolo
                 onChange={handleStudentChange}
@@ -394,10 +447,10 @@ export default function LessonPlanNewForm() {
                 ChipProps={{ size: "small" }}
                 disabled={fields}
               />
-              <RHFTextField name="purposeOfClass" disabled={fields} label="Purpose of Class" />
+              <RHFTextField name="purposeOfClass" disabled={fields} label={translate('lesson_plans_create_form.purpose')} />
               <RHFTextField
                 name="bibliography"
-                label="Bibliography"
+                label={translate('lesson_plans_create_form.biblio')}
                 fullWidth
                 multiline
                 rows={3}
@@ -405,7 +458,7 @@ export default function LessonPlanNewForm() {
               />
               <Stack spacing={1}>
                   <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                    Notify students
+                    {translate('lesson_plans_create_form.notify_students')}
                   </Typography>
 
                   <RHFRadioGroup control={control} row spacing={4} name="notification" options={NOTIFICATION_OPTION} />
@@ -417,9 +470,14 @@ export default function LessonPlanNewForm() {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <DateTimePicker
-                        views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                        label="Notification Date"
+                        minDate={tomorrow}
+                        defaultValue={today}
+                        shouldDisableDate={isWeekend}
+                        format="do MMMM yyyy HH"
+                        views={['year', 'month', 'day', 'hours']}
+                        label={translate('lesson_plans_create_form.notify_date')}
                         value={field.value}
+                        
                         onChange={(newValue) => {
                           field.onChange(newValue);
                         }}
@@ -436,6 +494,34 @@ export default function LessonPlanNewForm() {
                     )}
                   />
               )}
+                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                    {translate('lesson_plans_create_form.deadline')}
+                </Typography>
+              <Controller
+                name="deadlineDate"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <DateTimePicker
+                    minDate={tomorrow}
+                    defaultValue={today}
+                    shouldDisableDate={isWeekend}
+                    format="do MMMM yyyy HH"
+                    views={['year', 'month', 'day', 'hours']}
+                    label={translate('lesson_plans_create_form.deadline')}
+                    value={currentDeadlineDate}
+                    onChange={setDeadlineDate}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        error={!!error}
+                        helperText={error?.message}
+                      />
+                    )}
+                    disabled
+                  />
+                )}
+              />
             </Stack>
           </Card>
           <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
@@ -447,7 +533,7 @@ export default function LessonPlanNewForm() {
               loading={isSubmitting}
               disabled={fields}
             >
-              Save
+              {translate('lesson_plans_create_form.save')}
             </LoadingButton>
           </Stack>
         </Grid>

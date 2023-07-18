@@ -28,6 +28,7 @@
     "change-case": "^4.1.2",
     "csvtojson": "^2.0.10",
     "date-fns": "^2.29.3",
+    "dayjs": "^1.11.9",
     "framer-motion": "^7.6.18",
     "highlight.js": "^11.7.0",
     "i18next": "^22.0.6",
