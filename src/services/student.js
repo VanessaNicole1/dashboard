@@ -53,6 +53,17 @@ export const findStudentLessonPlans = async (isValidated, userId, periodId ) => 
   }
 }
 
+export const getStudentLessonPlanToValidate = async (userId, lessonPlanId) => {
+  try  {
+    const { data } = await axios.get(`/students/${userId}/lesson-plan-to-validate`, { params: { lessonPlanId } });
+    return data;
+  } catch (error) {
+    return {
+      errorMessage: error.message
+    }
+  }
+};
+
 export const validateStudents = async (data) => {
   try {
     await axios.post('/students/validate', { students: data })
