@@ -330,22 +330,6 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       setCurrentDeadlineNotification(true);
     }
   }, [selectedDeadlineNotificationValue]);
-  
-
-  // const isInCurrentMonth = (date) => {
-  //   const currentDate = new Date(date);
-  //   const currentMonth = currentDate.getMonth();
-  //   const monthPeriod = new Date(startPeriod).getMonth();
-  //   console.log('currentMonth', currentMonth);
-  //   console.log('monthPeriod', monthPeriod);
-
-  //   return currentMonth < dayjs().get('month');
-  // };
-
-  // const isInCurrentMonth = (date) => {
-  //   console.log('date!!!!!!!!!!!!!!!', date.get('month'));
-  //   return date.get('month') === dayjs().get('month')
-  // };
 
   const onSubmit = async (data) => {
     const { grade: schedule, period, resources } = data;
@@ -542,12 +526,12 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
                   name="deadlineDate"
                   control={control}
                   render={({ field, fieldState: { error } }) => (
-                    <DateTimePicker
+                    <DatePicker
                       minDate={tomorrow}
                       defaultValue={today}
                       shouldDisableDate={isWeekend}
                       disabled={currentDeadlineNotification}
-                      views={['year', 'month', 'day', 'hours']}
+                      views={['year', 'month', 'day']}
                       label={translate('lesson_plans_update_form.deadline')}
                       value={field.value}
                       onChange={(newValue) => {
