@@ -361,6 +361,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
                 label={translate('lesson_plans_update_form.period')}
                 onChange={handlePeriodChange}
                 value={selectedActivePeriod}
+                disabled
               >
                 <option value="" />
                 {teacherActivePeriods.map((period) => (
@@ -376,6 +377,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
                 label={translate('lesson_plans_update_form.subject')}
                 onChange={handleSubjectChange}
                 value={selectedSubject}
+                disabled
               >
                 <option value="" />
                 {uniqueSubjects.map((schedule) => (
@@ -391,6 +393,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
                 label={translate('lesson_plans_update_form.grade')}
                 onChange={handleGradeChange}
                 value={selectedScheduleByGrade}
+                disabled
               >
                 <option value="" />
                 {grades.map((grade) => (
@@ -443,12 +446,15 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
               </Stack>
 
               <Stack spacing={1}>
-                <Typography
+                {
+                  currentResources.length > 0 && 
+                  <Typography
                   variant="subtitle2"
                   sx={{ color: "text.secondary" }}
                 >
                   {translate('lesson_plans_update_form.resources')}
                 </Typography>
+                }
 
               { currentResources &&
                 <Stack spacing={2}>
