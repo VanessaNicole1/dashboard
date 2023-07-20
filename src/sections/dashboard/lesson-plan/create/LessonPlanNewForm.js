@@ -501,12 +501,12 @@ export default function LessonPlanNewForm() {
                 name="deadlineDate"
                 control={control}
                 render={({ field, fieldState: { error } }) => (
-                  <DateTimePicker
+                  <DatePicker
                     minDate={tomorrow}
                     defaultValue={today}
                     shouldDisableDate={isWeekend}
                     format="do MMMM yyyy HH"
-                    views={['year', 'month', 'day', 'hours']}
+                    views={['year', 'month', 'day']}
                     label={translate('lesson_plans_create_form.deadline')}
                     value={currentDeadlineDate}
                     onChange={setDeadlineDate}
