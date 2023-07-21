@@ -421,7 +421,6 @@ export default function LessonPlanNewForm() {
                   type="file"
                   onRemove={handleRemoveFile}
                   onRemoveAll={handleRemoveAllFiles}
-                  onUpload={() => console.log("ON UPLOAD")}
                   disabled={fields}
                 />
               </Stack>

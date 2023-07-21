@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Card, Grid, Stack, TextField, Typography } from '@mui/material';
+import { Card, Chip, Container, Grid, IconButton, Stack, TextField, Tooltip, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,7 +21,7 @@ import { getSchedules } from '../../../../services/schedule';
 import { getStudents } from '../../../../services/student';
 import { useAuthContext } from '../../../../auth/useAuthContext';
 import { findTeacherActivePeriods } from '../../../../services/teacher';
-import { getLessonPlan, removeResource, updateLessonPlan } from '../../../../services/lesson-plan';
+import { getLessonPlanWithPeriod, removeResource, updateLessonPlan } from '../../../../services/lesson-plan';
 import { manualHideErrorSnackbarOptions } from '../../../../utils/snackBar';
 import { useSnackbar } from '../../../../components/snackbar';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
@@ -29,6 +29,7 @@ import FileGeneralRecentCard from './FileGeneralRecentCard';
 import FileNewFolderDialog from '../create/file/FileNewFolderDialog';
 import { useLocales } from '../../../../locales';
 import { getPeriod } from '../../../../services/period';
+import StudentsWhoValidated from './StudentsWhoValidated';
 
 LessonPlanUpdateForm.propTypes = {
   lessonPlanId: PropTypes.string,
@@ -44,7 +45,6 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
     { label: translate('lesson_plans_update_form.change_no'), value: 'no' },
     { label: translate('lesson_plans_update_form.change_yes'), value: 'yes' },
   ];
-  
 
   const [currentLessonlPlan, setCurrentLessonPlan] = useState({});
   const [teacherActivePeriods, setTeacherActivePeriods] = useState([]);
@@ -62,6 +62,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
   const [currentDeadlineNotification, setCurrentDeadlineNotification] = useState(true);
   const [changeResources, setChangeResources] = useState(false);
   const [totalStudentsValidate, setTotalStudentsValidate] = useState(1);
+  const [studentsValidated, setStudentsValidated] = useState([]);
 
   const today = dayjs();
   const tomorrow = dayjs().add(1, 'day');
@@ -75,7 +76,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
 
   useEffect(() => {
     const fetchLessonPlan = async () => {
-      const lessonPlan = await getLessonPlan(lessonPlanId);
+      const lessonPlan = await getLessonPlanWithPeriod(lessonPlanId);
       setCurrentLessonPlan(lessonPlan);
     }
     fetchLessonPlan();
@@ -166,9 +167,11 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       }
       fetchCurrentStudents();
       const validationsTracking = currentLessonlPlan?.validationsTracking;
-      const allStudents = validationsTracking.map((validationTracking) => validationTracking.student);
-      const newStudentFormat = allStudents.map((student) => ({id: student.id, displayName: `${student.user.name} ${student.user.lastName}`}))
-      setCurrentSelectedStudents(newStudentFormat);
+      const currentValitedLessonPlansTracking = validationsTracking.filter((validationTracking) => validationTracking.isValidated);
+      const validatedStudents = currentValitedLessonPlansTracking.map((tracking) => ({id: tracking.student.id, name: tracking.student.user.displayName, email: tracking.student.user.email}));
+      setStudentsValidated(validatedStudents);
+      const allStudents = validationsTracking.map((validationTracking) => ({id: validationTracking.student.id, displayName: validationTracking.student.user.displayName, isValidated: validationTracking.isValidated}));
+      setCurrentSelectedStudents(allStudents);
     }
   }, [currentLessonlPlan]);
 
@@ -218,7 +221,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       deadlineDate: currentLessonlPlan?.maximumValidationDate || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentLessonlPlan]
+    [currentLessonlPlan, currentSelectedStudents]
   );
 
   const methods = useForm({
@@ -234,6 +237,15 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
     watch,
     formState: { isSubmitting },
   } = methods;
+
+
+  useEffect(() => {
+    if (currentSelectedStudents.length > 0) {
+      setValue("students", currentSelectedStudents);
+    }
+  }, [currentSelectedStudents])
+  
+
 
   const values = watch();
 
@@ -299,10 +311,15 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
   };
 
   function removeDuplicates(arr) {
-    return arr.filter((obj, index) => {
-      const firstIndex = arr.findIndex((item) => JSON.stringify(item) === JSON.stringify(obj));
-      return index === firstIndex;
-    });
+    const tempObject = {};
+    for (const obj of arr) {
+      const attrValue = obj.id;
+      if (!tempObject[attrValue]) {
+        tempObject[attrValue] = obj;
+      }
+    }
+    const uniqueArray = Object.values(tempObject);
+    return uniqueArray;
   }
 
   const handleStudentChange = (event, newValue) => {
@@ -337,8 +354,10 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       ...data,
       scheduleId: schedule,
       periodId: period,
+      students: currentSelectedStudents,
       date: data.date.toISOString()
     }
+
     const lessonPlanResponse = await updateLessonPlan(currentLessonlPlan.id, data, resources);
 
     if (lessonPlanResponse.errorMessage) {
@@ -408,7 +427,6 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
                 render={({ field, fieldState: { error } }) => (
                   <DatePicker
                     shouldDisableDate={isWeekend}
-                    // shouldDisableMonth={isInCurrentMonth}
                     label={translate('lesson_plans_update_form.date')}
                     value={field.value}
                     onChange={(newValue) => {
@@ -487,7 +505,6 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
                   type="file"
                   onRemove={handleRemoveFile}
                   onRemoveAll={handleRemoveAllFiles}
-                  onUpload={() => console.log("ON UPLOAD")}
                 />
               </Stack>
               }
@@ -496,6 +513,9 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
           </Card>
         </Grid>
         <Grid item xs={12} md={4}>
+          {
+            studentsValidated.length > 0 && <StudentsWhoValidated sx={{ margin: 0.3 }} title="Lesson plan validated by:" list={studentsValidated} />
+          }
           <Card sx={{ p: 3 }}>
             <Stack spacing={3}>
               <RHFAutocomplete
@@ -510,7 +530,15 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
                   (student) => ({id: student.id, displayName: `${student.user.name} ${student.user.lastName}`})
                 )}
                 getOptionLabel={(option) => option.displayName}
-                // setcustomkey={(option) => option.id}
+                renderTags={(tagValue, getTagProps) =>
+                  tagValue.map((option, index) => (
+                    <Chip
+                      label={option.displayName}
+                      {...getTagProps({ index })}
+                      disabled={option.isValidated === true}
+                    />
+                  ))
+                }
                 ChipProps={{ size: "small" }}
               />
               <RHFTextField name="purposeOfClass" label={translate('lesson_plans_update_form.purpose')} />
