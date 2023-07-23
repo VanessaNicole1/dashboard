@@ -95,3 +95,29 @@ export const removeResource = async (id, name) => {
     return { errorMessage: error.message }
   }
 }
+
+
+export const generateTeacherLessonPlanReport = async (userId, data) => {
+  const { fromDate, toDate, period, subject, grade } = data;
+  const reportParams = { 
+    from: fromDate.toISOString(),
+    to: toDate.toISOString(),
+    periodId: period,
+    subjectId: subject,
+    gradeId: grade
+  }
+  
+  try {
+    const response = await axios.get(`/lesson-plans/report/${userId}`, { 
+      responseType: 'blob',
+      headers: {
+        'Content-Type': 'application/pdf',
+      },
+      params: reportParams 
+    });
+    const pdfUrl = URL.createObjectURL(response.data);
+    return pdfUrl;
+  } catch (error) {
+    return { errorMessage: 'No existen planes de clases con los parámetros especificados' }
+  }
+};
