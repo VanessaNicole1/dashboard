@@ -108,7 +108,7 @@ export const generateTeacherLessonPlanReport = async (userId, data) => {
   }
   
   try {
-    const response = await axios.get(`/lesson-plans/report/${userId}`, { 
+    const response = await axios.get(`/lesson-plans/report/${userId}`, {
       responseType: 'blob',
       headers: {
         'Content-Type': 'application/pdf',
@@ -121,3 +121,12 @@ export const generateTeacherLessonPlanReport = async (userId, data) => {
     return { errorMessage: 'No existen planes de clases con los parámetros especificados' }
   }
 };
+
+export const getLessonPlanWithPeriod = async (id) => {
+  try {
+    const {data: lessonPlan} = await axios.get(`lesson-plans/period/${id}`);
+    return lessonPlan;
+  } catch (error) {
+    return { errorMessage: error.message }
+  }
+}

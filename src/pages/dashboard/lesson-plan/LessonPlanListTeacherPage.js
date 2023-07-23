@@ -60,9 +60,6 @@ export default function LessonPlanListTeacherPage() {
   const { user } = useAuthContext();
   const { themeStretch } = useSettingsContext();
   const navigate = useNavigate();
-  const { translate } = useLocales();
-  const { enqueueSnackbar } = useSnackbar();
-
   const [tableData, setTableData] = useState([]);
   const [filterContent, setFilterName] = useState('');
   const [filterPeriod, setFilterPeriod] = useState('0');
@@ -71,6 +68,10 @@ export default function LessonPlanListTeacherPage() {
   const [currentPeriods, setPeriods] = useState([{id: '0', name: 'all'}]);
   const [openGenerateReportDialog, setOpenGenerateReportDialog] = useState(false);
   const [generatingReport, setGeneratingReport] = useState(false);
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { translate } = useLocales();
 
   useEffect(() => {
     const fetchPeriods = async () => {
@@ -142,7 +143,11 @@ export default function LessonPlanListTeacherPage() {
   };
 
   const handleDeleteRow = async (id) => {
-    await deleteLessonPlan(id);
+    const response = await deleteLessonPlan(id);
+
+    if (response.errorMessage) {
+      enqueueSnackbar(response.errorMessage, manualHideErrorSnackbarOptions);
+    }
     setSelected([]);
     const currentLessons = await getLessonPlansByUser(user.id);
     setTableData(currentLessons);

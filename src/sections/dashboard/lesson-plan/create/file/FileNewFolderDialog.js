@@ -58,7 +58,6 @@ export default function FileNewFolderDialog({
 
   const handleUpload = () => {
     onClose();
-    console.log('ON UPLOAD');
   };
 
   const handleRemoveFile = (inputFile) => {

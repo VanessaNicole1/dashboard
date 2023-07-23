@@ -421,7 +421,6 @@ export default function LessonPlanNewForm() {
                   type="file"
                   onRemove={handleRemoveFile}
                   onRemoveAll={handleRemoveAllFiles}
-                  onUpload={() => console.log("ON UPLOAD")}
                   disabled={fields}
                 />
               </Stack>
@@ -470,6 +469,8 @@ export default function LessonPlanNewForm() {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <DateTimePicker
+                        minTime={new Date(new Date().setHours(8))}
+                        maxTime={new Date(new Date().setHours(16))}
                         minDate={tomorrow}
                         defaultValue={today}
                         shouldDisableDate={isWeekend}
