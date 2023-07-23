@@ -10,6 +10,8 @@ import {
   TableBody,
   Container,
   TableContainer,
+  Button,
+  Stack,
 } from '@mui/material';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import Scrollbar from '../../../components/scrollbar';
@@ -31,7 +33,11 @@ import { findTeacherPeriods } from '../../../services/teacher';
 import { getMonth , getFullYears } from '../../../sections/dashboard/period/list/utils/date.utils';
 import LessonPlanToobar from '../../../sections/dashboard/lesson-plan/list/LessonPlanToolbar';
 import LessonPlanTableRow from '../../../sections/dashboard/lesson-plan/list/LessonPlanTableRow';
-import { deleteLessonPlan } from '../../../services/lesson-plan';
+import { deleteLessonPlan, generateTeacherLessonPlanReport } from '../../../services/lesson-plan';
+import Iconify from '../../../components/iconify/Iconify';
+import { useSnackbar } from '../../../components/snackbar';
+import { LessonPlanGenerateReportDialog } from '../../../sections/dashboard/lesson-plan/teachers-list/LessonPlanGenerateReportDialog';
+import { manualHideErrorSnackbarOptions } from '../../../utils/snackBar';
 
 const STATUS_OPTIONS = ['all', 'marked', 'unmarked'];
 
@@ -52,24 +58,19 @@ export default function LessonPlanListTeacherPage() {
   } = useTable();
 
   const { user } = useAuthContext();
-
   const { themeStretch } = useSettingsContext();
-
   const navigate = useNavigate();
+  const { translate } = useLocales();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [tableData, setTableData] = useState([]);
-
   const [filterContent, setFilterName] = useState('');
-
   const [filterPeriod, setFilterPeriod] = useState('0');
-
   const [filterStatus, setFilterStatus] = useState('all');
-
   const [dataFiltered, setDataFiltered] = useState([]);
-
   const [currentPeriods, setPeriods] = useState([{id: '0', name: 'all'}]);
-
-  const { translate } = useLocales();
+  const [openGenerateReportDialog, setOpenGenerateReportDialog] = useState(false);
+  const [generatingReport, setGeneratingReport] = useState(false);
 
   useEffect(() => {
     const fetchPeriods = async () => {
@@ -167,20 +168,44 @@ export default function LessonPlanListTeacherPage() {
     setFilterStatus('all');
   };
 
+  const generateLessonPlanTeacherReport = async (data) => {
+    setGeneratingReport(true);
+    const teacherReportUrl = await generateTeacherLessonPlanReport(user.id, data);
+
+    setGeneratingReport(false);
+    setOpenGenerateReportDialog(false);
+    if (teacherReportUrl.errorMessage) {
+      enqueueSnackbar(teacherReportUrl.errorMessage, manualHideErrorSnackbarOptions);
+    } else {
+      window.open(teacherReportUrl, "_blank");
+    }
+  }
+
   return (
     <>
       <Helmet>
         <title> {translate('teachers_lesson_plans.helmet')} </title>
       </Helmet>
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading={translate('teachers_lesson_plans.heading')}
-          links={[
-            { name: translate('teachers_lesson_plans.dashboard'), href: PATH_DASHBOARD.root },
-            { name: translate('teachers_lesson_plans.about'), href: PATH_DASHBOARD.lessonPlan.listProcesses },
-            { name: translate('teachers_lesson_plans.list') },
-          ]}
-        />
+          <CustomBreadcrumbs
+            heading={translate('teachers_lesson_plans.heading')}
+            links={[
+              { name: translate('teachers_lesson_plans.dashboard'), href: PATH_DASHBOARD.root },
+              { name: translate('teachers_lesson_plans.about'), href: PATH_DASHBOARD.lessonPlan.listProcesses },
+              { name: translate('teachers_lesson_plans.list') },
+            ]}
+          />
+        <Stack direction='row-reverse' marginBottom='10px'> 
+          <Button
+            color="inherit"
+            variant="outlined"
+            onClick={() => setOpenGenerateReportDialog(true)}
+            startIcon={<Iconify icon="solar:printer-minimalistic-bold" />}
+          >
+            Generar Reporte
+          </Button>
+        </Stack>
+      
         <Card>
           <Tabs
             value={filterStatus}
@@ -250,6 +275,13 @@ export default function LessonPlanListTeacherPage() {
           />
         </Card>
       </Container>
+
+      <LessonPlanGenerateReportDialog
+        isLoading={generatingReport}
+        onClose={() => setOpenGenerateReportDialog(false)}
+        open={openGenerateReportDialog}
+        onValidate={generateLessonPlanTeacherReport}
+      />
     </>
   );
 }
