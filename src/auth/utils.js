@@ -14,7 +14,6 @@ function jwtDecode(token) {
   );
   
   const jwtDecoded = JSON.parse(jsonPayload);
-  console.log(jwtDecoded);
   return jwtDecoded;
 }
 
@@ -44,7 +43,7 @@ export const tokenExpired = (exp) => {
   clearTimeout(expiredTimer);
 
   expiredTimer = setTimeout(() => {
-    alert('Token expired');
+    // alert('Token expired');
 
     localStorage.removeItem('accessToken');
 

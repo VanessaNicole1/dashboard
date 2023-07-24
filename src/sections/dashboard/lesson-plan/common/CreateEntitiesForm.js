@@ -242,8 +242,6 @@ export default function CreateEntitiesForm({
       enqueueSnackbar(validationErrorMessage, manualHideErrorSnackbarOptions);
       return false;
     }
-    
-    console.log(validate.message);
 
     enqueueSnackbar(validate.message, { variant: 'success', autoHideDuration: 5000 })
     return true;

@@ -276,8 +276,15 @@ export default function Router () {
       },
     ]
   }
+
+  const DefaultRoute = {
+    path: "*",
+    element: <Navigate to="/dashboard/" replace />,
+  };
+
   return useRoutes([
     AuthRoutes,
-    DashboardRoutes
+    DashboardRoutes,
+    DefaultRoute
   ])
 }

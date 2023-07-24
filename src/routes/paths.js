@@ -73,13 +73,11 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/degree'),
     view: path(ROOTS_DASHBOARD, '/degree/view'),
     create: path(ROOTS_DASHBOARD, '/degree/create')
-
   },
   subjects: {
     root: path(ROOTS_DASHBOARD, '/subjects'),
     listSubjects: path(ROOTS_DASHBOARD, '/subjects/list'),
     create: path(ROOTS_DASHBOARD, '/subjects/create')
-
   },
   schedule: {
     root: path(ROOTS_DASHBOARD, '/schedule'),
@@ -89,7 +87,6 @@ export const PATH_DASHBOARD = {
   settings: {
     root: path(ROOTS_DASHBOARD, '/settings'),
     settings: path(ROOTS_DASHBOARD, 'settings/'),
-
   },
   updatePassword: {
     root: path(ROOTS_DASHBOARD, '/update-password'),
@@ -103,15 +100,6 @@ export const PATH_DASHBOARD = {
     booking: path(ROOTS_DASHBOARD, '/booking'),
     file: path(ROOTS_DASHBOARD, '/file'),
   },
-  mail: {
-    root: path(ROOTS_DASHBOARD, '/mail'),
-    all: path(ROOTS_DASHBOARD, '/mail/all'),
-  },
-  chat: {
-    root: path(ROOTS_DASHBOARD, '/chat'),
-    new: path(ROOTS_DASHBOARD, '/chat/new'),
-    view: (name) => path(ROOTS_DASHBOARD, `/chat/${name}`),
-  },
   user: {
     root: path(ROOTS_DASHBOARD, '/user'),
     new: path(ROOTS_DASHBOARD, '/user/new'),
@@ -122,38 +110,6 @@ export const PATH_DASHBOARD = {
     edit: (id) => path(ROOTS_DASHBOARD, `/user/${id}/edit`),
     demoEdit: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
   },
-  eCommerce: {
-    root: path(ROOTS_DASHBOARD, '/e-commerce'),
-    shop: path(ROOTS_DASHBOARD, '/e-commerce/shop'),
-    list: path(ROOTS_DASHBOARD, '/e-commerce/list'),
-    checkout: path(ROOTS_DASHBOARD, '/e-commerce/checkout'),
-    new: path(ROOTS_DASHBOARD, '/e-commerce/product/new'),
-    view: (name) => path(ROOTS_DASHBOARD, `/e-commerce/product/${name}`),
-    edit: (name) => path(ROOTS_DASHBOARD, `/e-commerce/product/${name}/edit`),
-    demoEdit: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-blazer-low-77-vintage/edit'),
-    demoView: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-air-force-1-ndestrukt'),
-  },
-  invoice: {
-    root: path(ROOTS_DASHBOARD, '/invoice'),
-    list: path(ROOTS_DASHBOARD, '/invoice/list'),
-    new: path(ROOTS_DASHBOARD, '/invoice/new'),
-    view: (id) => path(ROOTS_DASHBOARD, `/invoice/${id}`),
-    edit: (id) => path(ROOTS_DASHBOARD, `/invoice/${id}/edit`),
-    demoEdit: path(ROOTS_DASHBOARD, '/invoice/e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1/edit'),
-    demoView: path(ROOTS_DASHBOARD, '/invoice/e99f09a7-dd88-49d5-b1c8-1daf80c2d7b5'),
-  },
-  blog: {
-    root: path(ROOTS_DASHBOARD, '/blog'),
-    posts: path(ROOTS_DASHBOARD, '/blog/posts'),
-    new: path(ROOTS_DASHBOARD, '/blog/new'),
-    view: (title) => path(ROOTS_DASHBOARD, `/blog/post/${title}`),
-    demoView: path(ROOTS_DASHBOARD, '/blog/post/apply-these-7-secret-techniques-to-improve-event'),
-  },
-};
-
-export const PATH_DOCS = {
-  root: 'https://docs.minimals.cc',
-  changelog: 'https://docs.minimals.cc/changelog',
 };
 
 export const PATH_ZONE_ON_STORE = 'https://mui.com/store/items/zone-landing-page/';
