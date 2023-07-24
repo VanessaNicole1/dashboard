@@ -174,7 +174,7 @@ export default function CreateGeneralInformationForm({
         <Chip label={translate(`${i18nGeneralInformationKey}.students_number_chip`)} />
       </Divider>
 
-      <RHFTextField name='studentsNumber' label={translate(`${i18nFormKey}.students_number`)} />
+      <RHFTextField type="number" name='studentsNumber' label={translate(`${i18nFormKey}.students_number`)} />
 
       <Stack alignItems='flex-end' sx={{ mt: 3 }}>
         <LoadingButton type='submit' variant='contained' loading={isSubmitting}>
