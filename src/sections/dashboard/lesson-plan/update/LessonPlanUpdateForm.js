@@ -200,6 +200,9 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
     students: Yup.array().min(totalStudentsValidate, `Must have at least ${totalStudentsValidate} students`),
     purposeOfClass: Yup.string().required(translate('lesson_plans_update_form.purpose_required')),
     bibliography: Yup.string().required(translate('lesson_plans_update_form.biblio_required')),
+    materials: Yup.string().required(translate('lesson_plans_create_form.materials_required')),
+    evaluation: Yup.string().required(translate('lesson_plans_create_form.evaluation_required')),
+    comments: Yup.string().required(translate('lesson_plans_create_form.comments_required')),
     deadlineNotification: Yup.string(),
     deadlineDate: Yup.date()
   });
@@ -216,6 +219,9 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       students: currentSelectedStudents || [],
       purposeOfClass: currentLessonlPlan?.purposeOfClass || '',
       bibliography: currentLessonlPlan?.bibliography || '',
+      materials: currentLessonlPlan.materials || '',
+      evaluation: currentLessonlPlan.evaluation || '',
+      comments: currentLessonlPlan.comments || '',
       resources: [],
       deadlineNotification: "no",
       deadlineDate: currentLessonlPlan?.maximumValidationDate || '',
@@ -545,6 +551,27 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
               <RHFTextField
                 name="bibliography"
                 label={translate('lesson_plans_update_form.biblio')}
+                fullWidth
+                multiline
+                rows={3}
+              />
+              <RHFTextField
+                name="materials"
+                label={translate('lesson_plans_create_form.materials')}
+                fullWidth
+                multiline
+                rows={3}
+              />
+              <RHFTextField
+                name="evaluation"
+                label={translate('lesson_plans_create_form.evaluation')}
+                fullWidth
+                multiline
+                rows={3}
+              />
+              <RHFTextField
+                name="comments"
+                label={translate('lesson_plans_create_form.comments')}
                 fullWidth
                 multiline
                 rows={3}

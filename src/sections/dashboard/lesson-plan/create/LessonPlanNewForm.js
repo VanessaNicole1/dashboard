@@ -69,6 +69,9 @@ export default function LessonPlanNewForm() {
     purposeOfClass: Yup.string().required(translate('lesson_plans_create_form.purpose_required')),
     bibliography: Yup.string().required(translate('lesson_plans_create_form.biblio_required')),
     resources: Yup.array(),
+    materials: Yup.string().required(translate('lesson_plans_create_form.materials_required')),
+    evaluation: Yup.string().required(translate('lesson_plans_create_form.evaluation_required')),
+    comments: Yup.string().required(translate('lesson_plans_create_form.comments_required')),
     notification: Yup.string().required(translate('lesson_plans_create_form.notification_required')),
     notificationDate: Yup.date().when(['notification', 'date'], (notification, date, schema) => {
       if (notification === 'no') {
@@ -90,6 +93,9 @@ export default function LessonPlanNewForm() {
     students: [],
     purposeOfClass: "",
     bibliography: "",
+    materials: "",
+    evaluation: "",
+    comments: "",
     resources: [],
     notification: "yes",
     notificationDate: new Date(),
@@ -450,6 +456,30 @@ export default function LessonPlanNewForm() {
               <RHFTextField
                 name="bibliography"
                 label={translate('lesson_plans_create_form.biblio')}
+                fullWidth
+                multiline
+                rows={3}
+                disabled={fields}
+              />
+              <RHFTextField
+                name="materials"
+                label={translate('lesson_plans_create_form.materials')}
+                fullWidth
+                multiline
+                rows={3}
+                disabled={fields}
+              />
+              <RHFTextField
+                name="evaluation"
+                label={translate('lesson_plans_create_form.evaluation')}
+                fullWidth
+                multiline
+                rows={3}
+                disabled={fields}
+              />
+              <RHFTextField
+                name="comments"
+                label={translate('lesson_plans_create_form.comments')}
                 fullWidth
                 multiline
                 rows={3}
