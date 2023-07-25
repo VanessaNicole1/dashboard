@@ -18,9 +18,10 @@ LessonPlanTableRow.propTypes = {
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
+  onViewRow: PropTypes.func,
 };
 
-export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteRow }) {
+export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteRow, onViewRow }) {
   const { period, grade, subject, hasQualified } = row;
 
   const { startDate, endDate } = period;
@@ -109,11 +110,10 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
           </MenuItem>
         }
 
-{
-          !period.isActive && <MenuItem
+        {
+          period.isActive && <MenuItem
           onClick={() => {
-            handleOpenConfirm();
-            handleClosePopover();
+            onViewRow();
           }}
           >
             <Iconify icon="carbon:view" />
