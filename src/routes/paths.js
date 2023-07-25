@@ -48,6 +48,7 @@ export const PATH_DASHBOARD = {
     listStudentPlans: path(ROOTS_DASHBOARD, '/lesson-plan/student/list'),
     studentValidate: path(ROOTS_DASHBOARD, '/lesson-plan/student/validate'),
     listProcesses: path(ROOTS_DASHBOARD, '/lesson-plan/process-list'),
+    lessonPlanView: path(ROOTS_DASHBOARD, '/lesson-plan/teacher/view'),
     edit: (id) => path(ROOTS_DASHBOARD, `/lesson-plan/${id}/edit`),
   },
   roles: {

@@ -164,7 +164,7 @@ export default function LessonPlanListTeacherPage() {
   };
 
   const handleViewLessonPlan = (id) => {
-    navigate(PATH_DASHBOARD.teachers.listTeachers, {state: { periodId: id, links: [{ name: translate('period_list_page.list'), href: PATH_DASHBOARD.lessonPlan.listProcesses }]}});
+    navigate(`${PATH_DASHBOARD.lessonPlan.lessonPlanView}/${id}`);
   };
 
   const handleResetFilter = () => {
@@ -258,6 +258,7 @@ export default function LessonPlanListTeacherPage() {
                         selected={selected.includes(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
                         onEditRow={() => handleEditRow(row.id)}
+                        onViewRow={() => handleViewLessonPlan(row.id)}
                       />
                     ))}
                   <TableEmptyRows
