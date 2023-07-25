@@ -54,16 +54,16 @@ const navConfig = [
           { title: 'process_list', path: PATH_DASHBOARD.lessonPlan.listProcesses, roles: [ROLES.manager] },
         ]
       },
-      {
-        title: 'Roles',
-        path: PATH_DASHBOARD.roles.root,
-        icon: ICONS.lock,
-        roles: [ROLES.manager],
-        children: [
-          { title: 'list', path: PATH_DASHBOARD.roles.listRoles, roles: [ROLES.manager] },
+      // {
+      //   title: 'Roles',
+      //   path: PATH_DASHBOARD.roles.root,
+      //   icon: ICONS.lock,
+      //   roles: [ROLES.manager],
+      //   children: [
+      //     { title: 'list', path: PATH_DASHBOARD.roles.listRoles, roles: [ROLES.manager] },
           
-        ]
-      },
+      //   ]
+      // },
       {
         title: 'Users',
         path: PATH_DASHBOARD.user.root,

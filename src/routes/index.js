@@ -140,17 +140,17 @@ export default function Router () {
           }
         ]
       },
-      { 
-        path: 'roles',
-        children: [
-          { element: <Navigate to='/dashboard/roles/list' replace />, index: true },
-          { path: 'list', element: (
-            <RoleBasedGuard hasContent roles={[ROLES.manager]}>
-              <RolesListPage />
-            </RoleBasedGuard>
-          )},
-        ]
-      },
+      // { 
+      //   path: 'roles',
+      //   children: [
+      //     { element: <Navigate to='/dashboard/roles/list' replace />, index: true },
+      //     { path: 'list', element: (
+      //       <RoleBasedGuard hasContent roles={[ROLES.manager]}>
+      //         <RolesListPage />
+      //       </RoleBasedGuard>
+      //     )},
+      //   ]
+      // },
       { 
         path: 'user',
         children: [
