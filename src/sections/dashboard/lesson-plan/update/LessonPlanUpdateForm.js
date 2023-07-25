@@ -168,7 +168,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       fetchCurrentStudents();
       const validationsTracking = currentLessonlPlan?.validationsTracking;
       const currentValitedLessonPlansTracking = validationsTracking.filter((validationTracking) => validationTracking.isValidated);
-      const validatedStudents = currentValitedLessonPlansTracking.map((tracking) => ({id: tracking.student.id, name: tracking.student.user.displayName, email: tracking.student.user.email}));
+      const validatedStudents = currentValitedLessonPlansTracking.map((tracking) => ({id: tracking.student.id, name: tracking.student.user.displayName, email: tracking.student.user.email, isValidated: tracking.isValidated}));
       setStudentsValidated(validatedStudents);
       const allStudents = validationsTracking.map((validationTracking) => ({id: validationTracking.student.id, displayName: validationTracking.student.user.displayName, isValidated: validationTracking.isValidated}));
       setCurrentSelectedStudents(allStudents);

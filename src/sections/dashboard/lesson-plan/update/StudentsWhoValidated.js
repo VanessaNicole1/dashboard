@@ -31,6 +31,7 @@ AuthorItem.propTypes = {
     name: PropTypes.string,
     avatar: PropTypes.string,
     email: PropTypes.string,
+    isValidated: PropTypes.bool,
   }),
   index: PropTypes.number,
 };
@@ -58,8 +59,10 @@ function AuthorItem({ author, index }) {
         </Typography>
       </Box>
 
-      <Iconify
-        icon="ant-design:trophy-filled"
+      {
+        author.isValidated && 
+        <Iconify
+        icon="gg:check-o"
         sx={{
           p: 1,
           width: 40,
@@ -77,6 +80,29 @@ function AuthorItem({ author, index }) {
           }),
         }}
       />
+      }
+      {
+        !author.isValidated &&
+        <Iconify
+        icon="tabler:xbox-x"
+        sx={{
+          p: 1,
+          width: 40,
+          height: 40,
+          borderRadius: '50%',
+          color: 'error.main',
+          bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
+          ...(index === 1 && {
+            color: 'error.main',
+            bgcolor: (theme) => alpha(theme.palette.info.main, 0.08),
+          }),
+          ...(index === 2 && {
+            color: 'error.main',
+            bgcolor: (theme) => alpha(theme.palette.error.main, 0.08),
+          }),
+        }}
+      />
+      }
     </Stack>
   );
 }
