@@ -11,7 +11,6 @@ import useResponsive from '../../../../hooks/useResponsive';
 import { fData } from '../../../../utils/formatNumber';
 import { fDateTime } from '../../../../utils/formatTime';
 import Iconify from '../../../../components/iconify';
-import { useSnackbar } from '../../../../components/snackbar';
 import FileThumbnail from '../../../../components/file-thumbnail';
 
 FileGeneralRecentCard.propTypes = {
@@ -22,8 +21,6 @@ FileGeneralRecentCard.propTypes = {
 };
 
 export default function FileGeneralRecentCard({ file, onDelete, onView, sx, ...other  }) {
-  const { enqueueSnackbar } = useSnackbar();
-
   const isDesktop = useResponsive('up', 'sm');
 
   const handleOpenDetails = () => {

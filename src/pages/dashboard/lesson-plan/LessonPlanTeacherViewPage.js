@@ -1,15 +1,13 @@
 import { CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getLessonPlanWithPeriod } from "../../../services/lesson-plan";
 import LessonPlanViewPage from "../../../sections/dashboard/lesson-plan/view/LessonPlanViewPage";
 
 // TODO: Add i18n.
 export const LessonPlanTeacherViewPage = () => {
   const { lessonPlanId } = useParams();
-  const navidate = useNavigate();
-
   const [lessonPlan, setLessonPlan] = useState();
   const [lessonPlanTracking, setLessonPlanTracking] = useState();
   const [isLoading, setIsLoading] = useState(true);

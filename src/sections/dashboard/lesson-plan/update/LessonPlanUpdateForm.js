@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import { Card, Chip, Container, Grid, IconButton, Stack, TextField, Tooltip, Typography } from '@mui/material';
+import { Card, Chip, Grid, Stack, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useEffect, useState, useMemo, useCallback } from 'react';
-import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import FormProvider from '../../../../components/hook-form/FormProvider';
@@ -59,7 +59,6 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
   const [currentResources, setCurrentResources] = useState([]);
   const [students, setStudents] = useState([]);
   const [currentSelectedStudents, setCurrentSelectedStudents] = useState([]);
-  const [startPeriod, setStartPeriod] = useState(new Date());
   const [currentDeadlineNotification, setCurrentDeadlineNotification] = useState(true);
   const [changeResources, setChangeResources] = useState(false);
   const [totalStudentsValidate, setTotalStudentsValidate] = useState(1);
@@ -104,11 +103,6 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       const currentPeriod = currentLessonlPlan?.schedule?.grade?.degree?.period.id;
       setSelectedActivePeriod(currentPeriod);
     }
-  }, [currentLessonlPlan]);
-
-  useEffect(() => {
-    const periodStartDate = currentLessonlPlan?.schedule?.grade?.degree?.period?.startDate;
-    setStartPeriod(periodStartDate);
   }, [currentLessonlPlan]);
 
   useEffect(() => {

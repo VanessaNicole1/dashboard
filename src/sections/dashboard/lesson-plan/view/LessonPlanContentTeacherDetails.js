@@ -7,7 +7,6 @@ import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
 import { fDate } from "../../../../utils/formatTime";
 import Logo from "../../../../components/logo/Logo";
-import Label from '../../../../components/label';
 import FileRecentItem from "../../../file-manager/file-recent-item";
 
 // TODO: Add i18n
