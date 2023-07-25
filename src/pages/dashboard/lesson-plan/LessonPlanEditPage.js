@@ -28,7 +28,7 @@ export default function LessonPlanEditPage () {
             },
             {
               name: translate('lesson_plan_update_page.links.plans'),
-              href: PATH_DASHBOARD.lessonPlan.root,
+              href: PATH_DASHBOARD.lessonPlan.listTeacherPlans,
             },
             {
               name: translate('lesson_plan_update_page.links.update'),
