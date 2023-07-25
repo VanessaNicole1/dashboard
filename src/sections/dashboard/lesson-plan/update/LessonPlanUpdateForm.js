@@ -30,6 +30,7 @@ import FileNewFolderDialog from '../create/file/FileNewFolderDialog';
 import { useLocales } from '../../../../locales';
 import { getPeriod } from '../../../../services/period';
 import StudentsWhoValidated from './StudentsWhoValidated';
+import { HOST_API_KEY } from '../../../../config-global';
 
 LessonPlanUpdateForm.propTypes = {
   lessonPlanId: PropTypes.string,
@@ -316,6 +317,10 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
     setValue('resources', []);
   };
 
+  const handleViewResource = (url) => {
+    window.open(`${HOST_API_KEY}/lesson-plans/resource/${url}`, '_blank');
+  }
+
   function removeDuplicates(arr) {
     const tempObject = {};
     for (const obj of arr) {
@@ -487,6 +492,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
                     key={file.url}
                     file={file}
                     onDelete={() => handleRemoveResources(file.url)}
+                    onView={() => handleViewResource(file.url)}
                   />
                 ))}
 

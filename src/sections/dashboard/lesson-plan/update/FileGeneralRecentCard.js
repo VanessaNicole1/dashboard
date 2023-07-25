@@ -4,6 +4,8 @@ import {
   Stack,
   MenuItem,
   Typography,
+  Tooltip,
+  IconButton,
 } from '@mui/material';
 import useResponsive from '../../../../hooks/useResponsive';
 import { fData } from '../../../../utils/formatNumber';
@@ -16,9 +18,10 @@ FileGeneralRecentCard.propTypes = {
   sx: PropTypes.object,
   file: PropTypes.object,
   onDelete: PropTypes.func,
+  onView: PropTypes.func,
 };
 
-export default function FileGeneralRecentCard({ file, onDelete, sx, ...other  }) {
+export default function FileGeneralRecentCard({ file, onDelete, onView, sx, ...other  }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const isDesktop = useResponsive('up', 'sm');
@@ -84,6 +87,13 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other  })
         >
           <Iconify icon="eva:trash-2-outline" />
         </MenuItem>
+        <Tooltip title="Ver Recurso">
+        <IconButton color='default' onClick={() => {
+          onView();
+        }}>
+          <Iconify icon="majesticons:eye-line" />
+        </IconButton>
+      </Tooltip>
       </Stack>
     </>
   );
