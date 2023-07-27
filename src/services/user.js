@@ -37,12 +37,13 @@ export const getUser = async (id) => {
 
 export const updateUser = async (id, updateUserData) => {
   try {
-    const { data: user } = await axios.patch(`/users/${id}`, updateUserData);
-    return user;
-  } catch (error) {
+    const { roles } = updateUserData;
+    await axios.patch(`/users/${id}`, {...updateUserData, roleIds: roles.map((role) => role.id)});
     return {
-      message: "Couldn't update user",
+      message: 'User updated successfully'
     };
+  } catch (error) {
+    return { errorMessage: error.message };
   }
 };
 
