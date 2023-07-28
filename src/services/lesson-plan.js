@@ -34,7 +34,7 @@ export const createLessonPlan = async (data, resources) => {
     }
     await axios.post('/lesson-plans', formData);
     return {
-      message: 'Lesson Plan created nice'
+      message: 'Lesson Plan created successfully'
     };
   } catch (error) {
     return { errorMessage: error.message }
