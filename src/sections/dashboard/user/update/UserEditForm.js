@@ -1,30 +1,44 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel, Autocomplete, TextField } from '@mui/material';
+import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel, Chip } from '@mui/material';
 import { fData } from '../../../../utils/formatNumber';
 import Label from '../../../../components/label';
 import FormProvider, {
+  RHFAutocomplete,
   RHFTextField,
   RHFUploadAvatar,
 } from '../../../../components/hook-form';
+import { getUser, updateUser } from '../../../../services/user';
+import { getRoles } from '../../../../services/role';
+import { manualHideErrorSnackbarOptions } from '../../../../utils/snackBar';
+import { useSnackbar } from '../../../../components/snackbar';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 UserEditForm.propTypes = {
-  currentUser: PropTypes.object,
-  simpleRoles: PropTypes.array,
+  currentUserId: PropTypes.string,
 };
 
-export default function UserEditForm({ currentUser, simpleRoles }) {
+export default function UserEditForm({ currentUserId }) {
+
+  const [currentUser, setCurrentUser] = useState({});
+  const [simpleRoles, setSimpleRoles] = useState([]);
+  const [currentRoles, setCurrentRoles] = useState([]);
+
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+
   const userSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    city: Yup.string().required('City is required'),
-    roles: Yup.array(),
+    phoneNumber: Yup.number(),
+    identificationCard: Yup.string(),
+    city: Yup.string(),
+    roles: Yup.array().min(1, 'A role should be select at least'),
     isActive: Yup.boolean(),
     avatarUrl: Yup.mixed(),
   });
@@ -33,8 +47,8 @@ export default function UserEditForm({ currentUser, simpleRoles }) {
     () => ({
       name: currentUser?.name || '',
       email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || '',
-      address: currentUser?.address || '',
+      phoneNumber: currentUser?.phoneNumber || 0,
+      identificationCard: currentUser?.identificationCard || '',
       city: currentUser?.city || '',
       roles: currentUser?.roles || [],
       isActive: currentUser?.isActive || false,
@@ -43,6 +57,30 @@ export default function UserEditForm({ currentUser, simpleRoles }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
   );
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await getUser(currentUserId);
+      setCurrentRoles(user.roles);
+      setCurrentUser(user);
+    }
+
+    const fetchRoles = async () => {
+      const roles = await getRoles();
+      const validateCurrentRoles = currentRoles.map((role) => role.name);
+      if (validateCurrentRoles.includes('STUDENT')) {
+        const studentRole = roles.filter((role) => role.name === 'STUDENT');
+        setSimpleRoles(studentRole);
+      } else {
+        const newCurrentRoles = roles.filter((role) => role.name !== 'STUDENT');
+        setSimpleRoles(newCurrentRoles);
+      }
+    }
+
+    fetchUser();
+    fetchRoles();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (currentUser) {
@@ -68,14 +106,14 @@ export default function UserEditForm({ currentUser, simpleRoles }) {
   const values = watch();
 
   const onSubmit = async (data) => {
-    // try {
-    //   await new Promise((resolve) => setTimeout(resolve, 500));
-    //   reset();
-    //   enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-    //   navigate(PATH_DASHBOARD.user.list);
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    const updatedUser = await updateUser(currentUser.id, data);
+    if (updatedUser.errorMessage) {
+      enqueueSnackbar(updatedUser.errorMessage, manualHideErrorSnackbarOptions);
+      navigate(PATH_DASHBOARD.user.list);
+    } else {
+      enqueueSnackbar(updatedUser.message, { variant: 'success', autoHideDuration: 5000 });
+      navigate(PATH_DASHBOARD.user.list);
+    }
   };
 
   const handleDrop = useCallback(
@@ -92,6 +130,24 @@ export default function UserEditForm({ currentUser, simpleRoles }) {
     },
     [setValue]
   );
+
+  function removeDuplicates(arr) {
+    const tempObject = {};
+    for (const obj of arr) {
+      const attrValue = obj.id;
+      if (!tempObject[attrValue]) {
+        tempObject[attrValue] = obj;
+      }
+    }
+    const uniqueArray = Object.values(tempObject);
+    return uniqueArray;
+  }
+
+  const handleRoleChange = (event, newValue) => {
+    const validValues = removeDuplicates(newValue);
+    setValue("roles", validValues);
+    setCurrentRoles(validValues);
+  }
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -179,33 +235,29 @@ export default function UserEditForm({ currentUser, simpleRoles }) {
               <RHFTextField name="email" label="Email Address" />
               <RHFTextField name="phoneNumber" label="Phone Number" />
               <RHFTextField name="city" label="City" />
-              <RHFTextField name="address" label="Address" />
               <RHFTextField name="identificationCard" label="Identification Card" />
-              <Controller 
-                name="roles"
+              <RHFAutocomplete
                 control={control}
-                render={({ field: { ref, ...field } }) => (
-                  <Autocomplete
-                    multiple
-                    defaultValue={field.roles}
-                    onChange={(event, value) => field.onChange(value)}
-                    id="multiple-limit-tags"
-                    options={simpleRoles}
-                    getOptionLabel={(option) => option?.name}
-                    // getOptionDisabled={(option) => {
-                    //   if (userRoles.includes('STUDENT') && option.name !== 'STUDENT') {
-                    //     return true;
-                    //   }
-                    //   if ((userRoles.includes('MANAGER') || userRoles.includes('TEACHER')) && option.name === 'STUDENT') {
-                    //     return true;
-                    //   }
-                    //   return false;
-                    // }}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Roles" placeholder="Roles" />
-                    )}
-                  />
+                value={currentRoles}
+                name="roles"
+                label="roles"
+                multiple
+                freeSolo
+                onChange={handleRoleChange}
+                options={simpleRoles.map(
+                  (role) => ({id: role.id, name: role.name})
                 )}
+                getOptionLabel={(option) => option.name}
+                renderTags={(tagValue, getTagProps) =>
+                  tagValue.map((option, index) => (
+                    <Chip
+                      label={option.name}
+                      {...getTagProps({ index })}
+                      disabled={option.isValidated === true}
+                    />
+                  ))
+                }
+                ChipProps={{ size: "small" }}
               />
             </Box>
 

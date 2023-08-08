@@ -34,7 +34,7 @@ export const createLessonPlan = async (data, resources) => {
     }
     await axios.post('/lesson-plans', formData);
     return {
-      message: 'Lesson Plan created nice'
+      message: 'Lesson Plan created successfully'
     };
   } catch (error) {
     return { errorMessage: error.message }
@@ -128,5 +128,20 @@ export const getLessonPlanWithPeriod = async (id) => {
     return lessonPlan;
   } catch (error) {
     return { errorMessage: error.message }
+  }
+}
+
+export const generateLessonPlanReport = async (lessonPlanId) => {
+  try {
+    const response = await axios.get(`/lesson-plans/unique-report/${lessonPlanId}`, {
+      responseType: 'blob',
+      headers: {
+        'Content-Type': 'application/pdf',
+      },
+    });
+    const pdfUrl = URL.createObjectURL(response.data);
+    return pdfUrl;
+  } catch (error) {
+    return { errorMessage: 'No existen planes de clases con los parámetros especificados' }
   }
 }

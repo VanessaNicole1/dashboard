@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import { Card, Chip, Container, Grid, IconButton, Stack, TextField, Tooltip, Typography } from '@mui/material';
+import { Card, Chip, Grid, Stack, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useEffect, useState, useMemo, useCallback } from 'react';
-import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import FormProvider from '../../../../components/hook-form/FormProvider';
@@ -30,6 +30,7 @@ import FileNewFolderDialog from '../create/file/FileNewFolderDialog';
 import { useLocales } from '../../../../locales';
 import { getPeriod } from '../../../../services/period';
 import StudentsWhoValidated from './StudentsWhoValidated';
+import { HOST_API_KEY } from '../../../../config-global';
 
 LessonPlanUpdateForm.propTypes = {
   lessonPlanId: PropTypes.string,
@@ -58,7 +59,6 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
   const [currentResources, setCurrentResources] = useState([]);
   const [students, setStudents] = useState([]);
   const [currentSelectedStudents, setCurrentSelectedStudents] = useState([]);
-  const [startPeriod, setStartPeriod] = useState(new Date());
   const [currentDeadlineNotification, setCurrentDeadlineNotification] = useState(true);
   const [changeResources, setChangeResources] = useState(false);
   const [totalStudentsValidate, setTotalStudentsValidate] = useState(1);
@@ -103,11 +103,6 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       const currentPeriod = currentLessonlPlan?.schedule?.grade?.degree?.period.id;
       setSelectedActivePeriod(currentPeriod);
     }
-  }, [currentLessonlPlan]);
-
-  useEffect(() => {
-    const periodStartDate = currentLessonlPlan?.schedule?.grade?.degree?.period?.startDate;
-    setStartPeriod(periodStartDate);
   }, [currentLessonlPlan]);
 
   useEffect(() => {
@@ -168,7 +163,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       fetchCurrentStudents();
       const validationsTracking = currentLessonlPlan?.validationsTracking;
       const currentValitedLessonPlansTracking = validationsTracking.filter((validationTracking) => validationTracking.isValidated);
-      const validatedStudents = currentValitedLessonPlansTracking.map((tracking) => ({id: tracking.student.id, name: tracking.student.user.displayName, email: tracking.student.user.email}));
+      const validatedStudents = currentValitedLessonPlansTracking.map((tracking) => ({id: tracking.student.id, name: tracking.student.user.displayName, email: tracking.student.user.email, isValidated: tracking.isValidated}));
       setStudentsValidated(validatedStudents);
       const allStudents = validationsTracking.map((validationTracking) => ({id: validationTracking.student.id, displayName: validationTracking.student.user.displayName, isValidated: validationTracking.isValidated}));
       setCurrentSelectedStudents(allStudents);
@@ -315,6 +310,10 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
   const handleRemoveAllFiles = () => {
     setValue('resources', []);
   };
+
+  const handleViewResource = (url) => {
+    window.open(`${HOST_API_KEY}/lesson-plans/resource/${url}`, '_blank');
+  }
 
   function removeDuplicates(arr) {
     const tempObject = {};
@@ -487,6 +486,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
                     key={file.url}
                     file={file}
                     onDelete={() => handleRemoveResources(file.url)}
+                    onView={() => handleViewResource(file.url)}
                   />
                 ))}
 

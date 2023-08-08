@@ -35,6 +35,7 @@ import UsersListPage from "../pages/dashboard/user/UsersListPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import LessonPlanEditPage from "../pages/dashboard/lesson-plan/LessonPlanEditPage";
 import { LessonPlanValidateStudentPage } from "../pages/dashboard/lesson-plan/LessonPlanValidateStudentPage";
+import { LessonPlanTeacherViewPage } from "../pages/dashboard/lesson-plan/LessonPlanTeacherViewPage";
 
 export default function Router () {
 
@@ -129,20 +130,27 @@ export default function Router () {
                 <LessonPlanValidateStudentPage />
               </RoleBasedGuard>
             )
+          },
+          { path: 'teacher/view/:lessonPlanId',
+            element: (
+              <RoleBasedGuard hasContent roles={[ROLES.teacher]}>
+                <LessonPlanTeacherViewPage />
+              </RoleBasedGuard>
+            )
           }
         ]
       },
-      { 
-        path: 'roles',
-        children: [
-          { element: <Navigate to='/dashboard/roles/list' replace />, index: true },
-          { path: 'list', element: (
-            <RoleBasedGuard hasContent roles={[ROLES.manager]}>
-              <RolesListPage />
-            </RoleBasedGuard>
-          )},
-        ]
-      },
+      // { 
+      //   path: 'roles',
+      //   children: [
+      //     { element: <Navigate to='/dashboard/roles/list' replace />, index: true },
+      //     { path: 'list', element: (
+      //       <RoleBasedGuard hasContent roles={[ROLES.manager]}>
+      //         <RolesListPage />
+      //       </RoleBasedGuard>
+      //     )},
+      //   ]
+      // },
       { 
         path: 'user',
         children: [

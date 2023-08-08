@@ -4,23 +4,23 @@ import {
   Stack,
   MenuItem,
   Typography,
+  Tooltip,
+  IconButton,
 } from '@mui/material';
 import useResponsive from '../../../../hooks/useResponsive';
 import { fData } from '../../../../utils/formatNumber';
 import { fDateTime } from '../../../../utils/formatTime';
 import Iconify from '../../../../components/iconify';
-import { useSnackbar } from '../../../../components/snackbar';
 import FileThumbnail from '../../../../components/file-thumbnail';
 
 FileGeneralRecentCard.propTypes = {
   sx: PropTypes.object,
   file: PropTypes.object,
   onDelete: PropTypes.func,
+  onView: PropTypes.func,
 };
 
-export default function FileGeneralRecentCard({ file, onDelete, sx, ...other  }) {
-  const { enqueueSnackbar } = useSnackbar();
-
+export default function FileGeneralRecentCard({ file, onDelete, onView, sx, ...other  }) {
   const isDesktop = useResponsive('up', 'sm');
 
   const handleOpenDetails = () => {
@@ -84,6 +84,13 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other  })
         >
           <Iconify icon="eva:trash-2-outline" />
         </MenuItem>
+        <Tooltip title="Ver Recurso">
+        <IconButton color='default' onClick={() => {
+          onView();
+        }}>
+          <Iconify icon="majesticons:eye-line" />
+        </IconButton>
+      </Tooltip>
       </Stack>
     </>
   );

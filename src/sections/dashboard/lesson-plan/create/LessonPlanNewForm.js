@@ -285,6 +285,11 @@ export default function LessonPlanNewForm() {
     return currentDay === 0 || currentDay === 6;
   };
 
+  function formatDateSpanish(date) {
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleString('es-ES', options);
+  }
+
   const onSubmit = async (data) => {
     const { notification, grade: schedule, period, resources } = data;
     let { notificationDate } = data;
@@ -299,6 +304,9 @@ export default function LessonPlanNewForm() {
       date: data.date.toISOString(),
       deadlineDate: new Date(currentDeadlineDate)
     }
+    const formattedDate = formatDateSpanish(notificationDate);
+
+    console.log(' - formattedDate', formattedDate);
 
     const lessonPlanResponse = await createLessonPlan(data, resources);
 
@@ -306,6 +314,9 @@ export default function LessonPlanNewForm() {
       enqueueSnackbar(lessonPlanResponse.errorMessage, manualHideErrorSnackbarOptions);
     } else {
       enqueueSnackbar(lessonPlanResponse.message, { variant: 'success', autoHideDuration: 5000 });
+      if (notification === 'no') {
+        enqueueSnackbar(`Students will be notified ${formattedDate} at 8:00 a.m.`, { variant: 'success', autoHideDuration: 5000 });
+      }
       navigate(PATH_DASHBOARD.lessonPlan.listTeacherPlans);
     }
   };
@@ -498,14 +509,14 @@ export default function LessonPlanNewForm() {
                     name="notificationDate"
                     control={control}
                     render={({ field, fieldState: { error } }) => (
-                      <DateTimePicker
+                      <DatePicker
                         minTime={new Date(new Date().setHours(8))}
                         maxTime={new Date(new Date().setHours(16))}
                         minDate={tomorrow}
                         defaultValue={today}
                         shouldDisableDate={isWeekend}
-                        format="do MMMM yyyy HH"
-                        views={['year', 'month', 'day', 'hours']}
+                        format="do MMMM yyyy"
+                        views={['year', 'month', 'day']}
                         label={translate('lesson_plans_create_form.notify_date')}
                         value={field.value}
                         

@@ -27,7 +27,7 @@ export default function LessonPlanCreatePage () {
             },
             {
               name: translate('lesson_plan_create_page.links.plans'),
-              href: PATH_DASHBOARD.lessonPlan.root,
+              href: PATH_DASHBOARD.lessonPlan.listTeacherPlans,
             },
             {
               name: translate('lesson_plan_create_page.links.create'),

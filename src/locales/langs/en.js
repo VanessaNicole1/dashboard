@@ -266,7 +266,7 @@ lesson_plan_list_page: {
   start_process: 'start process',
   all_plans: 'all plans',
   process_list: 'process',
-  teacher_plans: `teacher's plans`,
+  teacher_plans: `Lesson Plans`,
   create: "create",
   list: "list",
   pending: "pending",

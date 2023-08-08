@@ -20,8 +20,6 @@ export default function UserEditPage() {
 
   const location = useLocation();
 
-  const { links } = location.state;
-
   const currentState = location.state;
 
   useEffect(() => {
@@ -50,16 +48,28 @@ export default function UserEditPage() {
         <CustomBreadcrumbs
           heading="Edit user"
           state={currentState}
-          links={[
+          links={!location.state ? [
             {
               name: 'Dashboard',
               href: PATH_DASHBOARD.root,
             },
-            ...links,
-            { name: currentUser?.name },
+            ...(location.state && location.state.links ? location.state.links : []),
+            { name: 'Update' },
+          ] : [
+            {
+              name: 'Dashboard',
+              href: PATH_DASHBOARD.root,
+            },
+            {
+              name: 'Users',
+              href: PATH_DASHBOARD.user.list,
+            },
+            {
+              name: 'Update',
+            },
           ]}
         />
-        <UserEditForm currentUser={currentUser} simpleRoles={simpleRoles} />
+        <UserEditForm currentUserId={id} simpleRoles={simpleRoles} />
       </Container>
     </>
   );
