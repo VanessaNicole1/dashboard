@@ -19,6 +19,7 @@ export default function LessonPlanViewPage({ lessonPlan, lessonPlanTracking }) {
   const lessonPlanCreationDate = new Date(lessonPlan.createdAt);
   const settings = useSettingsContext();
   const [students, setStudents] = useState([]);
+  const [isPrintLoading, setIsPrintLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -27,7 +28,9 @@ export default function LessonPlanViewPage({ lessonPlan, lessonPlanTracking }) {
   }, [lessonPlanTracking]);
 
   const handlePrint = async () => {
+    setIsPrintLoading(true);
     const teacherReportUrl = await generateLessonPlanReport(lessonPlan.id);
+    setIsPrintLoading(false);
     if (teacherReportUrl.errorMessage) {
       enqueueSnackbar(teacherReportUrl.errorMessage, manualHideErrorSnackbarOptions);
     } else {
@@ -42,6 +45,7 @@ export default function LessonPlanViewPage({ lessonPlan, lessonPlanTracking }) {
         backLink={PATH_DASHBOARD.lessonPlan.listStudentPlans}
         createdAt={lessonPlanCreationDate}
         onPrint={handlePrint}
+        isThePrintLoading={isPrintLoading}
       />
 
       <Grid container spacing={3}>
