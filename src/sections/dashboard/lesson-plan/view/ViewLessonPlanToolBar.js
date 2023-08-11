@@ -15,6 +15,7 @@ export default function ViewLessonPlanToolBar({
   createdAt,
   topic,
   onPrint,
+  isThePrintLoading
 }) {
   return (
     <Stack
@@ -48,6 +49,7 @@ export default function ViewLessonPlanToolBar({
         justifyContent="flex-end"
       >
         <Button
+          disabled={isThePrintLoading}
           color="inherit"
           variant="outlined"
           startIcon={<Iconify icon="solar:printer-minimalistic-bold" />}
@@ -55,7 +57,9 @@ export default function ViewLessonPlanToolBar({
             onPrint();
           }}
         >
-          Imprimir
+          {
+            isThePrintLoading ? 'Loading...' : 'Imprimir'
+          }
         </Button>
       </Stack>
     </Stack>
@@ -67,4 +71,5 @@ ViewLessonPlanToolBar.propTypes = {
   createdAt: PropTypes.instanceOf(Date),
   topic: PropTypes.string,
   onPrint: PropTypes.func,
+  isThePrintLoading: PropTypes.bool,
 };
