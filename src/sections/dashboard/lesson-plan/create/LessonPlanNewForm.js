@@ -304,10 +304,6 @@ export default function LessonPlanNewForm() {
       date: data.date.toISOString(),
       deadlineDate: new Date(currentDeadlineDate)
     }
-    const formattedDate = formatDateSpanish(notificationDate);
-
-    console.log(' - formattedDate', formattedDate);
-
     const lessonPlanResponse = await createLessonPlan(data, resources);
 
     if (lessonPlanResponse.errorMessage) {
@@ -315,6 +311,7 @@ export default function LessonPlanNewForm() {
     } else {
       enqueueSnackbar(lessonPlanResponse.message, { variant: 'success', autoHideDuration: 5000 });
       if (notification === 'no') {
+        const formattedDate = formatDateSpanish(notificationDate);
         enqueueSnackbar(`Students will be notified ${formattedDate} at 8:00 a.m.`, { variant: 'success', autoHideDuration: 5000 });
       }
       navigate(PATH_DASHBOARD.lessonPlan.listTeacherPlans);
