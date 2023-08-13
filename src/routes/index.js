@@ -36,6 +36,7 @@ import RegisterPage from "../pages/auth/RegisterPage";
 import LessonPlanEditPage from "../pages/dashboard/lesson-plan/LessonPlanEditPage";
 import { LessonPlanValidateStudentPage } from "../pages/dashboard/lesson-plan/LessonPlanValidateStudentPage";
 import { LessonPlanTeacherViewPage } from "../pages/dashboard/lesson-plan/LessonPlanTeacherViewPage";
+import ReportsPage from "../pages/dashboard/reports/ReportsPage";
 
 export default function Router () {
 
@@ -278,6 +279,17 @@ export default function Router () {
             element: (
               <RoleBasedGuard hasContent roles={[ROLES.teacher]}>
                 <SchedulePage />
+              </RoleBasedGuard>
+          )}
+        ]
+      },
+      {
+        path: 'reports',
+        children: [
+          { path: '/dashboard/reports', 
+            element: (
+              <RoleBasedGuard hasContent roles={[ROLES.manager]}>
+                <ReportsPage />
               </RoleBasedGuard>
           )}
         ]

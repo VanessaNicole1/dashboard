@@ -78,8 +78,13 @@ const navConfig = [
         path: PATH_DASHBOARD.schedule.root,
         icon: ICONS.calendar,
         roles: [ROLES.teacher]
+      },
+      {
+        title: 'Reports',
+        path: PATH_DASHBOARD.reports.root,
+        icon: ICONS.calendar,
+        roles: [ROLES.manager]
       }
-
       // {
       //   title: 'Teachers',
       //   path: PATH_DASHBOARD.teachers.root,

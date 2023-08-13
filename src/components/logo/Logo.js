@@ -13,7 +13,7 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
     <Box
       component="img"
       src={logoPath}
-      sx={{height: 65}}
+      sx={{height: 65, width: 200}}
     />
   );
 
@@ -23,9 +23,11 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
   }
 
   return (
-    <Link component={RouterLink} to="/" sx={{ display: 'contents' }}>
-      {logo}
-    </Link>
+    <div style={{display: "flex", justifyContent: "center"}}>
+      <Link component={RouterLink} to="/" sx={{ display: 'contents'}}>
+        {logo}
+      </Link>
+    </div>
   );
 });
 
