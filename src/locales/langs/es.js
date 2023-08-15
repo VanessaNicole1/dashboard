@@ -1,4 +1,5 @@
 const en = {
+  Reports: "Reportes",
   Schedule: "Calendario",
   demo: {
     title: `English`,

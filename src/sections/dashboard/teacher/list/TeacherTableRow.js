@@ -12,12 +12,10 @@ import MenuPopover from '../../../../components/menu-popover';
 TeacherTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
-  onEditRow: PropTypes.func,
-  onDeleteRow: PropTypes.func,
-  onSelectRow: PropTypes.func,
+  onEditRow: PropTypes.func
 };
 
-export default function TeacherTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
+export default function TeacherTableRow({ row, selected, onEditRow }) {
   const { user } = row;
   const [openPopover, setOpenPopover] = useState(null);
 

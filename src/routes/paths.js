@@ -85,6 +85,9 @@ export const PATH_DASHBOARD = {
     view: path(ROOTS_DASHBOARD, '/schedule/view'),
     create: path(ROOTS_DASHBOARD, '/schedule/create')
   },
+  reports: {
+    root: path(ROOTS_DASHBOARD, '/reports')
+  },
   settings: {
     root: path(ROOTS_DASHBOARD, '/settings'),
     settings: path(ROOTS_DASHBOARD, 'settings/'),

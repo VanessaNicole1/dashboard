@@ -25,7 +25,7 @@ export const getPeriods = async (filterPeriod) => {
 
 export const getActivePeriods = async () => {
   try  {
-    const { data: periods } = await axios.post('/periods',   {isActive: true});
+    const { data: periods } = await axios.post('/periods', {isActive: true});
     return periods;
   } catch (error) {
     return {
@@ -33,6 +33,17 @@ export const getActivePeriods = async () => {
     }
   }
 };
+
+export const getPeriodWeeks = async (periodId) => {
+  try  {
+    const { data: periodWeeks } = await axios.get(`/periods/${periodId}/weeks`);
+    return periodWeeks;
+  } catch (error) {
+    return {
+      message: "Couldn't retrieve periods"
+    }
+  }
+}
 
 export const deletePeriod = async (id) => {
   try {
