@@ -24,6 +24,17 @@ export const getUsers = async (filterUser = {}) => {
   }
 };
 
+export const getAllUsers = async (filterUser = {}) => {
+  try {
+    const { data: users } = await axios.get("/users", filterUser);
+    return users;
+  } catch (error) {
+    return {
+      message: "Couldn't retrieve users",
+    };
+  }
+};
+
 export const getUser = async (id) => {
   try {
     const { data: user } = await axios.get(`/users/${id}`);
