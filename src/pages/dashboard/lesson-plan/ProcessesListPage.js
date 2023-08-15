@@ -286,17 +286,27 @@ async function applyFilter({ inputData, comparator, filterContent, filterStatus,
     });
   }
 
+  if (filterManager !== '0') {
+    const currentPeriods = await getPeriods({idManagerUser: filterManager});
+    inputData = currentPeriods;
+  }
+
+  if (filterStatus === 'active' && filterManager !== '0') {
+    const currentPeriods = await getPeriods({isActive: true, idManagerUser: filterManager});
+    inputData = currentPeriods;
+  }
+
+  if (filterStatus === 'finished' && filterManager !== '0') {
+    const currentPeriods = await getPeriods({isActive: false, idManagerUser: filterManager});
+    inputData = currentPeriods;
+  }
+
   if (filterStatus === 'active') {
     inputData = inputData.filter((period) => period.isActive === true);
   }
 
   if (filterStatus === 'finished') {
     inputData = inputData.filter((period) => period.isActive === false);
-  }
-
-  if (filterManager !== '0') {
-    const currentPeriods = await getPeriods({idManagerUser: filterManager});
-    inputData = currentPeriods;
   }
 
   return inputData;
