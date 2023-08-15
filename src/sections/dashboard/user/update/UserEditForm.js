@@ -64,7 +64,11 @@ export default function UserEditForm({ currentUserId }) {
       setCurrentRoles(user.roles);
       setCurrentUser(user);
     }
+    fetchUser();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  useEffect(() => {
     const fetchRoles = async () => {
       const roles = await getRoles();
       const validateCurrentRoles = currentRoles.map((role) => role.name);
@@ -76,11 +80,9 @@ export default function UserEditForm({ currentUserId }) {
         setSimpleRoles(newCurrentRoles);
       }
     }
-
-    fetchUser();
     fetchRoles();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [currentUser]);
+  
 
   useEffect(() => {
     if (currentUser) {
