@@ -102,8 +102,8 @@ export default function ProcessesListPage() {
   }, [filterContent, tableData, filterManager, filterStatus]);
 
   const TABLE_HEAD = [
-    { id: 'start', label: translate("period_list_page.start_label"), align: 'left' },
-    { id: 'end', label: translate("period_list_page.end_label"), align: 'left' },
+    { id: 'start', label: translate("period_list_page.start_label"), align: 'center' },
+    { id: 'end', label: translate("period_list_page.end_label"), align: 'center' },
     { id: 'manager', label: translate("period_list_page.manager_label"), align: 'left' },
     { id: 'degree', label: translate("period_list_page.degree_label"), align: 'left' },
     { id: 'status', label: translate("period_list_page.status_label"), align: 'left' },

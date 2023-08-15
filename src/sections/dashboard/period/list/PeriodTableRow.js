@@ -11,7 +11,7 @@ import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
-import { getFullYears, getMonth } from './utils/date.utils';
+import { convertToSpanishDate, getFullYears, getMonth } from './utils/date.utils';
 
 PeriodTableRow.propTypes = {
   row: PropTypes.object,
@@ -27,8 +27,11 @@ PeriodTableRow.propTypes = {
 export default function PeriodTableRow({ row, selected, onEditRow, onDeleteRow, onViewTeachers, onViewStudents, onViewGrades, onViewSubjects }) {
   const { startDate, endDate, degree, isActive } = row;
 
-  const startDateFormat = `${getMonth(startDate)} - ${getFullYears(startDate)}`;
-  const endDateFormat = `${getMonth(endDate)} - ${getFullYears(endDate)}`;
+  const convertedDtartDate = convertToSpanishDate(new Date(startDate));
+  const startDateFormat = convertedDtartDate.charAt(0).toUpperCase() + convertedDtartDate.slice(1);
+  const convertedEndDate = convertToSpanishDate(new Date(endDate));
+  const endDateFormat = convertedEndDate.charAt(0).toUpperCase() + convertedEndDate.slice(1);
+
 
   const {name, manager} = degree;
 
