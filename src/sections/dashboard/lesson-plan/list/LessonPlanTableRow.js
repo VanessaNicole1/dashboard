@@ -110,8 +110,8 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
           </MenuItem>
         }
 
-        {
-          period.isActive && <MenuItem
+        
+          <MenuItem
           onClick={() => {
             onViewRow();
           }}
@@ -119,7 +119,7 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
             <Iconify icon="carbon:view" />
             View
           </MenuItem>
-        }
+        
       </MenuPopover>
 
       <ConfirmDialog

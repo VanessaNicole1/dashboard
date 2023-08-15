@@ -113,7 +113,7 @@ export default function LessonPlanListTeacherPage() {
     { id: 'grade', label: translate('teachers_lesson_plans.table.grade'), align: 'left' },
     { id: 'subject', label: translate('teachers_lesson_plans.table.subject'), align: 'left' },
     { id: 'status', label: translate('teachers_lesson_plans.table.status'), align: 'left' },
-    { id: 'Actions', label: translate('teachers_lesson_plans.table.actions'), align: 'center' },
+    { id: 'actions', label: translate('teachers_lesson_plans.table.actions'), align: 'center' },
   ];
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
