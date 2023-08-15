@@ -369,7 +369,8 @@ lesson_plan_list_page: {
       last: 'Last Name',
       email: 'Email',
       actions: 'Actions',
-      roles: 'Roles'
+      roles: 'Roles',
+      status: 'Status',
     }
   },
   teachers_lesson_plans: {

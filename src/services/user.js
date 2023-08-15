@@ -24,9 +24,9 @@ export const getUsers = async (filterUser = {}) => {
   }
 };
 
-export const getAllUsers = async (filterUser = {}) => {
+export const getAllUsers = async (filterUser) => {
   try {
-    const { data: users } = await axios.get("/users", filterUser);
+    const { data: users } = await axios.get('/users', { params: filterUser });
     return users;
   } catch (error) {
     return {

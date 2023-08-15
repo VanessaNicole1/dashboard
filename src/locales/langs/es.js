@@ -350,7 +350,8 @@ const en = {
       last: 'Apellido',
       email: 'Correo Electrónico',
       actions: 'Acciones',
-      roles: 'Roles'
+      roles: 'Roles',
+      status: 'Estado',
     }
   },
   teachers_lesson_plans: {
