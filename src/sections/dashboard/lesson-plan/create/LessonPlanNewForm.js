@@ -243,18 +243,31 @@ export default function LessonPlanNewForm() {
     name: 'notificationDate',
   });
 
+  const addWeekdays = (startDate, numWeekdays) => {
+    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
+    const currentDate = new Date(startDate);
+    while (numWeekdays > 0) {
+      currentDate.setTime(currentDate.getTime() + oneDayInMilliseconds);
+      if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
+        // eslint-disable-next-line no-plusplus
+        numWeekdays--;
+      }
+    }
+    return currentDate;
+  }
+
   useEffect(() => {
     if (!selectedNotification) {
+      const totalDays = 7;
       const currentDate = new Date();
-      const nextDate = new Date(currentDate);
-      nextDate.setDate(currentDate.getDate() + 7);
-      setDeadlineDate(nextDate);
+      const resultDate = addWeekdays(currentDate, totalDays);
+      setDeadlineDate(resultDate);
     } else {
+      const totalDays = 7;
       setValue("deadlineDate", '');
       const currentNotificationDate = new Date(notificationDateValue);
-      const nextNotificationDate = new Date(currentNotificationDate);
-      nextNotificationDate.setDate(currentNotificationDate.getDate() + 7);
-      setDeadlineDate(nextNotificationDate);
+      const resultDate = addWeekdays(currentNotificationDate, totalDays);
+      setDeadlineDate(resultDate);
     }
   }, [selectedNotification, notificationDateValue]);
 
