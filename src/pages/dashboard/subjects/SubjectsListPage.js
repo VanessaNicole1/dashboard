@@ -127,18 +127,6 @@ export default function SubjectsListPage () {
     setPage(0);
   };
 
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
-
-    if (page > 0) {
-      if (dataInPage.length < 2) {
-        setPage(page - 1);
-      }
-    }
-  };
-
   const handleResetFilter = () => {
     setFilterContent('');
   };
@@ -203,7 +191,6 @@ export default function SubjectsListPage () {
                           row={row}
                           selected={selected.includes(row.id)}
                           onSelectRow={() => onSelectRow(row.id)}
-                          onDeleteRow={() => handleDeleteRow(row.id)}
                           onEditRow={() => handleOpenModal(row.id)}
                         />
                       ))}

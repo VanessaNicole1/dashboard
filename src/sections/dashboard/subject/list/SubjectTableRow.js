@@ -33,13 +33,10 @@ export default function SubjectTableRow({ row, selected, onEditRow }) {
         }
       </TableCell>
       <TableCell align="center">
-        <IconButton color="primary" aria-label="upload picture" component="label" icon="eva:edit-fill" onClick={() => {
+        <IconButton color="secondary" aria-label="upload picture" component="label" icon="eva:edit-fill" onClick={() => {
           onEditRow();
         }}>
           <Iconify icon="eva:edit-fill" />
-        </IconButton>
-        <IconButton color="primary" aria-label="upload picture" component="label" icon="eva:edit-fill">
-          <Iconify icon="eva:trash-2-outline" />
         </IconButton>
       </TableCell>
     </TableRow>
