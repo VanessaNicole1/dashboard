@@ -149,10 +149,6 @@ export default function ProcessesListPage() {
     navigate(PATH_DASHBOARD.lessonPlan.listProcesses);
   };
 
-  const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
-  };
-
   const handleViewTeachers = (id) => {
     navigate(PATH_DASHBOARD.teachers.listTeachers, {state: { periodId: id, links: [{ name: translate('period_list_page.list'), href: PATH_DASHBOARD.lessonPlan.listProcesses }]}});
   };
@@ -233,7 +229,6 @@ export default function ProcessesListPage() {
                         row={row}
                         selected={selected.includes(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.name)}
                         onViewTeachers={() => handleViewTeachers(row.id)}
                         onViewStudents={() => handleViewStudents(row.id)}
                         onViewGrades={() => handleViewGrades(row.id)}

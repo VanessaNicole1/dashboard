@@ -16,7 +16,6 @@ import { convertToSpanishDate, getFullYears, getMonth } from './utils/date.utils
 PeriodTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
-  onEditRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
   onViewTeachers: PropTypes.func,
   onViewStudents: PropTypes.func,
@@ -24,7 +23,7 @@ PeriodTableRow.propTypes = {
   onViewSubjects: PropTypes.func,
 };
 
-export default function PeriodTableRow({ row, selected, onEditRow, onDeleteRow, onViewTeachers, onViewStudents, onViewGrades, onViewSubjects }) {
+export default function PeriodTableRow({ row, selected, onDeleteRow, onViewTeachers, onViewStudents, onViewGrades, onViewSubjects }) {
   const { startDate, endDate, degree, isActive } = row;
 
   const convertedDtartDate = convertToSpanishDate(new Date(startDate));
@@ -103,18 +102,6 @@ export default function PeriodTableRow({ row, selected, onEditRow, onDeleteRow, 
           >
             <Iconify icon="eva:trash-2-outline" />
             Delete
-          </MenuItem>
-        }
-
-        {
-          isActive && <MenuItem
-          onClick={() => {
-            onEditRow();
-            handleClosePopover();
-          }}
-          >
-            <Iconify icon="eva:edit-fill" />
-            Edit
           </MenuItem>
         }
 
