@@ -39,7 +39,7 @@ import { useSnackbar } from '../../../components/snackbar';
 import { LessonPlanGenerateReportDialog } from '../../../sections/dashboard/lesson-plan/teachers-list/LessonPlanGenerateReportDialog';
 import { manualHideErrorSnackbarOptions } from '../../../utils/snackBar';
 
-const STATUS_OPTIONS = ['all', 'marked', 'unmarked'];
+const STATUS_OPTIONS = ['all', 'validated', 'not validated'];
 
 export default function LessonPlanListTeacherPage() {
   const {
@@ -314,11 +314,11 @@ async function applyFilter({ inputData, comparator, filterContent, filterStatus,
     });
   }
 
-  if (filterStatus === 'marked') {
+  if (filterStatus === 'validated') {
     inputData = await getLessonPlansByUser(user.id, {hasQualified: 'true'});
   }
 
-  if (filterStatus === 'unmarked') {
+  if (filterStatus === 'not validated') {
     inputData = inputData.filter((lessonPlan) => lessonPlan.hasQualified === false);
   }
   
@@ -327,8 +327,13 @@ async function applyFilter({ inputData, comparator, filterContent, filterStatus,
     inputData = lessonPlans;
   }
 
-  if (filterStatus === 'marked' && filterPeriod !== '0') {
+  if (filterStatus === 'validated' && filterPeriod !== '0') {
     const test = await getLessonPlansByUser(user.id, {periodId: filterPeriod, hasQualified: 'true'});
+    inputData = test;
+  }
+
+  if (filterStatus === 'not validated' && filterPeriod !== '0') {
+    const test = await getLessonPlansByUser(user.id, {periodId: filterPeriod, hasQualified: 'false'});
     inputData = test;
   }
 

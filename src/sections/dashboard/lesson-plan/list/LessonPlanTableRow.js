@@ -68,7 +68,7 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
             color={(hasQualified !== (true) && 'error') || 'success'}
             sx={{ textTransform: 'capitalize' }}
           >
-            {hasQualified !== (true) ? 'Unmarked' : 'Marked' }
+            {hasQualified !== (true) ? 'Not validated' : 'Validated' }
           </Label>
         </TableCell>
 
