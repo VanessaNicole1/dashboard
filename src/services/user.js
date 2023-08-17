@@ -24,6 +24,17 @@ export const getUsers = async (filterUser = {}) => {
   }
 };
 
+export const getAllUsers = async (filterUser) => {
+  try {
+    const { data: users } = await axios.get('/users', { params: filterUser });
+    return users;
+  } catch (error) {
+    return {
+      message: "Couldn't retrieve users",
+    };
+  }
+};
+
 export const getUser = async (id) => {
   try {
     const { data: user } = await axios.get(`/users/${id}`);
@@ -37,8 +48,7 @@ export const getUser = async (id) => {
 
 export const updateUser = async (id, updateUserData) => {
   try {
-    const { roles } = updateUserData;
-    await axios.patch(`/users/${id}`, {...updateUserData, roleIds: roles.map((role) => role.id)});
+    await axios.patch(`/users/${id}`, updateUserData);
     return {
       message: 'User updated successfully'
     };

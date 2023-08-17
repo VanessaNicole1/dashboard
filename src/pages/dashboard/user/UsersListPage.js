@@ -26,7 +26,7 @@ import { useLocales } from "../../../locales";
 import { getRoles } from "../../../services/role";
 import UserToobar from "../../../sections/dashboard/user/list/UserToolbar";
 import UserTableRow from "../../../sections/dashboard/user/list/UserTableRow";
-import { getUsers } from "../../../services/user";
+import { getAllUsers } from "../../../services/user";
 
 export default function UsersListPage() {
   const { translate } = useLocales();
@@ -65,7 +65,12 @@ export default function UsersListPage() {
         id: "roles",
         label: translate("users_list_page.table.roles"),
         align: "center",
-      },
+    },
+    {
+      id: "status",
+      label: translate("users_list_page.table.status"),
+      align: "center",
+  },
     {
       id: "",
       label: translate("users_list_page.table.actions"),
@@ -108,7 +113,7 @@ export default function UsersListPage() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const users = await getUsers();
+      const users = await getAllUsers();
       setTableData(users);
     };
 
@@ -272,7 +277,7 @@ async function applyFilter({
   inputData = stabilizedThis.map((el) => el[0]);
   
   if (filterRole !== 'all') {
-    const currentUsers = await getUsers({roleType: filterRole});
+    const currentUsers = await getAllUsers({roleType: filterRole});
     inputData = currentUsers;
   }
 

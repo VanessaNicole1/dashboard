@@ -53,6 +53,7 @@ export default function LessonPlanNewForm() {
   const [fields, setFields] = useState(true);
   const [currentDeadlineDate, setDeadlineDate] = useState(new Date());
   const [totalStudentsValidate, setTotalStudentsValidate] = useState(1);
+  const [validateDate, setValidateDate] = useState(true);
 
   const today = dayjs();
   const tomorrow = dayjs().add(1, 'day');
@@ -117,6 +118,22 @@ export default function LessonPlanNewForm() {
 
   const values = watch();
 
+  const validateWeekend = (date) => {
+    const dayOfWeek = date.getDay();
+    return dayOfWeek === 0 || dayOfWeek === 6;
+  }
+
+  // TODO: Validate the day
+  useEffect(() => {
+    const currentDate = new Date();
+    const isWeekend = validateWeekend(currentDate);
+    if (isWeekend) {
+      setValidateDate(false);
+    } else {
+      setValidateDate(true);
+    }
+  }, []);
+
   useEffect(() => {
     const fetchTeacherActivePeriods = async () => {
       const activePeriods = await findTeacherActivePeriods(user.id);
@@ -175,6 +192,9 @@ export default function LessonPlanNewForm() {
       fetchStudents();
     }
   }, [selectedGrade]);
+
+  console.log('validateDate', validateDate);
+  
 
   const handleCloseUploadFile = () => {
     setOpenUploadFile(false);
@@ -243,18 +263,31 @@ export default function LessonPlanNewForm() {
     name: 'notificationDate',
   });
 
+  const addWeekdays = (startDate, numWeekdays) => {
+    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
+    const currentDate = new Date(startDate);
+    while (numWeekdays > 0) {
+      currentDate.setTime(currentDate.getTime() + oneDayInMilliseconds);
+      if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
+        // eslint-disable-next-line no-plusplus
+        numWeekdays--;
+      }
+    }
+    return currentDate;
+  }
+
   useEffect(() => {
     if (!selectedNotification) {
+      const totalDays = 7;
       const currentDate = new Date();
-      const nextDate = new Date(currentDate);
-      nextDate.setDate(currentDate.getDate() + 7);
-      setDeadlineDate(nextDate);
+      const resultDate = addWeekdays(currentDate, totalDays);
+      setDeadlineDate(resultDate);
     } else {
+      const totalDays = 7;
       setValue("deadlineDate", '');
       const currentNotificationDate = new Date(notificationDateValue);
-      const nextNotificationDate = new Date(currentNotificationDate);
-      nextNotificationDate.setDate(currentNotificationDate.getDate() + 7);
-      setDeadlineDate(nextNotificationDate);
+      const resultDate = addWeekdays(currentNotificationDate, totalDays);
+      setDeadlineDate(resultDate);
     }
   }, [selectedNotification, notificationDateValue]);
 
@@ -493,13 +526,15 @@ export default function LessonPlanNewForm() {
                 rows={3}
                 disabled={fields}
               />
-              <Stack spacing={1}>
+              {
+                validateDate && 
+                <Stack spacing={1}>
                   <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                     {translate('lesson_plans_create_form.notify_students')}
                   </Typography>
-
                   <RHFRadioGroup control={control} row spacing={4} name="notification" options={NOTIFICATION_OPTION} />
               </Stack>
+              }
 
               {selectedNotification && (
                 <Controller
@@ -563,18 +598,21 @@ export default function LessonPlanNewForm() {
               />
             </Stack>
           </Card>
-          <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
-            <LoadingButton
-              fullWidth
-              type="submit"
-              variant="contained"
-              size="large"
-              loading={isSubmitting}
-              disabled={fields}
-            >
-              {translate('lesson_plans_create_form.save')}
-            </LoadingButton>
+          {
+            validateDate && 
+            <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
+              <LoadingButton
+                fullWidth
+                type="submit"
+                variant="contained"
+                size="large"
+                loading={isSubmitting}
+                disabled={fields}
+              >
+                {translate('lesson_plans_create_form.save')}
+              </LoadingButton>
           </Stack>
+          }
         </Grid>
         <FileNewFolderDialog
           open={openUploadFile}

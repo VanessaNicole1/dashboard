@@ -19,7 +19,7 @@ UserTableRow.propTypes = {
 };
 
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { name, lastName, email, roles } = row;
+  const { name, lastName, email, roles, isActive } = row;
   const [openPopover, setOpenPopover] = useState(null);
 
   const handleOpenPopover = (event) => {
@@ -55,6 +55,18 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
             ))
           }
         </TableCell>
+
+        <TableCell align="center">
+            <Label
+                  variant="soft"
+                  color={(isActive && 'primary') || (!isActive && 'error')}
+                  sx={{ textTransform: 'capitalize' }}
+            >
+              {isActive && 'active' || !isActive && 'deactivated'}
+            </Label>
+        </TableCell>
+
+
         <TableCell align="center">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />

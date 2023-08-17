@@ -3,10 +3,10 @@ import axios from "../utils/axios";
 export const getSubjects = async (filterSubjects) => {
   try  {
     if (!filterSubjects) {
-      const { data: subjects } = await axios.post('/subjects');
+      const { data: subjects } = await axios.get('/subjects');
       return subjects;
     }
-    const { data: subjects } = await axios.post('/subjects', filterSubjects);
+    const { data: subjects } = await axios.get('/subjects', { params: filterSubjects });
     return subjects;
   } catch (error) {
     return {

@@ -42,7 +42,7 @@ export default function LessonPlanViewPage({ lessonPlan, lessonPlanTracking }) {
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <ViewLessonPlanToolBar
         topic={lessonPlan.topic}
-        backLink={PATH_DASHBOARD.lessonPlan.listStudentPlans}
+        backLink={PATH_DASHBOARD.lessonPlan.listTeacherPlans}
         createdAt={lessonPlanCreationDate}
         onPrint={handlePrint}
         isThePrintLoading={isPrintLoading}

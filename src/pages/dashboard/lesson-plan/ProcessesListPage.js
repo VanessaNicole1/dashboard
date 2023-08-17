@@ -102,8 +102,8 @@ export default function ProcessesListPage() {
   }, [filterContent, tableData, filterManager, filterStatus]);
 
   const TABLE_HEAD = [
-    { id: 'start', label: translate("period_list_page.start_label"), align: 'left' },
-    { id: 'end', label: translate("period_list_page.end_label"), align: 'left' },
+    { id: 'start', label: translate("period_list_page.start_label"), align: 'center' },
+    { id: 'end', label: translate("period_list_page.end_label"), align: 'center' },
     { id: 'manager', label: translate("period_list_page.manager_label"), align: 'left' },
     { id: 'degree', label: translate("period_list_page.degree_label"), align: 'left' },
     { id: 'status', label: translate("period_list_page.status_label"), align: 'left' },
@@ -147,10 +147,6 @@ export default function ProcessesListPage() {
       }
     }
     navigate(PATH_DASHBOARD.lessonPlan.listProcesses);
-  };
-
-  const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
   };
 
   const handleViewTeachers = (id) => {
@@ -233,7 +229,6 @@ export default function ProcessesListPage() {
                         row={row}
                         selected={selected.includes(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.name)}
                         onViewTeachers={() => handleViewTeachers(row.id)}
                         onViewStudents={() => handleViewStudents(row.id)}
                         onViewGrades={() => handleViewGrades(row.id)}
@@ -286,17 +281,27 @@ async function applyFilter({ inputData, comparator, filterContent, filterStatus,
     });
   }
 
+  if (filterManager !== '0') {
+    const currentPeriods = await getPeriods({idManagerUser: filterManager});
+    inputData = currentPeriods;
+  }
+
+  if (filterStatus === 'active' && filterManager !== '0') {
+    const currentPeriods = await getPeriods({isActive: true, idManagerUser: filterManager});
+    inputData = currentPeriods;
+  }
+
+  if (filterStatus === 'finished' && filterManager !== '0') {
+    const currentPeriods = await getPeriods({isActive: false, idManagerUser: filterManager});
+    inputData = currentPeriods;
+  }
+
   if (filterStatus === 'active') {
     inputData = inputData.filter((period) => period.isActive === true);
   }
 
   if (filterStatus === 'finished') {
     inputData = inputData.filter((period) => period.isActive === false);
-  }
-
-  if (filterManager !== '0') {
-    const currentPeriods = await getPeriods({idManagerUser: filterManager});
-    inputData = currentPeriods;
   }
 
   return inputData;

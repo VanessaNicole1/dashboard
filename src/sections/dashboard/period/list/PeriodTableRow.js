@@ -11,12 +11,11 @@ import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
-import { getFullYears, getMonth } from './utils/date.utils';
+import { convertToSpanishDate, getFullYears, getMonth } from './utils/date.utils';
 
 PeriodTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
-  onEditRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
   onViewTeachers: PropTypes.func,
   onViewStudents: PropTypes.func,
@@ -24,11 +23,14 @@ PeriodTableRow.propTypes = {
   onViewSubjects: PropTypes.func,
 };
 
-export default function PeriodTableRow({ row, selected, onEditRow, onDeleteRow, onViewTeachers, onViewStudents, onViewGrades, onViewSubjects }) {
+export default function PeriodTableRow({ row, selected, onDeleteRow, onViewTeachers, onViewStudents, onViewGrades, onViewSubjects }) {
   const { startDate, endDate, degree, isActive } = row;
 
-  const startDateFormat = `${getMonth(startDate)} - ${getFullYears(startDate)}`;
-  const endDateFormat = `${getMonth(endDate)} - ${getFullYears(endDate)}`;
+  const convertedDtartDate = convertToSpanishDate(new Date(startDate));
+  const startDateFormat = convertedDtartDate.charAt(0).toUpperCase() + convertedDtartDate.slice(1);
+  const convertedEndDate = convertToSpanishDate(new Date(endDate));
+  const endDateFormat = convertedEndDate.charAt(0).toUpperCase() + convertedEndDate.slice(1);
+
 
   const {name, manager} = degree;
 
@@ -100,18 +102,6 @@ export default function PeriodTableRow({ row, selected, onEditRow, onDeleteRow, 
           >
             <Iconify icon="eva:trash-2-outline" />
             Delete
-          </MenuItem>
-        }
-
-        {
-          isActive && <MenuItem
-          onClick={() => {
-            onEditRow();
-            handleClosePopover();
-          }}
-          >
-            <Iconify icon="eva:edit-fill" />
-            Edit
           </MenuItem>
         }
 

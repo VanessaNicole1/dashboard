@@ -11,7 +11,7 @@ import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
-import { getFullYears, getMonth } from '../../period/list/utils/date.utils';
+import { convertToSpanishDate, getFullYears, getMonth } from '../../period/list/utils/date.utils';
 
 LessonPlanTableRow.propTypes = {
   row: PropTypes.object,
@@ -26,8 +26,8 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
 
   const { startDate, endDate } = period;
 
-  const startDateFormat = `${getMonth(startDate)} - ${getFullYears(startDate)}`;
-  const endDateFormat = `${getMonth(endDate)} - ${getFullYears(endDate)}`;
+  const startDateFormat = `${new Date(startDate).getDate()} de ${getMonth(startDate)} - ${getFullYears(startDate)} `;
+  const endDateFormat = ` ${new Date(endDate).getDate()} de ${getMonth(endDate)} - ${getFullYears(endDate)}`;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -52,7 +52,7 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell align="center">{ `${startDateFormat} - ${endDateFormat}`}</TableCell>
+        <TableCell align="center">{ `${startDateFormat}   -   ${endDateFormat}`}</TableCell>
 
         <TableCell align="left">
           { `${grade.number} "${grade.parallel}"` }
@@ -68,7 +68,7 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
             color={(hasQualified !== (true) && 'error') || 'success'}
             sx={{ textTransform: 'capitalize' }}
           >
-            {hasQualified !== (true) ? 'Unmarked' : 'Marked' }
+            {hasQualified !== (true) ? 'Not validated' : 'Validated' }
           </Label>
         </TableCell>
 
@@ -110,8 +110,8 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
           </MenuItem>
         }
 
-        {
-          period.isActive && <MenuItem
+        
+          <MenuItem
           onClick={() => {
             onViewRow();
           }}
@@ -119,7 +119,7 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
             <Iconify icon="carbon:view" />
             View
           </MenuItem>
-        }
+        
       </MenuPopover>
 
       <ConfirmDialog
