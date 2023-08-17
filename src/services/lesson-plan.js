@@ -99,21 +99,28 @@ export const removeResource = async (id, name) => {
 
 export const generateTeacherLessonPlanReport = async (userId, data) => {
   const { fromDate, toDate, period, subject, grade } = data;
-  const reportParams = { 
+
+  const baseReportParams = {
     from: fromDate.toISOString(),
     to: toDate.toISOString(),
     periodId: period,
-    subjectId: subject,
-    gradeId: grade
+  };
+
+  if (subject) {
+    baseReportParams.subjectId = subject
   }
-  
+
+  if (grade) {
+    baseReportParams.gradeId = grade
+  }
+
   try {
     const response = await axios.get(`/lesson-plans/report/${userId}`, {
       responseType: 'blob',
       headers: {
         'Content-Type': 'application/pdf',
       },
-      params: reportParams 
+      params: baseReportParams 
     });
     const pdfUrl = URL.createObjectURL(response.data);
     return pdfUrl;
