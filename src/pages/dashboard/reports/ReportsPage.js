@@ -109,7 +109,6 @@ export default function ReportsPage() {
 
   const fetchPeriodWeeks = async (periodId) => {
     const fetchedPeriodWeeks = await getPeriodWeeks(periodId);
-    console.log(fetchedPeriodWeeks);
     setPeriodWeeks(fetchedPeriodWeeks);
   }
 
@@ -246,8 +245,9 @@ export default function ReportsPage() {
           </Grid>
           <Grid item md={4} xs={12}>
             <WeeksReportSection
+              period={selectedPeriod}
               title="Reportes Semanales"
-              subheader="Subheader for weekly reports"
+              subheader="Generar reporte de docentes por semana"
               list={periodWeeks}
             />
           </Grid>
@@ -255,6 +255,7 @@ export default function ReportsPage() {
       </Container>
 
       <TeacherReportDialog
+        period={selectedPeriod}
         weeks={periodWeeks}
         teacher={selectedTeacher}
         openDialog={openTeacherDialog}
