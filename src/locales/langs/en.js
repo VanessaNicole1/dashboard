@@ -181,6 +181,25 @@ lesson_plan_list_page: {
       actions: "Actions",
     },
   },
+  user_edit_page: {
+    title: "User - Edit User",
+    heading: "Edit User",
+    update_name: "Edit",
+    users_name: "Users",
+  },
+  user_edit_form: {
+    name_required: "Name is required",
+    email_required: "Email is required",
+    role_required: "User must have at least one role",
+    full_name: "Name",
+    email: "Email",
+    phone_number: "Phone Number",
+    city: "City",
+    identification: "Card",
+    save_button: "Save",
+    banner: "Banner",
+    apply_disable: "Apply deactivate account"
+  },
   degree_create_page: {
     helmet: "Degree: Create a new degree",
     heading: "Create a new degree",

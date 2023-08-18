@@ -18,6 +18,7 @@ import { getRoles } from '../../../../services/role';
 import { manualHideErrorSnackbarOptions } from '../../../../utils/snackBar';
 import { useSnackbar } from '../../../../components/snackbar';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
+import { useLocales } from '../../../../locales';
 
 UserEditForm.propTypes = {
   currentUserId: PropTypes.string,
@@ -29,16 +30,18 @@ export default function UserEditForm({ currentUserId }) {
   const [simpleRoles, setSimpleRoles] = useState([]);
   const [currentRoles, setCurrentRoles] = useState([]);
 
+  const { translate } = useLocales();
+
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
   const userSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
+    name: Yup.string().required(translate('user_edit_form.name_required')),
+    email: Yup.string().required(translate('user_edit_form.email_required')).email('Email must be a valid email address'),
     phoneNumber: Yup.number(),
     identificationCard: Yup.string(),
     city: Yup.string(),
-    roles: Yup.array().min(1, 'A role should be select at least'),
+    roles: Yup.array().min(1, translate('user_edit_form.role_required')),
     isActive: Yup.boolean(),
     avatarUrl: Yup.mixed(),
   });
@@ -209,10 +212,10 @@ export default function UserEditForm({ currentUserId }) {
                 label={
                   <>
                     <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Banned
+                      { translate('user_edit_form.banner') }
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Apply disable account
+                    { translate('user_edit_form.apply_disable') }
                     </Typography>
                   </>
                 }
@@ -233,11 +236,11 @@ export default function UserEditForm({ currentUserId }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name" label="Full Name" />
-              <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="phoneNumber" label="Phone Number" />
-              <RHFTextField name="city" label="City" />
-              <RHFTextField name="identificationCard" label="Identification Card" />
+              <RHFTextField name="name" label={translate('user_edit_form.full_name')} />
+              <RHFTextField name="email" label={translate('user_edit_form.email')} />
+              <RHFTextField name="phoneNumber" label={translate('user_edit_form.phone_number')} />
+              <RHFTextField name="city" label={translate('user_edit_form.city')} />
+              <RHFTextField name="identificationCard" label={translate('user_edit_form.identification')} />
               <RHFAutocomplete
                 control={control}
                 value={currentRoles}
@@ -265,7 +268,7 @@ export default function UserEditForm({ currentUserId }) {
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Save Changes
+              { translate('user_edit_form.save_button') }
               </LoadingButton>
             </Stack>
           </Card>

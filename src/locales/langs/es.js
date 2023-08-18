@@ -163,6 +163,25 @@ const en = {
       }
     },
   },
+  user_edit_page: {
+    title: "Usuario - Editar Usuario",
+    heading: "Editar Usuario",
+    update_name: "Editar",
+    users_name: "Usuarios",
+  },
+  user_edit_form: {
+    name_required: "El nombre es requerido",
+    email_required: "El correo es requerido",
+    role_required: "El usuario debe tener por lo menos un rol",
+    full_name: "Nombre",
+    email: "Correo",
+    phone_number: "Número celular",
+    city: "Ciudad",
+    identification: "Cédula",
+    save_button: "Guardar",
+    banner: "Cambiar estado",
+    apply_disable: "Aplicar desactivar cuenta"
+  },
   lesson_plan_list_page: {
     helmet: 'Plan de Clases | Lista',
     heading: 'Listado de Plan de Clases',
