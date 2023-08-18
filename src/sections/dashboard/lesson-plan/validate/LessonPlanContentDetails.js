@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { Alert } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
@@ -42,44 +43,54 @@ export const LessonPlanContentDetails = ({ lessonPlan, lessonPlanValidationTrack
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Recursos de la clase:
       </Typography>
-      {lessonPlan.resources.map((resource, index) => (
-        <FileRecentItem
-          key={index}
-          file={resource}
-          onDelete={() => console.info('DELETE', resource)}
-        />
-      ))}
+      {
+        lessonPlan.resources.length > 0 ? (
+          lessonPlan.resources.map((resource, index) => (
+            <FileRecentItem
+              key={index}
+              file={resource}
+            />
+          ))
+        ): 
+        (
+          <Alert severity="info">El docente no ha agregado recursos para este plan de clase.</Alert>
+        )
+      }
     </Stack>
   )
 
   return (
     <Card sx={{ pt: 5, px: 5 }}>
       <Box
-        rowGap={5}
-        display="grid"
-        alignItems="center"
-        gridTemplateColumns={{
-          xs: "repeat(1, 1fr)",
-          sm: "repeat(2, 1fr)",
-        }}
+        display="flex"
+        flexDirection={{ xs: "column", sm: "row" }}
+        justifyContent="space-between"
       >
-        <Logo />
+        <Logo disabledLink />
 
-        <Stack spacing={1} alignItems={{ xs: "flex-start", md: "flex-end" }}>
+        <Stack
+          spacing={1}
+          alignItems={{ xs: "flex-start", md: "flex-end"}}
+          display="flex"
+          flexDirection={{xs: "column", sm: "column" }}
+        >
           {
-            lessonPlanValidationTracking && (
+            lessonPlanValidationTracking.isValidated && (
               <Label
-              variant="soft"
-              color={lessonPlanValidationTracking.isAgree ? "success" : "error"}
+                variant="soft"
+                color={lessonPlanValidationTracking.isAgree ? "success" : "error"}
               >
-                {lessonPlanValidationTracking.isAgree ? "De acuerdo": "No de acuerdo"}
+                {
+                  lessonPlanValidationTracking.isAgree ? "De acuerdo": "No de acuerdo"
+                }
               </Label>
             )
           }
           <Typography variant="subtitle2">
             Fecha máxima de calificación
+            <br/>
+            <span>{fDate(new Date(lessonPlan.date))}</span>
           </Typography>
-          {fDate(new Date(lessonPlan.date))}
         </Stack>
       </Box>
 

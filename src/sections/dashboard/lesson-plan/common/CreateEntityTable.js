@@ -141,7 +141,7 @@ export default function CreateEntityTable({
 
   const handleDeleteRows = (selectedRows) => {
     const deleteRows = entities.filter(
-      (row) => !selectedRows.includes(row.email)
+      (row) => !selectedRows.includes(row.id)
     );
     setSelected([]);
     setEntities(deleteRows);
@@ -202,7 +202,7 @@ export default function CreateEntityTable({
             onSelectAllRows={(checked) =>
               onSelectAllRows(
                 checked,
-                entities.map((row) => row.email)
+                entities.map((row) => row.id)
               )
             }
             action={
@@ -226,7 +226,7 @@ export default function CreateEntityTable({
                 onSelectAllRows={(checked) =>
                   onSelectAllRows(
                     checked,
-                    entities.map((row) => row.email)
+                    entities.map((row) => row.id)
                   )
                 }
               />

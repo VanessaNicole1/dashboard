@@ -18,6 +18,8 @@ export default function ValidateLessonPlanToolBar({
   topic,
   enableValidateButton,
   onClickValidate,
+  onPrint,
+  isPrinting
 }) {
   return (
     <Stack
@@ -57,8 +59,10 @@ export default function ValidateLessonPlanToolBar({
           color="inherit"
           variant="outlined"
           startIcon={<Iconify icon="solar:printer-minimalistic-bold" />}
+          onClick={onPrint}
+          disabled={isPrinting}
         >
-          Imprimir
+          {isPrinting ? "Cargando..." : "Imprimir"}
         </Button>
 
         {enableValidateButton && (
@@ -66,7 +70,7 @@ export default function ValidateLessonPlanToolBar({
             color="inherit"
             variant="outlined"
             onClick={onClickValidate}
-            startIcon={<Iconify icon="solar:printer-minimalistic-bold" />}
+            startIcon={<Iconify icon="grommet-icons:validate" />}
           >
             Validar
           </Button>
@@ -83,4 +87,6 @@ ValidateLessonPlanToolBar.propTypes = {
   status: PropTypes.bool,
   enableValidateButton: PropTypes.bool,
   onClickValidate: PropTypes.func,
+  onPrint: PropTypes.func,
+  isPrinting: PropTypes.bool
 };

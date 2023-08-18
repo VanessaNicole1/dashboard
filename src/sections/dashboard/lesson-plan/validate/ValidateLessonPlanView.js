@@ -8,12 +8,17 @@ import ValidateLessonPlanToolBar from './ValidateLessonPlanToolBar';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import LessonPlanInfo from './LessonPlanInfo';
 import { useSettingsContext } from '../../../../components/settings';
+import { useSnackbar } from '../../../../components/snackbar';
 import { LessonPlanContentDetails } from './LessonPlanContentDetails';
 import { LessonPlanValidateDialog } from './LessonPlanValidateDialog';
 import { updateLessonPlanTracking } from '../../../../services/lesson-plan-tracking';
+import { generateLessonPlanReport } from '../../../../services/lesson-plan';
+import { manualHideErrorSnackbarOptions } from '../../../../utils/snackBar';
 
 // TODO: Add i18n
-export default function ValidateLessonPlanView({ lessonPlan, lessonPlanTracking }) {
+export default function ValidateLessonPlanView({ lessonPlan, lessonPlanTracking, onUpdateLessonPlanTracking }) {
+  const [isPrinting, setIsPrinting] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
   const [ openValidateDialog, setOpenValidateDialog ] = useState(false);
   const { schedule: { teacher, grade, subject } } = lessonPlan;
   const lessonPlanCreationDate = new Date(lessonPlan.createdAt);
@@ -29,6 +34,7 @@ export default function ValidateLessonPlanView({ lessonPlan, lessonPlanTracking 
       isAgree
     }
     const updateLessonPlanTrackingResponse = await updateLessonPlanTracking(lessonPlanTracking.id, data);
+    await onUpdateLessonPlanTracking();
     
     if (updateLessonPlanTrackingResponse.errorMessage) {
       console.log('Something was wrong trying to update the lesson plan tracking');
@@ -39,6 +45,17 @@ export default function ValidateLessonPlanView({ lessonPlan, lessonPlanTracking 
     setOpenValidateDialog(false);
   };
 
+  const handlePrint = async () => {
+    setIsPrinting(true);
+    const teacherReportUrl = await generateLessonPlanReport(lessonPlan.id);
+    setIsPrinting(false);
+    if (teacherReportUrl.errorMessage) {
+      enqueueSnackbar(teacherReportUrl.errorMessage, manualHideErrorSnackbarOptions);
+    } else {
+      window.open(teacherReportUrl, "_blank");
+    }
+  }
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <ValidateLessonPlanToolBar
@@ -48,6 +65,8 @@ export default function ValidateLessonPlanView({ lessonPlan, lessonPlanTracking 
         status={lessonPlanTracking.isValidated}
         enableValidateButton={!lessonPlanTracking.isValidated}
         onClickValidate={() => setOpenValidateDialog(true)}
+        onPrint={handlePrint}
+        isPrinting={isPrinting}
       />
 
       <Grid container spacing={3}>
@@ -80,5 +99,6 @@ export default function ValidateLessonPlanView({ lessonPlan, lessonPlanTracking 
 
 ValidateLessonPlanView.propTypes = {
   lessonPlan: PropTypes.object,
-  lessonPlanTracking: PropTypes.object
+  lessonPlanTracking: PropTypes.object,
+  onUpdateLessonPlanTracking: PropTypes.func
 };

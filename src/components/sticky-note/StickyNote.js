@@ -31,11 +31,10 @@ StickyNote.propTypes = {
 
 function StickyNote({ title, content, description = "", identifier, className, color }) {
   const isDesktop = useResponsive('up', 'sm');
-  const words = isDesktop ? content.split(" "): [content];
 
   return (
     <StickyNoteCard
-      style={{ backgroundColor: color, width: isDesktop ? 120: '100%', height: isDesktop ? 70: 30, marginTop: isDesktop ? 0: 10 }}
+      style={{ backgroundColor: color, width: isDesktop ? 120: '100%', height: isDesktop ? 100: 30, marginTop: isDesktop ? 0: 10 }}
       className={className}
       data-id={identifier}
       data-color={color}
@@ -43,9 +42,7 @@ function StickyNote({ title, content, description = "", identifier, className, c
     >
       <div style={{display: 'flex', flexDirection: 'column'}}>
         <Typography variant="body2" align="center">
-          {words.map((word, index) => (
-            <CenteredWord key={index}>{word}</CenteredWord>
-          ))}
+          <b>{content}</b>
         </Typography>
         {
           description && (
