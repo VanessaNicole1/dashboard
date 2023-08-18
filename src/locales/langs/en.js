@@ -416,6 +416,7 @@ lesson_plan_list_page: {
     dashboard: "Dashboard",
     about: "About",
     list: "List",
+    date: "Date",
     table: {
       period: "period",
       grade: "grade",

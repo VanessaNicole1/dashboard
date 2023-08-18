@@ -111,6 +111,7 @@ export default function LessonPlanListTeacherPage() {
 
   const TABLE_HEAD = [
     { id: 'period', label: translate('teachers_lesson_plans.table.period'), align: 'center' },
+    { id: 'date', label: translate('teachers_lesson_plans.date'), align: 'center' },
     { id: 'grade', label: translate('teachers_lesson_plans.table.grade'), align: 'left' },
     { id: 'subject', label: translate('teachers_lesson_plans.table.subject'), align: 'left' },
     { id: 'status', label: translate('teachers_lesson_plans.table.status'), align: 'left' },

@@ -393,6 +393,7 @@ const en = {
     dashboard: "Dashboard",
     about: "Información",
     list: "Lista",
+    date: "Fecha",
     table: {
       period: "Periodo",
       grade: "Grado",

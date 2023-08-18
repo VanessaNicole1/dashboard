@@ -23,7 +23,9 @@ LessonPlanTableRow.propTypes = {
 };
 
 export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteRow, onViewRow }) {
-  const { period, grade, subject, hasQualified } = row;
+  const { period, grade, subject, hasQualified, date } = row;
+
+  const convertedDate = convertToSpanishDate(date);
 
   const { startDate, endDate } = period;
 
@@ -56,6 +58,10 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
     <>
       <TableRow hover selected={selected}>
         <TableCell align="center">{ `${startDateFormat}   -   ${endDateFormat}`}</TableCell>
+
+        <TableCell align="center">
+          { convertedDate }
+        </TableCell>
 
         <TableCell align="left">
           { `${grade.number} "${grade.parallel}"` }
