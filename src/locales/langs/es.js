@@ -362,7 +362,15 @@ const en = {
     finished: 'finalizados',
     manager: "Director",
     search: "Buscar....",
-    actions: "Acciones"
+    actions: "Acciones",
+    delete: "Eliminar",
+    view_students: "Ver estudiantes",
+    view_teachers: "Ver docentes",
+    view_grades: "Ver cursos",
+    view_subjects: "Ver materias",
+    content_delete: "¿Estás seguro de eliminar?",
+    delete_button: "Eliminar",
+    delete_title: "Eliminar"
   },
   users_list_page: {
     helmet: 'Usuarios | Lista',

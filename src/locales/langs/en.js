@@ -381,7 +381,15 @@ lesson_plan_list_page: {
     finished: 'finalizados',
     manager: "Manager",
     search: "Search....",
-    actions: "Actions"
+    actions: "Actions",
+    delete: "Delete",
+    view_students: "View students",
+    view_teachers: "View teachers",
+    view_grades: "View grades",
+    view_subjects: "View subjects",
+    content_delete: "Are you sure to delete?",
+    delete_button: "Delete",
+    delete_title: "Delete"
   },
   users_list_page: {
     helmet: 'Users | List',
