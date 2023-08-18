@@ -120,7 +120,7 @@ const en = {
           },
           degree: "Degree name",
           manager: "Select degree manager",
-          students_number: "Number of students who will be able to grade"
+          students_number: "Minimum number of students who will be able to validate"
         },
         errors: {
           required_start_date: "Period start date is required.",
@@ -181,6 +181,25 @@ lesson_plan_list_page: {
       actions: "Actions",
     },
   },
+  user_edit_page: {
+    title: "User - Edit User",
+    heading: "Edit User",
+    update_name: "Edit",
+    users_name: "Users",
+  },
+  user_edit_form: {
+    name_required: "Name is required",
+    email_required: "Email is required",
+    role_required: "User must have at least one role",
+    full_name: "Name",
+    email: "Email",
+    phone_number: "Phone Number",
+    city: "City",
+    identification: "Card",
+    save_button: "Save",
+    banner: "Banner",
+    apply_disable: "Apply deactivate account"
+  },
   degree_create_page: {
     helmet: "Degree: Create a new degree",
     heading: "Create a new degree",
@@ -207,7 +226,7 @@ lesson_plan_list_page: {
   },
   lesson_plan_create_page: {
     title: "Lesson Plan: New Lesson Plan",
-    heading: "Create a lesson plan",
+    heading: "Create lesson plan",
     links: {
       dashboard: "Dashboard",
       plans: "Lesson Plans",
@@ -216,12 +235,16 @@ lesson_plan_list_page: {
   },
   lesson_plan_update_page: {
     title: "Lesson Plan: Update Lesson Plan",
-    heading: "Update a lesson plan",
+    heading: "Update lesson plan",
     links: {
       dashboard: "Dashboard",
       plans: "Lesson Plans",
       update: "Update"
     }
+  },
+  validate_lesson_plan_page: {
+    subject_title: "Subject",
+    grade_title: "Grade"
   },
   components: {
     table_pagination_custom: {
@@ -356,7 +379,21 @@ lesson_plan_list_page: {
     manager_label: 'Manager',
     degree_label: 'Degree',
     status_label: 'Status',
-    list: 'Process'
+    list: 'Process',
+    list_name: 'List',
+    active: 'activos',
+    finished: 'finalizados',
+    manager: "Manager",
+    search: "Search....",
+    actions: "Actions",
+    delete: "Delete",
+    view_students: "View students",
+    view_teachers: "View teachers",
+    view_grades: "View grades",
+    view_subjects: "View subjects",
+    content_delete: "Are you sure to delete?",
+    delete_button: "Delete",
+    delete_title: "Delete"
   },
   users_list_page: {
     helmet: 'Users | List',
@@ -373,12 +410,25 @@ lesson_plan_list_page: {
       status: 'Status',
     }
   },
+  list_lesson_plans_student_page: {
+    title: "Student - Lesson Plans",
+    heading: "List - Lesson Plans",
+    list_link: "List",
+    period_label: "Period",
+    grade_label: "Grade",
+    teacher_label: "Teacher",
+    subject_label: "Subject",
+    status_label: "Status",
+    date_label: "Date",
+    actions: "Actions"
+  },
   teachers_lesson_plans: {
     helmet: "Lesson Plans | List",
     heading: "Lesson Plans List",
     dashboard: "Dashboard",
     about: "About",
     list: "List",
+    date: "Date",
     table: {
       period: "period",
       grade: "grade",
@@ -389,7 +439,15 @@ lesson_plan_list_page: {
     toolbar: {
       period: "Period",
       search: "Search..."
-    }
+    },
+    validated: "validated",
+    not_validated: "not validated",
+    delete: "Delete",
+    edit: "Edit",
+    view: "View",
+    delete_button: "Delete",
+    delete_title: "Delete",
+    content_delete: "Are you sure to delete?"
   },
   degree_create_form: {
     button_create: "Create degree",

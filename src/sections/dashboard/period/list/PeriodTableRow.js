@@ -11,7 +11,8 @@ import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
-import { convertToSpanishDate, getFullYears, getMonth } from './utils/date.utils';
+import { convertToSpanishDate } from './utils/date.utils';
+import { useLocales } from '../../../../locales';
 
 PeriodTableRow.propTypes = {
   row: PropTypes.object,
@@ -31,6 +32,7 @@ export default function PeriodTableRow({ row, selected, onDeleteRow, onViewTeach
   const convertedEndDate = convertToSpanishDate(new Date(endDate));
   const endDateFormat = convertedEndDate.charAt(0).toUpperCase() + convertedEndDate.slice(1);
 
+  const { translate } = useLocales();
 
   const {name, manager} = degree;
 
@@ -101,7 +103,7 @@ export default function PeriodTableRow({ row, selected, onDeleteRow, onViewTeach
           sx={{ color: 'error.main' }}
           >
             <Iconify icon="eva:trash-2-outline" />
-            Delete
+            {translate("period_list_page.delete")}
           </MenuItem>
         }
 
@@ -112,7 +114,7 @@ export default function PeriodTableRow({ row, selected, onDeleteRow, onViewTeach
           }}
           >
             <Iconify icon="ic:baseline-person" />
-            View Students
+            {translate("period_list_page.view_students")}
           </MenuItem>
 
           <MenuItem
@@ -122,7 +124,7 @@ export default function PeriodTableRow({ row, selected, onDeleteRow, onViewTeach
           }}
           >
             <Iconify icon="ic:baseline-person" />
-            View Teachers
+            {translate("period_list_page.view_teachers")}
           </MenuItem>
 
           <MenuItem
@@ -132,7 +134,7 @@ export default function PeriodTableRow({ row, selected, onDeleteRow, onViewTeach
           }}
           >
             <Iconify icon="ic:baseline-meeting-room" />
-            View Grades
+            {translate("period_list_page.view_grades")}
           </MenuItem>
 
           <MenuItem
@@ -142,18 +144,18 @@ export default function PeriodTableRow({ row, selected, onDeleteRow, onViewTeach
           }}
           >
           <Iconify icon="material-symbols:book" />
-            View Subjects
+          {translate("period_list_page.view_subjects")}
           </MenuItem>
       </MenuPopover>
 
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
-        title="Delete"
-        content="Are you sure want to delete?"
+        title={translate("period_list_page.delete_title")}
+        content={translate("period_list_page.content_delete")}
         action={
           <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Delete
+            {translate("period_list_page.delete_button")}
           </Button>
         }
       />

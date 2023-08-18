@@ -16,7 +16,27 @@ const StyledRoot = styled('div')(({ theme }) => ({
 export default function NavAccount() {
   const { user } = useAuthContext();
 
-  const roles = user.roles.map(role => role.name.toLowerCase()).join(' | ');
+  // const roles = user.roles.map(role => role.name.toLowerCase()).join(' | ');
+  const currentRoles = [];
+
+  for (const role of user.roles) {
+    if (role.name === 'TEACHER') {
+      const teacher = 'docente';
+      currentRoles.push(teacher.charAt(0).toUpperCase() + teacher.slice(1));
+    }
+    
+    if (role.name === 'MANAGER') {
+      const manager = 'director';
+      currentRoles.push(manager.charAt(0).toUpperCase() + manager.slice(1));
+    }
+
+    if (role.name === 'STUDENT') {
+      const student = 'estudiante';
+      currentRoles.push(student.charAt(0).toUpperCase() + student.slice(1));
+    }
+  }
+
+  const currentRolesFormat = currentRoles.join(' | ');
 
   return (
     <Link component={RouterLink} to={PATH_DASHBOARD.user.account} underline="none" color="inherit">
@@ -25,11 +45,11 @@ export default function NavAccount() {
 
         <Box sx={{ ml: 2, minWidth: 0 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.name} {user?.lastName}
+            {user?.name}
           </Typography>
 
           <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-            {roles}
+            {currentRolesFormat}
           </Typography>
         </Box>
       </StyledRoot>

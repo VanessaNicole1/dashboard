@@ -39,8 +39,6 @@ import { useSnackbar } from '../../../components/snackbar';
 import { LessonPlanGenerateReportDialog } from '../../../sections/dashboard/lesson-plan/teachers-list/LessonPlanGenerateReportDialog';
 import { manualHideErrorSnackbarOptions } from '../../../utils/snackBar';
 
-const STATUS_OPTIONS = ['all', 'validated', 'not validated'];
-
 export default function LessonPlanListTeacherPage() {
   const {
     dense,
@@ -72,6 +70,9 @@ export default function LessonPlanListTeacherPage() {
   const { enqueueSnackbar } = useSnackbar();
 
   const { translate } = useLocales();
+
+
+  const STATUS_OPTIONS = ['all', translate('teachers_lesson_plans.validated'), translate('teachers_lesson_plans.not_validated')];
 
   useEffect(() => {
     const fetchPeriods = async () => {
@@ -110,6 +111,7 @@ export default function LessonPlanListTeacherPage() {
 
   const TABLE_HEAD = [
     { id: 'period', label: translate('teachers_lesson_plans.table.period'), align: 'center' },
+    { id: 'date', label: translate('teachers_lesson_plans.date'), align: 'center' },
     { id: 'grade', label: translate('teachers_lesson_plans.table.grade'), align: 'left' },
     { id: 'subject', label: translate('teachers_lesson_plans.table.subject'), align: 'left' },
     { id: 'status', label: translate('teachers_lesson_plans.table.status'), align: 'left' },
@@ -314,11 +316,11 @@ async function applyFilter({ inputData, comparator, filterContent, filterStatus,
     });
   }
 
-  if (filterStatus === 'validated') {
+  if ((filterStatus === 'validated' || filterStatus === 'validados')) {
     inputData = await getLessonPlansByUser(user.id, {hasQualified: 'true'});
   }
 
-  if (filterStatus === 'not validated') {
+  if ((filterStatus === 'not validated' || filterStatus === 'no validados')) {
     inputData = inputData.filter((lessonPlan) => lessonPlan.hasQualified === false);
   }
   
@@ -327,12 +329,12 @@ async function applyFilter({ inputData, comparator, filterContent, filterStatus,
     inputData = lessonPlans;
   }
 
-  if (filterStatus === 'validated' && filterPeriod !== '0') {
+  if ((filterStatus === 'validated' || filterStatus === 'validados') && filterPeriod !== '0') {
     const test = await getLessonPlansByUser(user.id, {periodId: filterPeriod, hasQualified: 'true'});
     inputData = test;
   }
 
-  if (filterStatus === 'not validated' && filterPeriod !== '0') {
+  if ((filterStatus === 'not validated' || filterStatus === 'no validados') && filterPeriod !== '0') {
     const test = await getLessonPlansByUser(user.id, {periodId: filterPeriod, hasQualified: 'false'});
     inputData = test;
   }

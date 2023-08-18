@@ -29,20 +29,25 @@ import {
   findStudentLessonPlans,
 } from "../../../services/student";
 import LessonPlanStudentTableRow from "../../../sections/dashboard/lesson-plan/list/LessonPlanStudentTableRow";
+import { useLocales } from "../../../locales";
 
 // TODO: Add i18n.
 
 export default function LessonPlanListStudentPage() {
+
+  const { translate } = useLocales();
+
   const STATUS_OPTIONS = ["Pending", "Validated"];
   const TABLE_HEAD = [
-    { id: "period", label: "Period", align: "center" },
-    { id: "grade", label: "Grade", align: "left" },
-    { id: "teacher", label: "Teacher", align: "left" },
-    { id: "subject", label: "Subject", align: "left" },
-    { id: "status", label: "Status", align: "left" },
-    { id: "creationDate", label: "Creation Date", align: "left" },
-    { id: "Actions", label: "Actions", align: "center" },
+    { id: "period", label: translate('list_lesson_plans_student_page.period_label'), align: "center" },
+    { id: "creationDate", label: translate('list_lesson_plans_student_page.date_label'), align: "left" },
+    { id: "grade", label: translate('list_lesson_plans_student_page.grade_label'), align: "left" },
+    { id: "teacher", label: translate('list_lesson_plans_student_page.teacher_label'), align: "left" },
+    { id: "subject", label: translate('list_lesson_plans_student_page.subject_label'), align: "left" },
+    { id: "status", label: translate('list_lesson_plans_student_page.status_label'), align: "left" },
+    { id: "Actions", label: translate('list_lesson_plans_student_page.actions'), align: "center" },
   ];
+
 
   const {
     dense,
@@ -104,7 +109,7 @@ export default function LessonPlanListStudentPage() {
           grade,
           teacher,
           subject,
-          creationDate: tracking.lessonPlan.createdAt,
+          creationDate: tracking.lessonPlan.date,
           lessonPlanId: tracking.lessonPlan.id,
         };
       });
@@ -159,15 +164,15 @@ export default function LessonPlanListStudentPage() {
   return (
     <>
       <Helmet>
-        <title> Estudiante - Lesson Plans </title>
+        <title> {translate('list_lesson_plans_student_page.title')} </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : "lg"}>
         <CustomBreadcrumbs
-          heading="Lesson Plans"
+          heading={translate('list_lesson_plans_student_page.heading')}
           links={[
             { name: "Dashboard", href: PATH_DASHBOARD.root },
-            { name: "List" },
+            { name: translate('list_lesson_plans_student_page.list_link') },
           ]}
         />
 

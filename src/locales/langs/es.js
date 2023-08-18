@@ -117,7 +117,7 @@ const en = {
           },
           degree: 'Nombre de la Carrera',
           manager: 'Seleccione el director de carrera',
-          students_number: "Número de estudiantes que calificarán el plan de clases"
+          students_number: "Número mínimo de estudiantes que validarán el plan de clases"
         },
         errors: {  
           required_start_date: 'La fecha de inicio del periodo es requerida.',
@@ -163,6 +163,25 @@ const en = {
       }
     },
   },
+  user_edit_page: {
+    title: "Usuario - Editar Usuario",
+    heading: "Editar Usuario",
+    update_name: "Editar",
+    users_name: "Usuarios",
+  },
+  user_edit_form: {
+    name_required: "El nombre es requerido",
+    email_required: "El correo es requerido",
+    role_required: "El usuario debe tener por lo menos un rol",
+    full_name: "Nombre",
+    email: "Correo",
+    phone_number: "Número celular",
+    city: "Ciudad",
+    identification: "Cédula",
+    save_button: "Guardar",
+    banner: "Cambiar estado",
+    apply_disable: "Aplicar desactivar cuenta"
+  },
   lesson_plan_list_page: {
     helmet: 'Plan de Clases | Lista',
     heading: 'Listado de Plan de Clases',
@@ -203,7 +222,7 @@ const en = {
   },
   lesson_plan_create_page: {
     title: "Plan de Clase: Nuevo Plan de Clases",
-    heading: "Crear un plan de clase",
+    heading: "Crear plan de clase",
     links: {
       dashboard: "Dashboard",
       plans: "Lista de plan de clases",
@@ -212,7 +231,7 @@ const en = {
   },
   lesson_plan_update_page: {
     title: "Plan de clase | Actualizar",
-    heading: "Actualizar un plan de clase",
+    heading: "Actualizar plan de clase",
     links: {
       dashboard: "Dashboard",
       plans: "Lista de plan de clases",
@@ -337,7 +356,21 @@ const en = {
     manager_label: 'Director',
     degree_label: 'Carrera',
     status_label: 'Estado',
-    list: 'Procesos'
+    list: 'Procesos',
+    list_name: 'Lista',
+    active: 'activos',
+    finished: 'finalizados',
+    manager: "Director",
+    search: "Buscar....",
+    actions: "Acciones",
+    delete: "Eliminar",
+    view_students: "Ver estudiantes",
+    view_teachers: "Ver docentes",
+    view_grades: "Ver cursos",
+    view_subjects: "Ver materias",
+    content_delete: "¿Estás seguro de eliminar?",
+    delete_button: "Eliminar",
+    delete_title: "Eliminar"
   },
   users_list_page: {
     helmet: 'Usuarios | Lista',
@@ -354,12 +387,25 @@ const en = {
       status: 'Estado',
     }
   },
+  list_lesson_plans_student_page: {
+    title: "Estudiante - Planes de Clases",
+    heading: "Listado - Planes de Clases",
+    list_link: "Lista",
+    period_label: "Periodo",
+    grade_label: "Curso",
+    teacher_label: "Docente",
+    subject_label: "Materia",
+    status_label: "Estado",
+    date_label: "Fecha",
+    actions: "Acciones"
+  },
   teachers_lesson_plans: {
     helmet: "Planes de Clases | Lista",
     heading: "Lista de Plan de Clases",
     dashboard: "Dashboard",
     about: "Información",
     list: "Lista",
+    date: "Fecha",
     table: {
       period: "Periodo",
       grade: "Grado",
@@ -368,9 +414,17 @@ const en = {
       actions: "Actiones"
     },
     toolbar: {
-      period: "Period",
-      search: "Search..."
-    }
+      period: "Periodo",
+      search: "Buscar..."
+    },
+    validated: "validados",
+    not_validated: "no validados",
+    delete: "Eliminar",
+    edit: "Editar",
+    view: "Ver",
+    delete_button: "Eliminar",
+    delete_title: "Eliminar",
+    content_delete: "¿Estás seguro de eliminar?"
   },
   subjects_list_page: {
     helmet: 'Materias | Lista',
@@ -383,6 +437,10 @@ const en = {
       grades: 'Grados',
       actions: 'Acciones'
     }
+  },
+  validate_lesson_plan_page: {
+    subject_title: "Materia",
+    grade_title: "Curso"
   },
   degree_create_form: {
     button_create: 'Crear Carrera',
@@ -463,7 +521,7 @@ const en = {
     content: "Contenido",
     resources: "Recursos compartidos",
     new_resources: "Recursos",
-    students: "Studiantes",
+    students: "Estudiantes",
     change_deadline: "Extender la fecha de validación",
     purpose: "Propósito de la clase",
     biblio: "Bibliografía",

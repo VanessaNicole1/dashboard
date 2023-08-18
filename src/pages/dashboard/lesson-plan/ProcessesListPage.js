@@ -31,8 +31,6 @@ import { deletePeriod, getPeriods } from '../../../services/period';
 import { getUsers } from '../../../services/user';
 import PeriodToolbar from '../../../sections/dashboard/period/list/PeriodToolbar';
 
-const STATUS_OPTIONS = ['all', 'active', 'finished'];
-
 export default function ProcessesListPage() {
   const {
     dense,
@@ -66,6 +64,8 @@ export default function ProcessesListPage() {
   const [dataFiltered, setDataFiltered] = useState([]);
 
   const { translate } = useLocales();
+
+  const STATUS_OPTIONS = ['all', translate("period_list_page.active"), translate("period_list_page.finished")];
 
   useEffect(() => {
     const fetchPeriods = async () => {
@@ -107,7 +107,7 @@ export default function ProcessesListPage() {
     { id: 'manager', label: translate("period_list_page.manager_label"), align: 'left' },
     { id: 'degree', label: translate("period_list_page.degree_label"), align: 'left' },
     { id: 'status', label: translate("period_list_page.status_label"), align: 'left' },
-    { id: 'Actions', label: 'Actions', align: 'center' },
+    { id: 'Actions', label: translate("period_list_page.actions"), align: 'center' },
   ];
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
@@ -182,8 +182,8 @@ export default function ProcessesListPage() {
           heading={translate("period_list_page.heading")}
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Process', href: PATH_DASHBOARD.lessonPlan.listProcesses },
-            { name: 'List' },
+            { name: translate("period_list_page.list"), href: PATH_DASHBOARD.lessonPlan.listProcesses },
+            { name: translate("period_list_page.list_name") },
           ]}
         />
         <Card>
@@ -286,21 +286,21 @@ async function applyFilter({ inputData, comparator, filterContent, filterStatus,
     inputData = currentPeriods;
   }
 
-  if (filterStatus === 'active' && filterManager !== '0') {
+  if ((filterStatus === 'active' || filterStatus === 'activos') && filterManager !== '0') {
     const currentPeriods = await getPeriods({isActive: true, idManagerUser: filterManager});
     inputData = currentPeriods;
   }
 
-  if (filterStatus === 'finished' && filterManager !== '0') {
+  if ((filterStatus === 'finished' || filterStatus === 'finalizados') && filterManager !== '0') {
     const currentPeriods = await getPeriods({isActive: false, idManagerUser: filterManager});
     inputData = currentPeriods;
   }
 
-  if (filterStatus === 'active') {
+  if ((filterStatus === 'active' || filterStatus === 'activos')) {
     inputData = inputData.filter((period) => period.isActive === true);
   }
 
-  if (filterStatus === 'finished') {
+  if ((filterStatus === 'finished' || filterStatus === 'finalizados')) {
     inputData = inputData.filter((period) => period.isActive === false);
   }
 
