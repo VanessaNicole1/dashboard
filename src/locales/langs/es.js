@@ -231,7 +231,7 @@ const en = {
   },
   lesson_plan_update_page: {
     title: "Plan de clase | Actualizar",
-    heading: "Actualizar un plan de clase",
+    heading: "Actualizar plan de clase",
     links: {
       dashboard: "Dashboard",
       plans: "Lista de plan de clases",
@@ -504,7 +504,7 @@ const en = {
     content: "Contenido",
     resources: "Recursos compartidos",
     new_resources: "Recursos",
-    students: "Studiantes",
+    students: "Estudiantes",
     change_deadline: "Extender la fecha de validación",
     purpose: "Propósito de la clase",
     biblio: "Bibliografía",

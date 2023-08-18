@@ -235,7 +235,7 @@ lesson_plan_list_page: {
   },
   lesson_plan_update_page: {
     title: "Lesson Plan: Update Lesson Plan",
-    heading: "Update a lesson plan",
+    heading: "Update lesson plan",
     links: {
       dashboard: "Dashboard",
       plans: "Lesson Plans",
