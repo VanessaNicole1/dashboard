@@ -47,11 +47,11 @@ export default function Header({ onOpenNav }) {
         direction="row"
         alignItems="center"
         justifyContent="flex-end"
-        spacing={{ xs: 0.5, sm: 1.5 }}
+        spacing={{ xs: 0.5, sm: 3.5 }}
       >
         <LanguagePopover />
 
-        <NotificationsPopover />
+        {/* <NotificationsPopover /> */}
         <AccountPopover />
       </Stack>
     </>
