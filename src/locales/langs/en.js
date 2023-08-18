@@ -410,6 +410,18 @@ lesson_plan_list_page: {
       status: 'Status',
     }
   },
+  list_lesson_plans_student_page: {
+    title: "Student - Lesson Plans",
+    heading: "List - Lesson Plans",
+    list_link: "List",
+    period_label: "Period",
+    grade_label: "Grade",
+    teacher_label: "Teacher",
+    subject_label: "Subject",
+    status_label: "Status",
+    date_label: "Date",
+    actions: "Actions"
+  },
   teachers_lesson_plans: {
     helmet: "Lesson Plans | List",
     heading: "Lesson Plans List",

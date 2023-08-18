@@ -8,9 +8,10 @@ import {
 } from '@mui/material';
 import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
-import { getFullYears, getMonth } from '../../period/list/utils/date.utils';
+import { convertToSpanishDate, getFullYears, getMonth } from '../../period/list/utils/date.utils';
 import { getFancyDate } from '../../../../utils/date';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
+import { useLocales } from '../../../../locales';
 
 LessonPlanStudentTableRow.propTypes = {
   row: PropTypes.object
@@ -18,11 +19,15 @@ LessonPlanStudentTableRow.propTypes = {
 
 // TODO: Add i18n.
 
-export default function LessonPlanStudentTableRow({ row }) { 
-  const getDateFormat = (date) => `${getMonth(date)} - ${getFullYears(date)}`
+export default function LessonPlanStudentTableRow({ row }) {
+  const getDateFormat = (date) => `${getMonth(date)} - ${getFullYears(date)}`;
+
+  const { translate } = useLocales();
 
   const { isValidated, period, grade, teacher, subject, creationDate, lessonPlanId } = row;
   const { startDate, endDate } = period;
+
+  const convertedDate = convertToSpanishDate(creationDate);
 
   const startDateFormat = getDateFormat(startDate);
   const endDateFormat = getDateFormat(endDate);
@@ -36,6 +41,10 @@ export default function LessonPlanStudentTableRow({ row }) {
   return (
     <TableRow hover >
       <TableCell align="center">{ `${startDateFormat} - ${endDateFormat}` }</TableCell>
+
+      <TableCell align="left">
+        {convertedDate}
+      </TableCell>
 
       <TableCell align="left">
         { `${grade.number} "${grade.parallel}"` }
@@ -57,10 +66,6 @@ export default function LessonPlanStudentTableRow({ row }) {
         >
           { isValidated ? 'Validated' : 'Not Validated' }
         </Label>
-      </TableCell>
-
-      <TableCell align="left">
-        {getFancyDate(creationDate)}
       </TableCell>
 
       <TableCell align="center">

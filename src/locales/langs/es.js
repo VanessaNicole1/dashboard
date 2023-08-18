@@ -387,6 +387,18 @@ const en = {
       status: 'Estado',
     }
   },
+  list_lesson_plans_student_page: {
+    title: "Estudiante - Planes de Clases",
+    heading: "Listado - Planes de Clases",
+    list_link: "Lista",
+    period_label: "Periodo",
+    grade_label: "Curso",
+    teacher_label: "Docente",
+    subject_label: "Materia",
+    status_label: "Estado",
+    date_label: "Fecha",
+    actions: "Acciones"
+  },
   teachers_lesson_plans: {
     helmet: "Planes de Clases | Lista",
     heading: "Lista de Plan de Clases",
