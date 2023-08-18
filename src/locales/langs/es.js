@@ -117,7 +117,7 @@ const en = {
           },
           degree: 'Nombre de la Carrera',
           manager: 'Seleccione el director de carrera',
-          students_number: "Número de estudiantes que calificarán el plan de clases"
+          students_number: "Número mínimo de estudiantes que validarán el plan de clases"
         },
         errors: {  
           required_start_date: 'La fecha de inicio del periodo es requerida.',

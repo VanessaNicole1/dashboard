@@ -120,7 +120,7 @@ const en = {
           },
           degree: "Degree name",
           manager: "Select degree manager",
-          students_number: "Number of students who will be able to grade"
+          students_number: "Minimum number of students who will be able to validate"
         },
         errors: {
           required_start_date: "Period start date is required.",
