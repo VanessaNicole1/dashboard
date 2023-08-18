@@ -11,7 +11,7 @@ import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
-import { convertToSpanishDate, getFullYears, getMonth } from './utils/date.utils';
+import { convertToSpanishDate } from './utils/date.utils';
 
 PeriodTableRow.propTypes = {
   row: PropTypes.object,

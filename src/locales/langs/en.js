@@ -375,7 +375,13 @@ lesson_plan_list_page: {
     manager_label: 'Manager',
     degree_label: 'Degree',
     status_label: 'Status',
-    list: 'Process'
+    list: 'Process',
+    list_name: 'List',
+    active: 'activos',
+    finished: 'finalizados',
+    manager: "Manager",
+    search: "Search....",
+    actions: "Actions"
   },
   users_list_page: {
     helmet: 'Users | List',

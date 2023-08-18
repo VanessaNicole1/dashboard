@@ -356,7 +356,13 @@ const en = {
     manager_label: 'Director',
     degree_label: 'Carrera',
     status_label: 'Estado',
-    list: 'Procesos'
+    list: 'Procesos',
+    list_name: 'Lista',
+    active: 'activos',
+    finished: 'finalizados',
+    manager: "Director",
+    search: "Buscar....",
+    actions: "Acciones"
   },
   users_list_page: {
     helmet: 'Usuarios | Lista',
