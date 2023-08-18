@@ -425,6 +425,10 @@ const en = {
       actions: 'Acciones'
     }
   },
+  validate_lesson_plan_page: {
+    subject_title: "Materia",
+    grade_title: "Curso"
+  },
   degree_create_form: {
     button_create: 'Crear Carrera',
     input_name: 'Nombre de la carrera',

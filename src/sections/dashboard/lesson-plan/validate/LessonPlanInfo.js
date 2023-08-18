@@ -6,10 +6,13 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
+import useLocales from '../../../../locales/useLocales';
 
 // TODO: Add i18n
 export default function LessonPlanInfo({ teacher, subject, grade }) {
   const { user } = teacher;
+
+  const { translate } = useLocales();
 
   const renderTeacher = (
     <>
@@ -36,7 +39,7 @@ export default function LessonPlanInfo({ teacher, subject, grade }) {
   const renderSubject = (
     <>
       <CardHeader
-        title="Subject"
+        title={translate('validate_lesson_plan_page.subject_title')}
       />
       <Stack spacing={1.5} sx={{ p: 3, typography: 'body2' }}>
         <Stack direction="row" alignItems="center">
@@ -52,7 +55,7 @@ export default function LessonPlanInfo({ teacher, subject, grade }) {
   const renderGrade = (
     <>
       <CardHeader
-        title="Grade"
+        title={translate('validate_lesson_plan_page.grade_title')}
       />
       <Stack spacing={1.5} sx={{ p: 3, typography: 'body2' }}>
         <Stack direction="row" alignItems="center">

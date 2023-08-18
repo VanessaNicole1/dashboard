@@ -39,15 +39,6 @@ export default function FileRecentItem({ file, onDelete, sx, ...other }) {
           <Iconify icon="majesticons:eye-line" />
         </IconButton>
       </Tooltip>
-      {
-        onDelete && (
-          <Tooltip title="Eliminar Recurso">
-            <IconButton color='error' onClick={onDelete}>
-              <Iconify icon="ic:baseline-delete" />
-            </IconButton>
-          </Tooltip>
-        )
-      }
     </Box>
   );
 

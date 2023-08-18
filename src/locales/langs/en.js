@@ -242,6 +242,10 @@ lesson_plan_list_page: {
       update: "Update"
     }
   },
+  validate_lesson_plan_page: {
+    subject_title: "Subject",
+    grade_title: "Grade"
+  },
   components: {
     table_pagination_custom: {
       form_control: {

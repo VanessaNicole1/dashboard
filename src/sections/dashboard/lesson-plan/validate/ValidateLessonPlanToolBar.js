@@ -36,7 +36,7 @@ export default function ValidateLessonPlanToolBar({
           <Stack spacing={1} direction="row" alignItems="center">
             <Typography variant="h4">{topic}</Typography>
             <Label variant="soft" color={status ? "info" : "warning"}>
-              {status ? "Validated" : "Not Validated"}
+              {status ? "Validado" : "Sin Validar"}
             </Label>
           </Stack>
 
