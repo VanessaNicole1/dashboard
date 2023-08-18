@@ -424,7 +424,13 @@ lesson_plan_list_page: {
       search: "Search..."
     },
     validated: "validated",
-    not_validated: "not validated"
+    not_validated: "not validated",
+    delete: "Delete",
+    edit: "Edit",
+    view: "View",
+    delete_button: "Delete",
+    delete_title: "Delete",
+    content_delete: "Are you sure to delete?"
   },
   degree_create_form: {
     button_create: "Create degree",

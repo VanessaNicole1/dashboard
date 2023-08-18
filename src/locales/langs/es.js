@@ -401,11 +401,17 @@ const en = {
       actions: "Actiones"
     },
     toolbar: {
-      period: "Period",
-      search: "Search..."
+      period: "Periodo",
+      search: "Buscar..."
     },
     validated: "validados",
-    not_validated: "no validados"
+    not_validated: "no validados",
+    delete: "Eliminar",
+    edit: "Editar",
+    view: "Ver",
+    delete_button: "Eliminar",
+    delete_title: "Eliminar",
+    content_delete: "¿Estás seguro de eliminar?"
   },
   subjects_list_page: {
     helmet: 'Materias | Lista',

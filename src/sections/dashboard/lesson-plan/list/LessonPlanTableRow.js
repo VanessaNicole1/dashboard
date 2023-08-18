@@ -12,6 +12,7 @@ import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import { convertToSpanishDate, getFullYears, getMonth } from '../../period/list/utils/date.utils';
+import { useLocales } from '../../../../locales';
 
 LessonPlanTableRow.propTypes = {
   row: PropTypes.object,
@@ -25,6 +26,8 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
   const { period, grade, subject, hasQualified } = row;
 
   const { startDate, endDate } = period;
+
+  const { translate } = useLocales();
 
   const startDateFormat = `${new Date(startDate).getDate()} de ${getMonth(startDate)} - ${getFullYears(startDate)} `;
   const endDateFormat = ` ${new Date(endDate).getDate()} de ${getMonth(endDate)} - ${getFullYears(endDate)}`;
@@ -94,7 +97,7 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
           sx={{ color: 'error.main' }}
           >
             <Iconify icon="eva:trash-2-outline" />
-            Delete
+            {translate('teachers_lesson_plans.delete')}
           </MenuItem>
         }
 
@@ -106,7 +109,7 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
           }}
           >
             <Iconify icon="eva:edit-fill" />
-            Edit
+            {translate('teachers_lesson_plans.edit')}
           </MenuItem>
         }
 
@@ -117,7 +120,7 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
           }}
           >
             <Iconify icon="carbon:view" />
-            View
+            {translate('teachers_lesson_plans.view')}
           </MenuItem>
         
       </MenuPopover>
@@ -125,11 +128,11 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
-        title="Delete"
-        content="Are you sure want to delete?"
+        title={translate('teachers_lesson_plans.delete_title')}
+        content={translate('teachers_lesson_plans.content_delete')}
         action={
           <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Delete
+            {translate('teachers_lesson_plans.delete_button')}
           </Button>
         }
       />
