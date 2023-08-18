@@ -422,7 +422,9 @@ lesson_plan_list_page: {
     toolbar: {
       period: "Period",
       search: "Search..."
-    }
+    },
+    validated: "validated",
+    not_validated: "not validated"
   },
   degree_create_form: {
     button_create: "Create degree",

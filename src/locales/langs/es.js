@@ -403,7 +403,9 @@ const en = {
     toolbar: {
       period: "Period",
       search: "Search..."
-    }
+    },
+    validated: "validados",
+    not_validated: "no validados"
   },
   subjects_list_page: {
     helmet: 'Materias | Lista',
