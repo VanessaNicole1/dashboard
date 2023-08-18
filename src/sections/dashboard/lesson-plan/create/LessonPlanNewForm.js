@@ -409,6 +409,7 @@ export default function LessonPlanNewForm() {
                 render={({ field, fieldState: { error } }) => (
                   <DatePicker
                     label={translate('lesson_plans_create_form.date')}
+                    shouldDisableDate={isWeekend}
                     value={field.value}
                     onChange={(newValue) => {
                       field.onChange(newValue);

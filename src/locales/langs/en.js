@@ -226,7 +226,7 @@ lesson_plan_list_page: {
   },
   lesson_plan_create_page: {
     title: "Lesson Plan: New Lesson Plan",
-    heading: "Create a lesson plan",
+    heading: "Create lesson plan",
     links: {
       dashboard: "Dashboard",
       plans: "Lesson Plans",

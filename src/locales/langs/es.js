@@ -222,7 +222,7 @@ const en = {
   },
   lesson_plan_create_page: {
     title: "Plan de Clase: Nuevo Plan de Clases",
-    heading: "Crear un plan de clase",
+    heading: "Crear plan de clase",
     links: {
       dashboard: "Dashboard",
       plans: "Lista de plan de clases",
