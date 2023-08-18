@@ -49,7 +49,6 @@ export const LessonPlanContentDetails = ({ lessonPlan, lessonPlanValidationTrack
             <FileRecentItem
               key={index}
               file={resource}
-              onDelete={() => console.info('DELETE', resource)}
             />
           ))
         ): 
