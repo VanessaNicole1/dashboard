@@ -17,22 +17,24 @@ export const LessonPlanValidateStudentPage = () => {
   const [lessonPlan, setLessonPlan] = useState();
   const [lessonPlanTracking, setLessonPlanTracking] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  
+  const fecthLessonPlan = async () => {
+    const fetchedLessonPlanInfo = await getStudentLessonPlanToValidate(user.id, lessonPlanId);
+
+    if (fetchedLessonPlanInfo.errorMessage) {
+      navigate(PATH_DASHBOARD.lessonPlan.listStudentPlans);
+    } else {
+      setLessonPlanTracking(fetchedLessonPlanInfo.lessonPlanTracking);
+      setLessonPlan(fetchedLessonPlanInfo.lessonPlan);
+    }
+    setIsLoading(false);
+  }
 
   useEffect(() => { 
-    const fecthLessonPlan = async () => {
-      const fetchedLessonPlanInfo = await getStudentLessonPlanToValidate(user.id, lessonPlanId);
-
-      if (fetchedLessonPlanInfo.errorMessage) {
-        navigate(PATH_DASHBOARD.lessonPlan.listStudentPlans);
-      } else {
-        setLessonPlanTracking(fetchedLessonPlanInfo.lessonPlanTracking);
-        setLessonPlan(fetchedLessonPlanInfo.lessonPlan);
-      }
-      setIsLoading(false);
-    }
     fecthLessonPlan();
   }, []);
 
+  
   return (
     <>
       {
@@ -55,6 +57,7 @@ export const LessonPlanValidateStudentPage = () => {
             <ValidateLessonPlanView 
               lessonPlan={lessonPlan}
               lessonPlanTracking={lessonPlanTracking}
+              onUpdateLessonPlanTracking={fecthLessonPlan}
             />
           </>
         )
