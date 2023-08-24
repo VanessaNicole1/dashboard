@@ -38,6 +38,7 @@ import { RemedialStudentPage } from "../pages/dashboard/lesson-plan/remedial/Rem
 import { RemedialTeacherPage } from "../pages/dashboard/lesson-plan/remedial/RemedialTeacherPage";
 import { RemedialManagerPage } from "../pages/dashboard/lesson-plan/remedial/RemedialManagerPage";
 import { RemedialLessonPlanAboutPage } from "../pages/dashboard/lesson-plan/remedial/RemedialLessonPlanAboutPage";
+import RemedialPlanCreatePage from "../pages/dashboard/remedial-plan/RemedialPlanCreatePage";
 
 export default function Router() {
   const AuthRoutes = {
@@ -193,6 +194,13 @@ export default function Router() {
                 <RemedialTrackingPage />
               </RoleBasedGuard>
             ),
+          },
+          { path: 'create', 
+            element: (
+              <RoleBasedGuard hasContent roles={[ROLES.teacher]}>
+                <RemedialPlanCreatePage />
+              </RoleBasedGuard>
+            )
           },
         ],
       },

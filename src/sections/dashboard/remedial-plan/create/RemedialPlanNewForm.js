@@ -1,43 +1,36 @@
 import { Card, Grid, Stack, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { Controller, useForm, useWatch } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useCallback, useEffect, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
 import FormProvider from '../../../../components/hook-form/FormProvider';
 import {
   RHFAutocomplete,
   RHFEditor,
-  RHFRadioGroup,
   RHFSelect,
   RHFTextField,
   RHFUpload,
 } from '../../../../components/hook-form';
-import FileNewFolderDialog from './file/FileNewFolderDialog';
 import { getSchedules } from '../../../../services/schedule';
 import { getStudents } from '../../../../services/student';
 import { useAuthContext } from '../../../../auth/useAuthContext';
 import { findTeacherActivePeriods } from '../../../../services/teacher';
-import { createLessonPlan } from '../../../../services/lesson-plan';
+import { createRemedialPlan } from '../../../../services/lesson-plan';
 import { manualHideErrorSnackbarOptions } from '../../../../utils/snackBar';
 import { useSnackbar } from '../../../../components/snackbar';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { useLocales } from '../../../../locales';
 import { getPeriod } from '../../../../services/period';
+import FileNewFolderDialog from '../../lesson-plan/create/file/FileNewFolderDialog';
 
-export default function LessonPlanNewForm() {
+export default function RemedialPlanNewForm() {
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const { translate } = useLocales();
-
-  const NOTIFICATION_OPTION = [
-    { label: translate('lesson_plans_create_form.notify_now'), value: 'yes' },
-    { label: translate('lesson_plans_create_form.notify_after'), value: 'no' },
-  ];
 
   const [openUploadFile, setOpenUploadFile] = useState(false);
   const [teacherActivePeriods, setTeacherActivePeriods] = useState([]);
@@ -48,15 +41,10 @@ export default function LessonPlanNewForm() {
   const [selectedActivePeriod, setSelectedActivePeriod] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
   const [selectedGrade, setSelectedGrade] = useState('');
-  const [selectedNotification, setSelectedNotification] = useState(true);
   const [selectedStudent, setSelectedStudent] = useState([]);
   const [fields, setFields] = useState(true);
-  const [currentDeadlineDate, setDeadlineDate] = useState(new Date());
   const [totalStudentsValidate, setTotalStudentsValidate] = useState(1);
   const [validateDate, setValidateDate] = useState(true);
-
-  const today = dayjs();
-  const tomorrow = dayjs().add(1, 'day');
 
   const newLessonPlanSchema = Yup.object().shape({
     period: Yup.string().required(translate('lesson_plans_create_form.period_required')),
@@ -73,15 +61,7 @@ export default function LessonPlanNewForm() {
     materials: Yup.string().required(translate('lesson_plans_create_form.materials_required')),
     evaluation: Yup.string().required(translate('lesson_plans_create_form.evaluation_required')),
     comments: Yup.string().required(translate('lesson_plans_create_form.comments_required')),
-    notification: Yup.string().required(translate('lesson_plans_create_form.notification_required')),
-    notificationDate: Yup.date().when(['notification', 'date'], (notification, date, schema) => {
-      if (notification === 'no') {
-        return schema.min(date, translate('lesson_plans_create_form.end_after_start'))
-        .typeError(translate('lesson_plans_create_form.end_date_required'))
-      }
-    }).required(translate('lesson_plans_create_form.end_date_required')),
-    // deadlineDate: Yup.date(),
-  })
+  });
 
   const defaultValues = {
     period: "",
@@ -193,9 +173,6 @@ export default function LessonPlanNewForm() {
     }
   }, [selectedGrade]);
 
-  console.log('validateDate', validateDate);
-  
-
   const handleCloseUploadFile = () => {
     setOpenUploadFile(false);
   };
@@ -253,44 +230,6 @@ export default function LessonPlanNewForm() {
     setValue("grade", e.target.value, { shouldValidate: true });
   }
 
-  const selectedNotificationValue = useWatch({
-    control,
-    name: 'notification',
-  });
-
-  const notificationDateValue = useWatch({
-    control,
-    name: 'notificationDate',
-  });
-
-  const addWeekdays = (startDate, numWeekdays) => {
-    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
-    const currentDate = new Date(startDate);
-    while (numWeekdays > 0) {
-      currentDate.setTime(currentDate.getTime() + oneDayInMilliseconds);
-      if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
-        // eslint-disable-next-line no-plusplus
-        numWeekdays--;
-      }
-    }
-    return currentDate;
-  }
-
-  useEffect(() => {
-    if (!selectedNotification) {
-      const totalDays = 7;
-      const currentDate = new Date();
-      const resultDate = addWeekdays(currentDate, totalDays);
-      setDeadlineDate(resultDate);
-    } else {
-      const totalDays = 7;
-      setValue("deadlineDate", '');
-      const currentNotificationDate = new Date(notificationDateValue);
-      const resultDate = addWeekdays(currentNotificationDate, totalDays);
-      setDeadlineDate(resultDate);
-    }
-  }, [selectedNotification, notificationDateValue]);
-
   function removeDuplicates(arr) {
     return arr.filter((obj, index) => {
       const firstIndex = arr.findIndex((item) => JSON.stringify(item) === JSON.stringify(obj));
@@ -304,49 +243,26 @@ export default function LessonPlanNewForm() {
     setSelectedStudent(validValues);
   }
 
-  useEffect(() => {
-    if (selectedNotificationValue === 'no') {
-      setSelectedNotification(true);
-    } else {
-      setSelectedNotification(false);
-    }
-  }, [selectedNotificationValue]);
-
   const isWeekend = (date) => {
     const currentDate = new Date(date);
     const currentDay = currentDate.getDay();
     return currentDay === 0 || currentDay === 6;
   };
 
-  function formatDateSpanish(date) {
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleString('es-ES', options);
-  }
-
   const onSubmit = async (data) => {
-    const { notification, grade: schedule, period, resources } = data;
-    let { notificationDate } = data;
-    if (notification === 'yes') {
-      notificationDate = null;
-    }
+    const { grade: schedule, period, resources } = data;
     data = {
       ...data,
-      notificationDate,
       scheduleId: schedule,
       periodId: period,
       date: data.date.toISOString(),
-      deadlineDate: new Date(currentDeadlineDate)
     }
-    const lessonPlanResponse = await createLessonPlan(data, resources);
+    const remedialPlanResponse = await createRemedialPlan(data, resources);
 
-    if (lessonPlanResponse.errorMessage) {
-      enqueueSnackbar(lessonPlanResponse.errorMessage, manualHideErrorSnackbarOptions);
+    if (remedialPlanResponse.errorMessage) {
+      enqueueSnackbar(remedialPlanResponse.errorMessage, manualHideErrorSnackbarOptions);
     } else {
-      enqueueSnackbar(lessonPlanResponse.message, { variant: 'success', autoHideDuration: 5000 });
-      if (notification === 'no') {
-        const formattedDate = formatDateSpanish(notificationDate);
-        enqueueSnackbar(`Students will be notified ${formattedDate} at 8:00 a.m.`, { variant: 'success', autoHideDuration: 5000 });
-      }
+      enqueueSnackbar(remedialPlanResponse.message, { variant: 'success', autoHideDuration: 5000 });
       navigate(PATH_DASHBOARD.lessonPlan.listTeacherPlans);
     }
   };
@@ -490,11 +406,18 @@ export default function LessonPlanNewForm() {
                   (student) => ({id: student.id, displayName: `${student.user.name} ${student.user.lastName}`})
                 )}
                 getOptionLabel={(option) => option.displayName}
-                // setcustomkey={(option) => option.id}
                 ChipProps={{ size: "small" }}
                 disabled={fields}
               />
               <RHFTextField name="purposeOfClass" disabled={fields} label={translate('lesson_plans_create_form.purpose')} />
+              <RHFTextField
+                name="resultado"
+                label="Resultado de Aprendizaje"
+                fullWidth
+                multiline
+                rows={3}
+                disabled={fields}
+              />
               <RHFTextField
                 name="bibliography"
                 label={translate('lesson_plans_create_form.biblio')}
@@ -526,76 +449,6 @@ export default function LessonPlanNewForm() {
                 multiline
                 rows={3}
                 disabled={fields}
-              />
-              {
-                validateDate && 
-                <Stack spacing={1}>
-                  <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                    {translate('lesson_plans_create_form.notify_students')}
-                  </Typography>
-                  <RHFRadioGroup control={control} row spacing={4} name="notification" options={NOTIFICATION_OPTION} />
-              </Stack>
-              }
-
-              {selectedNotification && (
-                <Controller
-                    name="notificationDate"
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <DatePicker
-                        minTime={new Date(new Date().setHours(8))}
-                        maxTime={new Date(new Date().setHours(16))}
-                        minDate={tomorrow}
-                        defaultValue={today}
-                        shouldDisableDate={isWeekend}
-                        format="do MMMM yyyy"
-                        views={['year', 'month', 'day']}
-                        label={translate('lesson_plans_create_form.notify_date')}
-                        value={field.value}
-                        
-                        onChange={(newValue) => {
-                          field.onChange(newValue);
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            fullWidth
-                            error={!!error}
-                            helperText={error?.message}
-                          />
-                        )}
-                        disabled={fields}
-                      />
-                    )}
-                  />
-              )}
-                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                    {translate('lesson_plans_create_form.deadline')}
-                </Typography>
-              <Controller
-                name="deadlineDate"
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <DatePicker
-                    minDate={tomorrow}
-                    defaultValue={today}
-                    shouldDisableDate={isWeekend}
-                    format="do MMMM yyyy HH"
-                    views={['year', 'month', 'day']}
-                    label={translate('lesson_plans_create_form.deadline')}
-                    value={currentDeadlineDate}
-                    onChange={setDeadlineDate}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        fullWidth
-                        error={!!error}
-                        helperText={error?.message}
-                      />
-                    )}
-                    disabled
-                  />
-                )}
               />
             </Stack>
           </Card>
