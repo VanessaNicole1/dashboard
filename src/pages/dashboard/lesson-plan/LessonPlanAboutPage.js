@@ -9,15 +9,18 @@ import { getSubjects } from "../../../services/subject";
 import AnalyticsLessonPlans from "../../../sections/dashboard/general/app/AnalyticsLessonPlans";
 import UsersTop from "../../../sections/dashboard/general/app/UsersTop";
 import { getLessonPlans } from "../../../services/lesson-plan";
+import LessonPlanTypeTotal from "../../../sections/dashboard/general/app/LessonPlanTypeTotal";
 
 export default function LessonPlanAboutPage () {
 
-  const { themeLayout, themeStretch } = useSettingsContext();
+  const { themeStretch } = useSettingsContext();
+  const theme = useTheme();
   const [users, setUsers] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [periodId, setPeriodId] = useState("9deb297b-2b2b-4177-a590-85955dfa9d79");
   const [currentLessonPlans, setLessonPlans] = useState([]);
-  const theme = useTheme();
+  const [totalLessonPlans, setTotalLessonPlans] = useState(0);
+  const [lessonPlanTypes, setLessonPlanTypes] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -105,6 +108,18 @@ export default function LessonPlanAboutPage () {
         value: unacceptedLessonPlans.length
       }
       setLessonPlans([acceptedLessonPlansData, unacceptedLessonPlansData]);
+      const normalLessonPlans = lessonPlansToPresent.filter((lessonPlan) => lessonPlan.type === 'NORMAL');
+      const remedialLessonPlans = lessonPlansToPresent.filter((lessonPlan) => lessonPlan.type === 'REMEDIAL');
+      const normalLessonPlansData = {
+        label: 'Plan de Clase',
+        value: normalLessonPlans.length,
+      }
+      const remedialLessonPlansData = {
+        label: 'Plan Remedial',
+        value: remedialLessonPlans.length
+      }
+      setTotalLessonPlans(lessonPlansToPresent.length);
+      setLessonPlanTypes([normalLessonPlansData, remedialLessonPlansData])
     };
     fetchLessonPlans();
   }, [periodId]);
@@ -148,6 +163,9 @@ export default function LessonPlanAboutPage () {
             <SubjectsTop title="Subject List" list={subjects} />
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
+            <SubjectsTop title="Subject List" list={subjects} />
+          </Grid>
+          <Grid item xs={12} md={6} lg={4}>
             <AnalyticsLessonPlans
               title="Planes de clases"
               chart={{
@@ -158,7 +176,16 @@ export default function LessonPlanAboutPage () {
                 ],
               }}
             />
-      </Grid>
+          </Grid>
+          <Grid item xs={12} md={6} lg={4}>
+            <LessonPlanTypeTotal
+              title="Planes de Clases y Planes de Clases Remediales"
+              total={totalLessonPlans}
+              chart={{
+                series: lessonPlanTypes,
+              }}
+            />
+          </Grid>
         </Grid>
     </Container>
           }
