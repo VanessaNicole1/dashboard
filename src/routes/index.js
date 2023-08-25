@@ -2,8 +2,6 @@ import { Navigate, useRoutes } from "react-router-dom";
 import AuthGuard from "../auth/AuthGuard";
 import GuestGuard from "../auth/GuestGuard";
 import RoleBasedGuard from "../auth/RoleBasedGuard";
-// TODO: Check after if this is necessary.
-import { PATH_AFTER_LOGIN } from "../config-global";
 import DashboardLayout from "../layouts/dashboard/DashboardLayout";
 import { ROLES } from "../layouts/dashboard/nav/config-navigation";
 import LessonPlanAboutPage from "../pages/dashboard/lesson-plan/LessonPlanAboutPage";
@@ -39,6 +37,7 @@ import { RemedialTeacherPage } from "../pages/dashboard/lesson-plan/remedial/Rem
 import { RemedialManagerPage } from "../pages/dashboard/lesson-plan/remedial/RemedialManagerPage";
 import { RemedialLessonPlanAboutPage } from "../pages/dashboard/lesson-plan/remedial/RemedialLessonPlanAboutPage";
 import RemedialPlanCreatePage from "../pages/dashboard/remedial-plan/RemedialPlanCreatePage";
+import { RemedialplanTeacherViewPage } from "../pages/dashboard/remedial-plan/RemedialPlanTeacherViewPage";
 
 export default function Router() {
   const AuthRoutes = {
@@ -202,7 +201,14 @@ export default function Router() {
               </RoleBasedGuard>
             )
           },
-        ],
+          { path: 'teacher/remedial-plan/view/:remedialPlanId',
+            element: (
+              <RoleBasedGuard hasContent roles={[ROLES.teacher]}>
+                <RemedialplanTeacherViewPage />
+              </RoleBasedGuard>
+            )
+          }
+        ]
       },
       {
         path: "user",
