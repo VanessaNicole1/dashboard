@@ -25,7 +25,7 @@ export const getPeriods = async (filterPeriod) => {
 
 export const getActivePeriods = async () => {
   try  {
-    const { data: periods } = await axios.post('/periods', {isActive: true});
+    const { data: periods } = await axios.get('/periods/active');
     return periods;
   } catch (error) {
     return {

@@ -1,11 +1,17 @@
 import axios from "../utils/axios";
+import { LessonPlanType } from "../common/constants/lessonPlanType";
 
-export const getLessonPlans = async () => {
+
+export const getLessonPlans = async ({
+  period,
+  type = LessonPlanType.NORMAL,
+  isValidatedByManager
+}) => {
   try  {
-    const { data: lessonPlans } = await axios.get('/lessonplan');
-    // TODO: This should not be done, just a PATCH because the backend is not ready.
-    const finalLessonPlans = lessonPlans;
-    return finalLessonPlans;
+    const { data: lessonPlans } = await axios.get('/lesson-plans', {
+      params: { period, type, isValidatedByManager }
+    });
+    return lessonPlans;
   } catch (error) {
     return {
       message: "Couldn't retrieve lesson plans"
@@ -128,6 +134,15 @@ export const generateTeacherLessonPlanReport = async (userId, data) => {
     return { errorMessage: 'No existen planes de clases con los parámetros especificados' }
   }
 };
+
+export const getLessonPlanById = async (id) => {
+  try {
+    const {data: lessonPlan} = await axios.get(`lesson-plans/${id}`);
+    return lessonPlan;
+  } catch (error) {
+    return { errorMessage: error.message }
+  }
+}
 
 export const getLessonPlanWithPeriod = async (id) => {
   try {
