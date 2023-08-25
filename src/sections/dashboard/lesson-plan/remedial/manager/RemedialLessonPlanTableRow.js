@@ -6,30 +6,27 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
-import Label from '../../../../components/label';
-import Iconify from '../../../../components/iconify';
-import { convertToSpanishDate, getFullYears, getMonth } from '../../period/list/utils/date.utils';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
+import Label from '../../../../../components/label';
+import Iconify from '../../../../../components/iconify';
+import { convertToSpanishDate, getFullYears, getMonth } from '../../../period/list/utils/date.utils';
+import { PATH_DASHBOARD } from '../../../../../routes/paths';
 
-LessonPlanStudentTableRow.propTypes = {
+RemedialLessonPlanTableRow.propTypes = {
   row: PropTypes.object
 };
 
-export default function LessonPlanStudentTableRow({ row }) {
-  const getDateFormat = (date) => `${getMonth(date)} - ${getFullYears(date)}`;
+const getDateFormat = (date) => `${getMonth(date)} - ${getFullYears(date)}`;
 
-  const { isValidated, period, grade, teacher, subject, creationDate, lessonPlanId } = row;
-  const { startDate, endDate } = period;
-
+export default function RemedialLessonPlanTableRow({ row }) {
+  const { isValidated, period, grade, teacher, subject, creationDate, id } = row;
+  const { startDate, endDate } = period
   const convertedDate = convertToSpanishDate(creationDate);
-
   const startDateFormat = getDateFormat(startDate);
   const endDateFormat = getDateFormat(endDate);
-
   const navigate = useNavigate();
 
   const handleValidate = () => {
-    navigate(`${PATH_DASHBOARD.lessonPlan.studentValidate}/${lessonPlanId}`);
+    navigate(`${PATH_DASHBOARD.lessonPlan.lessonPlanRemedialTracking(id)}`);
   };
 
   return (
@@ -63,9 +60,9 @@ export default function LessonPlanStudentTableRow({ row }) {
       </TableCell>
 
       <TableCell align="center">
-        <Tooltip title="Validar">
+        <Tooltip title="Seguimiento">
           <IconButton onClick={handleValidate}>
-            <Iconify icon="ic:outline-rate-review" />
+            <Iconify icon="ph:eye" />
           </IconButton>
         </Tooltip>
       </TableCell>

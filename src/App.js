@@ -1,6 +1,5 @@
 import './locales/i18n';
 
-// scroll bar
 import 'simplebar/src/simplebar.css';
 
 // lightbox
@@ -9,30 +8,24 @@ import 'yet-another-react-lightbox/styles.css';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 
-// editor
 import 'react-quill/dist/quill.snow.css';
 
-// slick-carousel
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-// lazy image
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider as ReduxProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
-// @mui
+
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-// redux
 import { store, persistor } from './redux/store';
-// routes
 import Router from './routes';
 
 import ThemeProvider from './theme';
-
 import ThemeLocalization from './locales';
 
 import { StyledChart } from './components/chart';

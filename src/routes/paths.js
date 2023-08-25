@@ -51,6 +51,14 @@ export const PATH_DASHBOARD = {
     lessonPlanView: path(ROOTS_DASHBOARD, '/lesson-plan/teacher/view'),
     edit: (id) => path(ROOTS_DASHBOARD, `/lesson-plan/${id}/edit`),
   },
+  remedialLessonPlan: {
+    root: path(ROOTS_DASHBOARD, '/lesson-plan-remedial'),
+    information: path(ROOTS_DASHBOARD, '/lesson-plan-remedial/about'),
+    listStudentRemedialPlans: path(ROOTS_DASHBOARD, '/lesson-plan-remedial/student'),
+    listTeacherRemedialPlans: path(ROOTS_DASHBOARD, '/lesson-plan-remedial/teacher'),
+    listManagerRemedialPlans: path(ROOTS_DASHBOARD, '/lesson-plan-remedial/manager'),
+    lessonPlanRemedialTracking: (id) => path(ROOTS_DASHBOARD, `/lesson-plan-remedial/manager/tracking/${id}`)
+  },
   roles: {
     root: path(ROOTS_DASHBOARD, '/roles'),
     listRoles: path(ROOTS_DASHBOARD, '/roles/list'),
@@ -115,12 +123,3 @@ export const PATH_DASHBOARD = {
     demoEdit: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
   },
 };
-
-export const PATH_ZONE_ON_STORE = 'https://mui.com/store/items/zone-landing-page/';
-
-export const PATH_MINIMAL_ON_STORE = 'https://mui.com/store/items/minimal-dashboard/';
-
-export const PATH_FREE_VERSION = 'https://mui.com/store/items/minimal-dashboard-free/';
-
-export const PATH_FIGMA_PREVIEW =
-  'https://www.figma.com/file/rWMDOkMZYw2VpTdNuBBCvN/%5BPreview%5D-Minimal-Web.26.11.22?node-id=0%3A1&t=ya2mDFiuhTXXLLF1-1';
