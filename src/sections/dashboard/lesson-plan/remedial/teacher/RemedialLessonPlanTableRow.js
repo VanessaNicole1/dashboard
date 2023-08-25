@@ -8,21 +8,16 @@ import {
 } from '@mui/material';
 import Label from '../../../../../components/label';
 import Iconify from '../../../../../components/iconify';
-import { convertToSpanishDate, getFullYears, getMonth } from '../../../period/list/utils/date.utils';
+import { convertToSpanishDate } from '../../../period/list/utils/date.utils';
 import { PATH_DASHBOARD } from '../../../../../routes/paths';
 
 RemedialLessonPlanTableRow.propTypes = {
   row: PropTypes.object
 };
 
-const getDateFormat = (date) => `${getMonth(date)} - ${getFullYears(date)}`;
-
 export default function RemedialLessonPlanTableRow({ row }) {
-  const { isValidated, period, grade, teacher, subject, creationDate, id } = row;
-  const { startDate, endDate } = period
+  const { isValidated, grade, teacher, subject, creationDate, id, hasQualified } = row;
   const convertedDate = convertToSpanishDate(creationDate);
-  const startDateFormat = getDateFormat(startDate);
-  const endDateFormat = getDateFormat(endDate);
   const navigate = useNavigate();
 
   const handleValidate = () => {
@@ -31,7 +26,6 @@ export default function RemedialLessonPlanTableRow({ row }) {
 
   return (
     <TableRow hover >
-      <TableCell align="center">{ `${startDateFormat} - ${endDateFormat}` }</TableCell>
 
       <TableCell align="left">
         {convertedDate}
@@ -49,13 +43,23 @@ export default function RemedialLessonPlanTableRow({ row }) {
         {subject.name}
       </TableCell>
 
-      <TableCell align="left">
+      <TableCell align="center">
         <Label
           variant="soft"
           color={ isValidated ? 'success' : 'warning' }
           sx={{ textTransform: 'capitalize' }}
         >
-          { isValidated ? 'Validated' : 'Not Validated' }
+          { isValidated ? 'Validado' : 'Pendiente' }
+        </Label>
+      </TableCell>
+
+      <TableCell align="center">
+        <Label
+          variant="soft"
+          color={ hasQualified ? 'success' : 'warning' }
+          sx={{ textTransform: 'capitalize' }}
+        >
+          { hasQualified ? 'Aceptado' : 'Pendiente' }
         </Label>
       </TableCell>
 

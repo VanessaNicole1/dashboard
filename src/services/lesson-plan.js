@@ -5,11 +5,23 @@ import { LessonPlanType } from "../common/constants/lessonPlanType";
 export const getLessonPlans = async ({
   period,
   type = LessonPlanType.NORMAL,
-  isValidatedByManager
+  isValidatedByManager = undefined,
+  userId = undefined
 }) => {
+
+  const additionalParams = {}
+
+  if (isValidatedByManager !== undefined) {
+    additionalParams.isValidatedByManager = isValidatedByManager;
+  }
+
+  if (userId) {
+    additionalParams.userId = userId;
+  }
+
   try  {
     const { data: lessonPlans } = await axios.get('/lesson-plans', {
-      params: { period, type, isValidatedByManager }
+      params: { period, type, ...additionalParams }
     });
     return lessonPlans;
   } catch (error) {

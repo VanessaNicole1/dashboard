@@ -35,7 +35,7 @@ export const RemedialTrackingPage = () => {
           heading="Plan de Clase Remedial"
           links={[
             { name: "Dashboard", href: PATH_DASHBOARD.root },
-            { name: "Planes de Clase Remedial", href: PATH_DASHBOARD.lessonPlan.listManagerRemedialPlans },
+            { name: "Planes de Clase Remedial", href: PATH_DASHBOARD.remedialLessonPlan.information },
             { name: remedialLessonPlan.topic },
           ]}
         />
