@@ -47,6 +47,7 @@ const navConfig = [
           { title: 'Listar', path: PATH_DASHBOARD.remedialLessonPlan.listStudentRemedialPlans, roles: [ROLES.student] },
           { title: 'Listar', path: PATH_DASHBOARD.remedialLessonPlan.listTeacherRemedialPlans, roles: [ROLES.teacher] },
           { title: 'Listar (Director)', path: PATH_DASHBOARD.remedialLessonPlan.listManagerRemedialPlans, roles: [ROLES.manager] },
+          { title: 'Crear', path: PATH_DASHBOARD.remedialLessonPlan.create, roles: [ROLES.teacher] },
         ]
       },
       {

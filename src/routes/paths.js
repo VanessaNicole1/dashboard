@@ -57,7 +57,8 @@ export const PATH_DASHBOARD = {
     listStudentRemedialPlans: path(ROOTS_DASHBOARD, '/lesson-plan-remedial/student'),
     listTeacherRemedialPlans: path(ROOTS_DASHBOARD, '/lesson-plan-remedial/teacher'),
     listManagerRemedialPlans: path(ROOTS_DASHBOARD, '/lesson-plan-remedial/manager'),
-    lessonPlanRemedialTracking: (id) => path(ROOTS_DASHBOARD, `/lesson-plan-remedial/manager/tracking/${id}`)
+    lessonPlanRemedialTracking: (id) => path(ROOTS_DASHBOARD, `/lesson-plan-remedial/manager/tracking/${id}`),
+    create: path(ROOTS_DASHBOARD, '/lesson-plan-remedial/teacher/create'),
   },
   roles: {
     root: path(ROOTS_DASHBOARD, '/roles'),
@@ -122,4 +123,8 @@ export const PATH_DASHBOARD = {
     edit: (id) => path(ROOTS_DASHBOARD, `/user/${id}/edit`),
     demoEdit: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
   },
+  remedialPlanTeacher: {
+    root: path(ROOTS_DASHBOARD, '/remedial-plan'),
+    create: path(ROOTS_DASHBOARD, '/remedial-plan/create'),
+  }
 };

@@ -179,3 +179,47 @@ export const generateLessonPlanReport = async (lessonPlanId) => {
     return { errorMessage: 'No existen planes de clases con los parámetros especificados' }
   }
 }
+
+export const createRemedialPlan = async (data, resources) => {
+  try {
+    const studentIds = data.students.map((student) => student.id);
+    data = {
+      ...data,
+      students: studentIds
+    }
+    const formData = new FormData();
+    resources.forEach(element => {
+      formData.append('files', element);
+    });
+    delete data.resources;
+
+    for (const key in data) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (data.hasOwnProperty(key)) {
+        formData.append(key, data[key]);
+      }
+    }
+    await axios.post('/lesson-plans/remedial-plan', formData);
+    return {
+      message: 'Plan de Clase Remedial creado con éxito',
+    };
+  } catch (error) {
+    return { errorMessage: error.message }
+  }
+}
+
+export const uploadSignedReportByTeacher = async (remedialPlanId, signedReport) => {
+  try {
+    const formData = new FormData();
+    signedReport.forEach(element => {
+      formData.append('file', element);
+    });
+    await axios.post(`/lesson-plans/signed-report-by-teacher/${remedialPlanId}`, formData);
+    return {
+      message: 'El reporte del Plan de Clase Remedial se ha subido con éxito',
+    };
+  } catch (error) {
+    return { errorMessage: error.message }
+  }
+
+}
