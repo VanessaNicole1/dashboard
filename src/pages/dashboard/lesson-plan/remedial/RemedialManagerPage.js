@@ -162,7 +162,7 @@ export const RemedialManagerPage = () => {
   return (
     <>
       <Helmet>
-        <title> Lesson Plan Remedial - Director de Carrera </title>
+        <title> Plan de Clase Remedial - Director de Carrera </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : "lg"}>

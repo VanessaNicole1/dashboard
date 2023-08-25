@@ -71,7 +71,6 @@ export default function LessonPlanListTeacherPage() {
 
   const { translate } = useLocales();
 
-
   const STATUS_OPTIONS = ['all', translate('teachers_lesson_plans.validated'), translate('teachers_lesson_plans.not_validated')];
 
   useEffect(() => {
