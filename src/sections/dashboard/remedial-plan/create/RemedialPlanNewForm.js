@@ -61,6 +61,7 @@ export default function RemedialPlanNewForm() {
     materials: Yup.string().required(translate('lesson_plans_create_form.materials_required')),
     evaluation: Yup.string().required(translate('lesson_plans_create_form.evaluation_required')),
     comments: Yup.string().required(translate('lesson_plans_create_form.comments_required')),
+    results: Yup.string().required("Los resultados de apredizaje son requeridos"),
   });
 
   const defaultValues = {
@@ -79,6 +80,7 @@ export default function RemedialPlanNewForm() {
     comments: "",
     resources: [],
     notification: "yes",
+    results: "",
     notificationDate: new Date(),
     deadlineDate: new Date(),
   };
@@ -411,7 +413,7 @@ export default function RemedialPlanNewForm() {
               />
               <RHFTextField name="purposeOfClass" disabled={fields} label={translate('lesson_plans_create_form.purpose')} />
               <RHFTextField
-                name="resultado"
+                name="results"
                 label="Resultado de Aprendizaje"
                 fullWidth
                 multiline
