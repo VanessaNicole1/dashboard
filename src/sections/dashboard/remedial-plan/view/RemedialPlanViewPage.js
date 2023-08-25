@@ -9,14 +9,13 @@ import { useSettingsContext } from '../../../../components/settings';
 import { manualHideErrorSnackbarOptions } from '../../../../utils/snackBar';
 import { useSnackbar } from '../../../../components/snackbar';
 import { generateLessonPlanReport } from '../../../../services/lesson-plan';
-import ViewLessonPlanToolBar from '../../lesson-plan/view/ViewLessonPlanToolBar';
 import LessonPlanContentTeacherDetails from '../../lesson-plan/view/LessonPlanContentTeacherDetails';
 import LessonPlanTeacherInfo from '../../lesson-plan/view/LessonPlanTeacherInfo';
 import ViewRemedialPlanToolBar from './ViewRemedialPlanToolBar';
 
 // TODO: Add i18n
 export default function RemedialPlanViewPage({ lessonPlan, lessonPlanTracking }) {
-  const { schedule: { teacher, grade, subject } } = lessonPlan;
+  const { id, schedule: { teacher, grade, subject } } = lessonPlan;
   const lessonPlanCreationDate = new Date(lessonPlan.createdAt);
   const settings = useSettingsContext();
   const [students, setStudents] = useState([]);
@@ -47,6 +46,7 @@ export default function RemedialPlanViewPage({ lessonPlan, lessonPlanTracking })
         createdAt={lessonPlanCreationDate}
         onPrint={handlePrint}
         isThePrintLoading={isPrintLoading}
+        remedialPlanId={id}
       />
 
       <Grid container spacing={3}>

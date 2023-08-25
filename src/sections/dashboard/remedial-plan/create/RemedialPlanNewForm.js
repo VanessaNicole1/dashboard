@@ -265,7 +265,7 @@ export default function RemedialPlanNewForm() {
       enqueueSnackbar(remedialPlanResponse.errorMessage, manualHideErrorSnackbarOptions);
     } else {
       enqueueSnackbar(remedialPlanResponse.message, { variant: 'success', autoHideDuration: 5000 });
-      navigate(PATH_DASHBOARD.lessonPlan.listTeacherPlans);
+      navigate(PATH_DASHBOARD.remedialLessonPlan.listTeacherRemedialPlans);
     }
   };
   

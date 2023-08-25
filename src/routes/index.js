@@ -194,14 +194,14 @@ export default function Router() {
               </RoleBasedGuard>
             ),
           },
-          { path: 'create', 
+          { path: 'teacher/create', 
             element: (
               <RoleBasedGuard hasContent roles={[ROLES.teacher]}>
                 <RemedialPlanCreatePage />
               </RoleBasedGuard>
             )
           },
-          { path: 'teacher/remedial-plan/view/:remedialPlanId',
+          { path: 'teacher/view/:remedialPlanId',
             element: (
               <RoleBasedGuard hasContent roles={[ROLES.teacher]}>
                 <RemedialplanTeacherViewPage />

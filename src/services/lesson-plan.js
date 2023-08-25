@@ -207,3 +207,19 @@ export const createRemedialPlan = async (data, resources) => {
     return { errorMessage: error.message }
   }
 }
+
+export const uploadSignedReportByTeacher = async (remedialPlanId, signedReport) => {
+  try {
+    const formData = new FormData();
+    signedReport.forEach(element => {
+      formData.append('file', element);
+    });
+    await axios.post(`/lesson-plans/signed-report-by-teacher/${remedialPlanId}`, formData);
+    return {
+      message: 'El reporte del Plan de Clase Remedial se ha subido con éxito',
+    };
+  } catch (error) {
+    return { errorMessage: error.message }
+  }
+
+}

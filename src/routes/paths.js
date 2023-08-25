@@ -58,7 +58,7 @@ export const PATH_DASHBOARD = {
     listTeacherRemedialPlans: path(ROOTS_DASHBOARD, '/lesson-plan-remedial/teacher'),
     listManagerRemedialPlans: path(ROOTS_DASHBOARD, '/lesson-plan-remedial/manager'),
     lessonPlanRemedialTracking: (id) => path(ROOTS_DASHBOARD, `/lesson-plan-remedial/manager/tracking/${id}`),
-    create: path(ROOTS_DASHBOARD, '/lesson-plan-remedial/create'),
+    create: path(ROOTS_DASHBOARD, '/lesson-plan-remedial/teacher/create'),
   },
   roles: {
     root: path(ROOTS_DASHBOARD, '/roles'),
