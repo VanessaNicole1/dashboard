@@ -39,7 +39,7 @@ const TABLE_HEAD = [
 export const RemedialTeacherPage = () => {
   const { user } = useAuthContext();
   const { themeStretch } = useSettingsContext();
-
+  
   const [periods, setPeriods] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [filterContent, setFilterContent] = useState("");
