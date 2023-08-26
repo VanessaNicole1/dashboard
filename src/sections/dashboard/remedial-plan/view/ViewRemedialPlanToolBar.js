@@ -18,7 +18,8 @@ export default function ViewRemedialPlanToolBar({
   topic,
   onPrint,
   isThePrintLoading,
-  remedialPlanId
+  remedialPlanId,
+  isValidatedByManager
 }) {
 
   const [openUploadFile, setOpenUploadFile] = useState(false);
@@ -63,7 +64,7 @@ export default function ViewRemedialPlanToolBar({
         justifyContent="flex-end"
       >
         <Button
-          disabled={isThePrintLoading}
+          disabled={isValidatedByManager}
           color="inherit"
           variant="outlined"
           startIcon={<Iconify icon="mdi:sign" />}
@@ -83,5 +84,6 @@ ViewRemedialPlanToolBar.propTypes = {
   topic: PropTypes.string,
   onPrint: PropTypes.func,
   isThePrintLoading: PropTypes.bool,
-  remedialPlanId: PropTypes.string
+  remedialPlanId: PropTypes.string,
+  isValidatedByManager: PropTypes.bool
 };

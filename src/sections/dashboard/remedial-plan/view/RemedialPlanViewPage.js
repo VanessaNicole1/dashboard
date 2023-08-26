@@ -47,6 +47,7 @@ export default function RemedialPlanViewPage({ lessonPlan, lessonPlanTracking })
         onPrint={handlePrint}
         isThePrintLoading={isPrintLoading}
         remedialPlanId={id}
+        isValidatedByManager={lessonPlan.isValidatedByManager}
       />
 
       <Grid container spacing={3}>

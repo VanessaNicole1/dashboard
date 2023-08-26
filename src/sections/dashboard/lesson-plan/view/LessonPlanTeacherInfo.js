@@ -79,10 +79,9 @@ export default function LessonPlanTeacherInfo({ teacher, subject, grade, student
   );
 
   const renderResources = (
-    <Stack spacing={2}>
-      <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Recursos de la clase:
-      </Typography>
+    <>
+      <CardHeader title="Reporte Firmado"/>
+      <Stack spacing={2}>
       {remedialReports.map((resource, index) => (
         <FileRecentItem
           key={index}
@@ -91,6 +90,7 @@ export default function LessonPlanTeacherInfo({ teacher, subject, grade, student
         />
       ))}
     </Stack>
+    </>
   );
 
   return (
