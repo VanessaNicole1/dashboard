@@ -24,6 +24,10 @@ export default function RemedialLessonPlanTableRow({ row }) {
     navigate(`${PATH_DASHBOARD.remedialLessonPlan.lessonPlanRemedialTracking(id)}`);
   };
 
+  const handleViewRemedialPlan = () => {
+    navigate(`${PATH_DASHBOARD.remedialLessonPlan.remedialPlanView}/${id}`);
+  }
+
   return (
     <TableRow hover >
 
@@ -67,6 +71,11 @@ export default function RemedialLessonPlanTableRow({ row }) {
         <Tooltip title="Seguimiento">
           <IconButton onClick={handleValidate}>
             <Iconify icon="ph:eye" />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Ver">
+          <IconButton onClick={handleViewRemedialPlan}>
+            <Iconify icon="solar:document-linear" />
           </IconButton>
         </Tooltip>
       </TableCell>

@@ -15,7 +15,7 @@ import ViewRemedialPlanToolBar from './ViewRemedialPlanToolBar';
 
 // TODO: Add i18n
 export default function RemedialPlanViewPage({ lessonPlan, lessonPlanTracking }) {
-  const { id, schedule: { teacher, grade, subject } } = lessonPlan;
+  const { id, schedule: { teacher, grade, subject }, remedialReports } = lessonPlan;
   const lessonPlanCreationDate = new Date(lessonPlan.createdAt);
   const settings = useSettingsContext();
   const [students, setStudents] = useState([]);
@@ -64,6 +64,7 @@ export default function RemedialPlanViewPage({ lessonPlan, lessonPlanTracking })
             grade={grade}
             subject={subject}
             studentsValidated={students}
+            remedialReports={remedialReports}
           />
         </Grid>
       </Grid>

@@ -7,10 +7,16 @@ import Divider from '@mui/material/Divider';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import StudentsWhoValidated from '../update/StudentsWhoValidated';
+import FileRecentItem from '../../../file-manager/file-recent-item';
+import UploadReport from '../remedial/view/UploadReport';
 
 // TODO: Add i18n
-export default function LessonPlanTeacherInfo({ teacher, subject, grade, studentsValidated }) {
+export default function LessonPlanTeacherInfo({ teacher, subject, grade, studentsValidated, remedialReports }) {
   const { user } = teacher;
+
+  if (!remedialReports) {
+    remedialReports = [];
+  }
 
   const renderTeacher = (
     <>
@@ -88,6 +94,12 @@ export default function LessonPlanTeacherInfo({ teacher, subject, grade, student
 
       <StudentsWhoValidated title="Estudiantes" list={studentsValidated} />
 
+      <Divider sx={{ borderStyle: 'dashed' }} />
+
+      {
+        remedialReports.length > 0 &&  <UploadReport />
+      }
+
     </Card>
   );
 }
@@ -96,5 +108,6 @@ LessonPlanTeacherInfo.propTypes = {
   teacher: PropTypes.object,
   subject: PropTypes.object,
   grade: PropTypes.object,
-  studentsValidated: PropTypes.array
+  studentsValidated: PropTypes.array,
+  remedialReports: PropTypes.array,
 };

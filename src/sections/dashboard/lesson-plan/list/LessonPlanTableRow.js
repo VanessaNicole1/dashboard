@@ -118,8 +118,6 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
             {translate('teachers_lesson_plans.edit')}
           </MenuItem>
         }
-
-        
           <MenuItem
           onClick={() => {
             onViewRow();
