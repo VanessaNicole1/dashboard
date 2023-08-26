@@ -78,6 +78,21 @@ export default function LessonPlanTeacherInfo({ teacher, subject, grade, student
     </>
   );
 
+  const renderResources = (
+    <Stack spacing={2}>
+      <Typography variant="subtitle2" sx={{ mb: 1 }}>
+        Recursos de la clase:
+      </Typography>
+      {remedialReports.map((resource, index) => (
+        <FileRecentItem
+          key={index}
+          file={resource}
+          onDelete={() => console.info('DELETE', resource)}
+        />
+      ))}
+    </Stack>
+  );
+
   return (
     <Card>
       {renderTeacher}
@@ -97,7 +112,7 @@ export default function LessonPlanTeacherInfo({ teacher, subject, grade, student
       <Divider sx={{ borderStyle: 'dashed' }} />
 
       {
-        remedialReports.length > 0 &&  <UploadReport />
+        remedialReports.length > 0 &&  renderResources
       }
 
     </Card>
