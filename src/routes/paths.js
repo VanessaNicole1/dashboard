@@ -60,6 +60,7 @@ export const PATH_DASHBOARD = {
     lessonPlanRemedialTracking: (id) => path(ROOTS_DASHBOARD, `/lesson-plan-remedial/manager/tracking/${id}`),
     create: path(ROOTS_DASHBOARD, '/lesson-plan-remedial/teacher/create'),
     remedialPlanView: path(ROOTS_DASHBOARD, '/lesson-plan-remedial/teacher/view'),
+    remedialPlanViewManager: path(ROOTS_DASHBOARD, '/lesson-plan-remedial/manager/view'),
   },
   roles: {
     root: path(ROOTS_DASHBOARD, '/roles'),

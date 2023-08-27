@@ -221,5 +221,20 @@ export const uploadSignedReportByTeacher = async (remedialPlanId, signedReport) 
   } catch (error) {
     return { errorMessage: error.message }
   }
+}
 
+export const uploadSignedReportByManager = async (remedialPlanId, signedReport) => {
+  try {
+    const formData = new FormData();
+    signedReport.forEach(element => {
+      formData.append('file', element);
+    });
+    const uploadReportByManager = await axios.post(`/lesson-plans/signed-report-by-manager/${remedialPlanId}`, formData);
+    return {
+      data: uploadReportByManager,
+      message: 'El reporte firmado del Plan de Clase Remedial se ha subido con éxito',
+    };
+  } catch (error) {
+    return { errorMessage: error.message }
+  }
 }
