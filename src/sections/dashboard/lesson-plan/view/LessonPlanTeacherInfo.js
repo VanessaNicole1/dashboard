@@ -87,21 +87,25 @@ export default function LessonPlanTeacherInfo({ teacher, subject, grade, student
             Docente:
           </Box>
         </Stack>
-        <RemedialPlanFileTeacherItem
-          key={remedialReports[0].role}
+        {
+          remedialReports.length > 0 &&
+          <RemedialPlanFileTeacherItem
+          key={remedialReports[0] ? remedialReports[0].role : 0}
           file={remedialReports[0]}
-          onDelete={() => console.info('DELETE', remedialReports[0])}
         />
+        }
         <Stack direction="row" alignItems="center">
           <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
             Director:
           </Box>
         </Stack>
-        <RemedialPlanFileTeacherItem
-          key={remedialReports[1].role}
+        {
+          remedialReports.length > 1 &&
+          <RemedialPlanFileTeacherItem
+          key={remedialReports[1] ? remedialReports[1].role : 1}
           file={remedialReports[1]}
-          onDelete={() => console.info('DELETE', remedialReports[1])}
         />
+        }
        </>
       }
     </Stack>

@@ -87,19 +87,25 @@ export default function RemedialPlanManagerInfo({ teacher, subject, grade, stude
             Docente:
           </Box>
         </Stack>
-        <RemedialPlanFileRecentItem
-          key={remedialReports[0].role}
+        {
+          remedialReports.length > 0 && 
+          <RemedialPlanFileRecentItem
+          key={remedialReports[0] ? remedialReports[0].role : 0}
           file={remedialReports[0]}
         />
+        }
         <Stack direction="row" alignItems="center">
           <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
             Director:
           </Box>
         </Stack>
-        <RemedialPlanFileRecentItem
-          key={remedialReports[1].role}
+        {
+          remedialReports.length > 1 &&
+          <RemedialPlanFileRecentItem
+          key={remedialReports[1] ? remedialReports[1].role : 1}
           file={remedialReports[1]}
         />
+        }
        </>
       }
     </Stack>
