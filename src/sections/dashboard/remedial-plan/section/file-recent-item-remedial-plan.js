@@ -16,7 +16,7 @@ export default function RemedialPlanFileRecentItem({ file, onDelete, sx, ...othe
 
   const seeResource = (e) => {
     e.preventDefault();
-    window.open(`${HOST_API_KEY}/lesson-plans/resource/${file.url}`, '_blank');
+    window.open(`${HOST_API_KEY}/lesson-plans/remedial-report/${file.url}`, '_blank');
   }
 
   const renderAction = (

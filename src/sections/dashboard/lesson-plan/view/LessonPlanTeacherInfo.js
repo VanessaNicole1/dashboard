@@ -7,8 +7,7 @@ import Divider from '@mui/material/Divider';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import StudentsWhoValidated from '../update/StudentsWhoValidated';
-import FileRecentItem from '../../../file-manager/file-recent-item';
-import UploadReport from '../remedial/view/UploadReport';
+import RemedialPlanFileTeacherItem from '../../remedial-plan/section/file-recent-item-remedial-plan-teacher';
 
 // TODO: Add i18n
 export default function LessonPlanTeacherInfo({ teacher, subject, grade, studentsValidated, remedialReports }) {
@@ -80,21 +79,45 @@ export default function LessonPlanTeacherInfo({ teacher, subject, grade, student
 
   const renderResources = (
     <>
-      <CardHeader title="Reporte Firmado"/>
-      <Stack spacing={2}>
-      {remedialReports.map((resource, index) => (
-        <FileRecentItem
-          key={index}
-          file={resource}
-          onDelete={() => console.info('DELETE', resource)}
+      <CardHeader title="Reportes Firmados"/>
+      <Stack spacing={1.5} sx={{ p: 3, typography: 'body2' }}>
+      {remedialReports && <>
+        <Stack direction="row" alignItems="center">
+          <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
+            Docente:
+          </Box>
+        </Stack>
+        <RemedialPlanFileTeacherItem
+          key={remedialReports[0].role}
+          file={remedialReports[0]}
+          onDelete={() => console.info('DELETE', remedialReports[0])}
         />
-      ))}
+        <Stack direction="row" alignItems="center">
+          <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
+            Director:
+          </Box>
+        </Stack>
+        <RemedialPlanFileTeacherItem
+          key={remedialReports[1].role}
+          file={remedialReports[1]}
+          onDelete={() => console.info('DELETE', remedialReports[1])}
+        />
+       </>
+      }
     </Stack>
     </>
   );
 
   return (
     <Card>
+      {
+        remedialReports.length > 0 &&  <>
+         {
+          renderResources
+         }
+         <Divider sx={{ borderStyle: 'dashed' }} />
+        </>
+      }
       {renderTeacher}
 
       <Divider sx={{ borderStyle: 'dashed' }} />
@@ -108,13 +131,6 @@ export default function LessonPlanTeacherInfo({ teacher, subject, grade, student
       <Divider sx={{ borderStyle: 'dashed' }} />
 
       <StudentsWhoValidated title="Estudiantes" list={studentsValidated} />
-
-      <Divider sx={{ borderStyle: 'dashed' }} />
-
-      {
-        remedialReports.length > 0 &&  renderResources
-      }
-
     </Card>
   );
 }

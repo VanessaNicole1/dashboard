@@ -79,21 +79,43 @@ export default function RemedialPlanManagerInfo({ teacher, subject, grade, stude
 
   const renderResources = (
     <>
-      <CardHeader title="Reporte Firmado"/>
-      <Stack spacing={2}>
-      {remedialReports.map((resource, index) => (
+      <CardHeader title="Reportes Firmados"/>
+      <Stack spacing={1.5} sx={{ p: 3, typography: 'body2' }}>
+      {remedialReports && <>
+        <Stack direction="row" alignItems="center">
+          <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
+            Docente:
+          </Box>
+        </Stack>
         <RemedialPlanFileRecentItem
-          key={index}
-          file={resource}
-          onDelete={() => console.info('DELETE', resource)}
+          key={remedialReports[0].role}
+          file={remedialReports[0]}
         />
-      ))}
+        <Stack direction="row" alignItems="center">
+          <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
+            Director:
+          </Box>
+        </Stack>
+        <RemedialPlanFileRecentItem
+          key={remedialReports[1].role}
+          file={remedialReports[1]}
+        />
+       </>
+      }
     </Stack>
     </>
   );
 
   return (
     <Card>
+      {
+        remedialReports.length > 0 &&  <>
+         {
+          renderResources
+         }
+        <Divider sx={{ borderStyle: 'dashed' }} />
+        </>
+      }
       {renderTeacher}
 
       <Divider sx={{ borderStyle: 'dashed' }} />
@@ -107,13 +129,6 @@ export default function RemedialPlanManagerInfo({ teacher, subject, grade, stude
       <Divider sx={{ borderStyle: 'dashed' }} />
 
       <StudentsWhoAcceptRemedialPlan title="Estudiantes que deben aceptar el plan de clase remedial" list={studentsValidated} />
-
-      <Divider sx={{ borderStyle: 'dashed' }} />
-
-      {
-        remedialReports.length > 0 &&  renderResources
-      }
-
     </Card>
   );
 }
