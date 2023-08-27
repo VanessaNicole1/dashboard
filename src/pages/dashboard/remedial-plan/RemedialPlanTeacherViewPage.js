@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
 import { getLessonPlanWithPeriod } from "../../../services/lesson-plan";
-import LessonPlanViewPage from "../../../sections/dashboard/lesson-plan/view/LessonPlanViewPage";
 import RemedialPlanViewPage from "../../../sections/dashboard/remedial-plan/view/RemedialPlanViewPage";
 
 // TODO: Add i18n.
