@@ -1,23 +1,19 @@
 import PropTypes from "prop-types";
-
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-
 import { RouterLink } from "../../../../routes/components";
 import { fDateTime } from "../../../../utils/formatTime";
 import Iconify from "../../../../components/iconify/Iconify";
-import SignedFileDialog from "./SignedFileDialog";
+import SignedFileManagerDialog from "./SignedFileManagerDialog";
 
 // TODO: Add i18n
-export default function ViewRemedialPlanToolBar({
+export default function RemedialPlanManagerToolBar({
   backLink,
   createdAt,
   topic,
-  onPrint,
-  isThePrintLoading,
   remedialPlanId,
   isValidatedByManager
 }) {
@@ -31,6 +27,8 @@ export default function ViewRemedialPlanToolBar({
   const handleCloseUploadFile = () => {
     setOpenUploadFile(false);
   };
+
+  const handleValidateReport = () => {}
 
   return (
     <Stack
@@ -73,17 +71,15 @@ export default function ViewRemedialPlanToolBar({
           Firmar
         </Button>
       </Stack>
-      <SignedFileDialog onPrint={onPrint} isThePrintLoading={isThePrintLoading} remedialPlanId={remedialPlanId} open={openUploadFile} onClose={handleCloseUploadFile} />
+      <SignedFileManagerDialog onValidate={handleValidateReport} remedialPlanId={remedialPlanId} open={openUploadFile} onClose={handleCloseUploadFile} />
     </Stack>
   );
 }
 
-ViewRemedialPlanToolBar.propTypes = {
+RemedialPlanManagerToolBar.propTypes = {
   backLink: PropTypes.string,
   createdAt: PropTypes.instanceOf(Date),
   topic: PropTypes.string,
-  onPrint: PropTypes.func,
-  isThePrintLoading: PropTypes.bool,
   remedialPlanId: PropTypes.string,
   isValidatedByManager: PropTypes.bool
 };

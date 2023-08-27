@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -9,11 +10,11 @@ import { manualHideErrorSnackbarOptions } from '../../../../utils/snackBar';
 import { useSnackbar } from '../../../../components/snackbar';
 import { generateLessonPlanReport } from '../../../../services/lesson-plan';
 import LessonPlanContentTeacherDetails from '../../lesson-plan/view/LessonPlanContentTeacherDetails';
-import LessonPlanTeacherInfo from '../../lesson-plan/view/LessonPlanTeacherInfo';
-import ViewRemedialPlanToolBar from './ViewRemedialPlanToolBar';
+import RemedialPlanManagerInfo from '../section/RemedialPlanManagerInfo';
+import RemedialPlanManagerToolBar from '../section/RemedialPlanManagerToolBar';
 
 // TODO: Add i18n
-export default function RemedialPlanViewPage({ lessonPlan, lessonPlanTracking }) {
+export default function RemedialPlanViewManagerSection({ lessonPlan, lessonPlanTracking }) {
   const { id, schedule: { teacher, grade, subject }, remedialReports } = lessonPlan;
   const lessonPlanCreationDate = new Date(lessonPlan.createdAt);
   const settings = useSettingsContext();
@@ -39,7 +40,7 @@ export default function RemedialPlanViewPage({ lessonPlan, lessonPlanTracking })
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <ViewRemedialPlanToolBar
+      <RemedialPlanManagerToolBar
         topic={lessonPlan.topic}
         backLink={PATH_DASHBOARD.lessonPlan.listTeacherPlans}
         createdAt={lessonPlanCreationDate}
@@ -59,7 +60,7 @@ export default function RemedialPlanViewPage({ lessonPlan, lessonPlanTracking })
         </Grid>
 
         <Grid xs={12} md={4}>
-          <LessonPlanTeacherInfo
+          <RemedialPlanManagerInfo
             teacher={teacher}
             grade={grade}
             subject={subject}
@@ -72,7 +73,7 @@ export default function RemedialPlanViewPage({ lessonPlan, lessonPlanTracking })
   );
 }
 
-RemedialPlanViewPage.propTypes = {
+RemedialPlanViewManagerSection.propTypes = {
   lessonPlan: PropTypes.object,
   lessonPlanTracking: PropTypes.array
 };

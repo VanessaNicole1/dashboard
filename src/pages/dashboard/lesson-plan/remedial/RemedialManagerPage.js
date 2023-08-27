@@ -23,10 +23,10 @@ import CustomBreadcrumbs from "../../../../components/custom-breadcrumbs/CustomB
 import { useSettingsContext } from "../../../../components/settings";
 import { PATH_DASHBOARD } from "../../../../routes/paths";
 import LessonPlanToolbar from "../../../../sections/dashboard/lesson-plan/list/LessonPlanToolbar";
-import RemedialLessonPlanTableRow from "../../../../sections/dashboard/lesson-plan/remedial/manager/RemedialLessonPlanTableRow";
 import { getActivePeriods } from "../../../../services/period";
 import { getLessonPlans } from "../../../../services/lesson-plan";
 import { LessonPlanType } from "../../../../common/constants/lessonPlanType";
+import RemedialLessonPlanManagerTableRow from "../../../../sections/dashboard/lesson-plan/remedial/manager/RemedialLessonPlanTableRow";
 
 const PENDING_STATUS = "PENDING";
 const VALIDATED_STATUS = "VALIDATED";
@@ -219,7 +219,7 @@ export const RemedialManagerPage = () => {
                         page * rowsPerPage + rowsPerPage
                       )
                       .map((row) => (
-                        <RemedialLessonPlanTableRow
+                        <RemedialLessonPlanManagerTableRow
                           key={row.id}
                           row={row}
                           selected={selected.includes(row.id)}

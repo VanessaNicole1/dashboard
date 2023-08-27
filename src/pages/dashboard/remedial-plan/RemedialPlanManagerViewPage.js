@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
 import { getLessonPlanWithPeriod } from "../../../services/lesson-plan";
-import RemedialPlanViewPage from "../../../sections/dashboard/remedial-plan/view/RemedialPlanViewPage";
+import RemedialPlanViewManagerSection from "../../../sections/dashboard/remedial-plan/view/RemedialPlanViewManagerSection";
 
 // TODO: Add i18n.
-export const RemedialplanTeacherViewPage = () => {
+export const RemedialplanManagerViewPage = () => {
   const { remedialPlanId } = useParams();
   const [lessonPlan, setLessonPlan] = useState();
   const [lessonPlanTracking, setLessonPlanTracking] = useState();
@@ -41,7 +41,7 @@ export const RemedialplanTeacherViewPage = () => {
               <title> Dashboard: Plan de Clase Remedial</title>
             </Helmet>
 
-            <RemedialPlanViewPage 
+            <RemedialPlanViewManagerSection 
               lessonPlan={lessonPlan}
               lessonPlanTracking={lessonPlanTracking}
             />

@@ -6,11 +6,11 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
-import StudentsWhoValidated from '../update/StudentsWhoValidated';
-import RemedialPlanFileTeacherItem from '../../remedial-plan/section/file-recent-item-remedial-plan-teacher';
+import StudentsWhoAcceptRemedialPlan from './StudentsWhoAcceptRemedialPlan';
+import RemedialPlanFileRecentItem from './file-recent-item-remedial-plan';
 
 // TODO: Add i18n
-export default function LessonPlanTeacherInfo({ teacher, subject, grade, studentsValidated, remedialReports }) {
+export default function RemedialPlanManagerInfo({ teacher, subject, grade, studentsValidated, remedialReports }) {
   const { user } = teacher;
 
   if (!remedialReports) {
@@ -88,8 +88,8 @@ export default function LessonPlanTeacherInfo({ teacher, subject, grade, student
           </Box>
         </Stack>
         {
-          remedialReports.length > 0 &&
-          <RemedialPlanFileTeacherItem
+          remedialReports.length > 0 && 
+          <RemedialPlanFileRecentItem
           key={remedialReports[0] ? remedialReports[0].role : 0}
           file={remedialReports[0]}
         />
@@ -101,7 +101,7 @@ export default function LessonPlanTeacherInfo({ teacher, subject, grade, student
         </Stack>
         {
           remedialReports.length > 1 &&
-          <RemedialPlanFileTeacherItem
+          <RemedialPlanFileRecentItem
           key={remedialReports[1] ? remedialReports[1].role : 1}
           file={remedialReports[1]}
         />
@@ -119,7 +119,7 @@ export default function LessonPlanTeacherInfo({ teacher, subject, grade, student
          {
           renderResources
          }
-         <Divider sx={{ borderStyle: 'dashed' }} />
+        <Divider sx={{ borderStyle: 'dashed' }} />
         </>
       }
       {renderTeacher}
@@ -134,12 +134,12 @@ export default function LessonPlanTeacherInfo({ teacher, subject, grade, student
 
       <Divider sx={{ borderStyle: 'dashed' }} />
 
-      <StudentsWhoValidated title="Estudiantes" list={studentsValidated} />
+      <StudentsWhoAcceptRemedialPlan title="Estudiantes que deben aceptar el plan de clase remedial" list={studentsValidated} />
     </Card>
   );
 }
 
-LessonPlanTeacherInfo.propTypes = {
+RemedialPlanManagerInfo.propTypes = {
   teacher: PropTypes.object,
   subject: PropTypes.object,
   grade: PropTypes.object,

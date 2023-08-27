@@ -38,6 +38,7 @@ import { RemedialManagerPage } from "../pages/dashboard/lesson-plan/remedial/Rem
 import { RemedialLessonPlanAboutPage } from "../pages/dashboard/lesson-plan/remedial/RemedialLessonPlanAboutPage";
 import RemedialPlanCreatePage from "../pages/dashboard/remedial-plan/RemedialPlanCreatePage";
 import { RemedialplanTeacherViewPage } from "../pages/dashboard/remedial-plan/RemedialPlanTeacherViewPage";
+import { RemedialplanManagerViewPage } from "../pages/dashboard/remedial-plan/RemedialPlanManagerViewPage";
 
 export default function Router() {
   const AuthRoutes = {
@@ -194,20 +195,30 @@ export default function Router() {
               </RoleBasedGuard>
             ),
           },
-          { path: 'teacher/create', 
+          { 
+            path: 'teacher/create', 
             element: (
               <RoleBasedGuard hasContent roles={[ROLES.teacher]}>
                 <RemedialPlanCreatePage />
               </RoleBasedGuard>
             )
           },
-          { path: 'teacher/view/:remedialPlanId',
+          { 
+            path: 'teacher/view/:remedialPlanId',
             element: (
               <RoleBasedGuard hasContent roles={[ROLES.teacher]}>
                 <RemedialplanTeacherViewPage />
               </RoleBasedGuard>
             )
-          }
+          },
+          {
+            path: "manager/view/:remedialPlanId",
+            element: (
+              <RoleBasedGuard hasContent roles={[ROLES.manager]}>
+                <RemedialplanManagerViewPage />
+              </RoleBasedGuard>
+            ),
+          },
         ]
       },
       {
