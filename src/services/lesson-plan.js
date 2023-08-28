@@ -41,6 +41,17 @@ export const getLessonPlans = async ({
   }
 };
 
+export const getLessonPlansTypes = async () => {
+  try  {
+    const { data: lessonPlans } = await axios.get('/lesson-plans/all-types');
+    return lessonPlans;
+  } catch (error) {
+    return {
+      message: "Couldn't retrieve lesson plans"
+    }
+  }
+};
+
 export const createLessonPlan = async (data, resources) => {
   try {
     const studentIds = data.students.map((student) => student.id);

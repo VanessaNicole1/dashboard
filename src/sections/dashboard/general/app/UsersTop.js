@@ -14,19 +14,14 @@ UsersTop.propTypes = {
 };
 
 export default function UsersTop({ title, subheader, list, ...other }) {
-
   
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} />
 
       <Stack spacing={3} sx={{ p: 3 }}>
-        {orderBy(list, ['total'], ['desc']).map((user
-        , index) => (
-          <AuthorItem key={user
-            .id} user
-            ={user
-            } index={index} />
+        {orderBy(list, ['total'], ['desc']).map((user, index) => (
+          <AuthorItem key={user.id} user={user} index={index} />
             ))}
       </Stack>
     </Card>
