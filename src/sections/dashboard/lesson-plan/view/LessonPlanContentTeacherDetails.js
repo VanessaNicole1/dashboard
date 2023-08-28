@@ -107,7 +107,7 @@ export default function LessonPlanContentTeacherDetails({ lessonPlan }) {
           <Typography variant="subtitle2">
             Fecha máxima de calificación
           </Typography>
-          {fDate(new Date(lessonPlan.date))}
+          {fDate(new Date(lessonPlan.maximumValidationDate))}
         </Stack>
       </Box>
 
