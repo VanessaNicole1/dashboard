@@ -188,7 +188,7 @@ export default function Router() {
             ),
           },
           {
-            path: "manager/tracking/:id",
+            path: "tracking/:id",
             element: (
               <RoleBasedGuard hasContent roles={[ROLES.manager]}>
                 <RemedialTrackingPage />

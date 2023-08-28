@@ -12,10 +12,12 @@ import { generateLessonPlanReport } from '../../../../services/lesson-plan';
 import LessonPlanContentTeacherDetails from '../../lesson-plan/view/LessonPlanContentTeacherDetails';
 import RemedialPlanManagerInfo from '../section/RemedialPlanManagerInfo';
 import RemedialPlanManagerToolBar from '../section/RemedialPlanManagerToolBar';
+import { RemedialLessonPlanStepStatus } from '../../../../common/remedialLessonPlanStepStatus';
 
-// TODO: Add i18n
+const signedByTeacherStepId = 2;
 export default function RemedialPlanViewManagerSection({ lessonPlan, lessonPlanTracking }) {
-  const { id, schedule: { teacher, grade, subject }, remedialReports } = lessonPlan;
+  const { id, schedule: { teacher, grade, subject }, remedialReports, trackingSteps } = lessonPlan;
+  const signedByTeacherStep = trackingSteps.find(step => step.id === signedByTeacherStepId);
   const lessonPlanCreationDate = new Date(lessonPlan.createdAt);
   const settings = useSettingsContext();
   const [students, setStudents] = useState([]);
@@ -41,6 +43,8 @@ export default function RemedialPlanViewManagerSection({ lessonPlan, lessonPlanT
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <RemedialPlanManagerToolBar
+        reports={remedialReports}
+        isSignedByTeacher={signedByTeacherStep.status === RemedialLessonPlanStepStatus.COMPLETED}
         topic={lessonPlan.topic}
         backLink={PATH_DASHBOARD.lessonPlan.listTeacherPlans}
         createdAt={lessonPlanCreationDate}

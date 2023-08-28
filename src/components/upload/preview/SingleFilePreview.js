@@ -1,8 +1,5 @@
 import PropTypes from 'prop-types';
-//
 import Image from '../../image';
-
-// ----------------------------------------------------------------------
 
 SingleFilePreview.propTypes = {
   file: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),

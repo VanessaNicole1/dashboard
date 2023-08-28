@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 import { getLessonPlanWithPeriod } from "../../../services/lesson-plan";
 import RemedialPlanViewPage from "../../../sections/dashboard/remedial-plan/view/RemedialPlanViewPage";
 
-// TODO: Add i18n.
 export const RemedialplanTeacherViewPage = () => {
   const { remedialPlanId } = useParams();
   const [lessonPlan, setLessonPlan] = useState();

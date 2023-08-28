@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
-import { Tooltip } from '@mui/material';
+import { Paper, Tooltip } from '@mui/material';
 import useResponsive from '../../../../hooks/useResponsive';
 import { HOST_API_KEY } from '../../../../config-global';
 import { fDateTime } from '../../../../utils/formatTime';
@@ -11,7 +11,7 @@ import { fData } from '../../../../utils/formatNumber';
 import Iconify from '../../../../components/iconify/Iconify';
 import FileThumbnail from '../../../../components/file-thumbnail/FileThumbnail';
 
-export default function RemedialPlanFileRecentItem({ file, onDelete, sx, ...other }) {
+export default function RemedialPlanFileRecentItem({  file, onDelete, sx, border = false, ...other }) {
   const smUp = useResponsive('up', 'sm');
 
   const seeResource = (e) => {
@@ -74,6 +74,7 @@ export default function RemedialPlanFileRecentItem({ file, onDelete, sx, ...othe
 
   return (
     <Stack
+      component={border ? Paper: null}
       variant="outlined"
       spacing={1}
       direction={{ xs: 'column', sm: 'row' }}
@@ -106,4 +107,5 @@ RemedialPlanFileRecentItem.propTypes = {
   file: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   onDelete: PropTypes.func,
   sx: PropTypes.object,
+  border: PropTypes.bool
 };

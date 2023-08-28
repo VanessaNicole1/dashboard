@@ -1,42 +1,35 @@
-import PropTypes from 'prop-types';
-import { useEffect, useState, useCallback } from 'react';
+import PropTypes from "prop-types";
+import { useEffect, useState, useCallback } from "react";
 import {
-  Stack,
   Dialog,
   Button,
-  TextField,
   DialogTitle,
   DialogContent,
   DialogActions,
-} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import Iconify from '../../../../components/iconify';
-import { Upload } from '../../../../components/upload';
-import { uploadSignedReportByTeacher } from '../../../../services/lesson-plan';
-import { useSnackbar } from '../../../../components/snackbar';
-import { manualHideErrorSnackbarOptions } from '../../../../utils/snackBar';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
-
+  Typography,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import Iconify from "../../../../components/iconify";
+import { Upload } from "../../../../components/upload";
+import { uploadSignedReportByTeacher } from "../../../../services/lesson-plan";
+import { useSnackbar } from "../../../../components/snackbar";
+import { manualHideErrorSnackbarOptions } from "../../../../utils/snackBar";
 
 SignedFileDialog.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   title: PropTypes.string,
-  onCreate: PropTypes.func,
-  onUpdate: PropTypes.func,
   folderName: PropTypes.string,
   onChangeFolderName: PropTypes.func,
   isThePrintLoading: PropTypes.bool,
   onPrint: PropTypes.func,
-  remedialPlanId: PropTypes.string
+  remedialPlanId: PropTypes.string,
 };
 
 export default function SignedFileDialog({
-  title = 'Cargar reporte',
+  title = "Firmar Clan de Clase Remedial",
   open,
   onClose,
-  onCreate,
-  onUpdate,
   folderName,
   onChangeFolderName,
   isThePrintLoading,
@@ -61,20 +54,28 @@ export default function SignedFileDialog({
           preview: URL.createObjectURL(file),
         })
       );
-      setFiles([...files, ...newFiles]);
-      const uploadReportFileResponse = await uploadSignedReportByTeacher(remedialPlanId, newFiles);
-      if (uploadReportFileResponse.errorMessage) {
-        enqueueSnackbar(uploadReportFileResponse.errorMessage, manualHideErrorSnackbarOptions);
-      } else {
-        enqueueSnackbar(uploadReportFileResponse.message, { variant: 'success', autoHideDuration: 5000 });
-        navigate(PATH_DASHBOARD.remedialLessonPlan.listTeacherRemedialPlans);
-      }
+      setFiles([...newFiles]);
     },
     [files]
   );
 
-  const handleUpload = (e) => {
-    onClose();
+  const handleUpload = async () => {
+    const uploadReportFileResponse = await uploadSignedReportByTeacher(
+      remedialPlanId,
+      files
+    );
+    if (uploadReportFileResponse.errorMessage) {
+      enqueueSnackbar(
+        uploadReportFileResponse.errorMessage,
+        manualHideErrorSnackbarOptions
+      );
+    } else {
+      enqueueSnackbar(uploadReportFileResponse.message, {
+        variant: "success",
+        autoHideDuration: 5000,
+      });
+      onClose();
+    }
   };
 
   const handleRemoveFile = (inputFile) => {
@@ -82,62 +83,59 @@ export default function SignedFileDialog({
     setFiles(filtered);
   };
 
-  const handleRemoveAllFiles = () => {
-    setFiles([]);
-  };
-
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose} {...other}>
-      <DialogTitle sx={{ p: (theme) => theme.spacing(3, 3, 2, 3) }}> {title} </DialogTitle>
+      <DialogTitle sx={{ p: (theme) => theme.spacing(3, 3, 2, 3) }}>
+        {" "}
+        {title}{" "}
+      </DialogTitle>
 
-      <DialogContent dividers sx={{ pt: 1, pb: 0, border: 'none' }}>
-        {(onCreate || onUpdate) && (
-          <TextField
-            fullWidth
-            label="Folder name"
-            value={folderName}
-            onChange={onChangeFolderName}
-            sx={{ mb: 3 }}
-          />
-        )}
+      <DialogContent dividers sx={{ pt: 1, pb: 0, border: "none" }}>
+        <Typography variant="body1" sx={{ marginBottom: 1 }}>
+          Estimado Docente por favor haga click en el siguiente botón para
+          descargar el reporte
+        </Typography>
 
-        <Upload multiple files={files} onDrop={handleDrop} onRemove={handleRemoveFile} />
+        <Button
+          fullWidth
+          disabled={isThePrintLoading}
+          color="primary"
+          variant="contained"
+          startIcon={<Iconify icon="material-symbols:print" />}
+          onClick={onPrint}
+        >
+          {isThePrintLoading ? "Descargando..." : "Descargar Reporte"}
+        </Button>
+
+        <Typography variant="body1" sx={{ marginY: 1 }}>
+          Una vez descargado el reporte, por favor fírmelo con la herramienta de
+          su preferencia y súbalo nuevamente para que sea validado por el
+          Director de Carrera
+        </Typography>
+
+        <Typography variant="h6" sx={{ marginY: 1 }}>
+          Subir Reporte firmado:
+        </Typography>
+
+        <Upload files={files} onDrop={handleDrop} onRemove={handleRemoveFile} />
       </DialogContent>
 
       <DialogActions>
-      <Button
-        disabled={isThePrintLoading}
-        color="inherit"
-        variant="outlined"
-        startIcon={<Iconify icon="material-symbols:print" />}
-        onClick={() => {
-          onPrint();
-        }}
-      >
-        {
-          isThePrintLoading ? 'Loading...' : 'Imprimir'
-        }
-      </Button>
-      <Button
-        variant="contained"
-        startIcon={<Iconify icon="eva:cloud-upload-fill" />}
-        onClick={handleUpload}
-      >
-        Upload
-      </Button>
+        <Button
+          variant="outlined"
+          onClick={onClose}
+        >
+          Cancelar
+        </Button>
 
-        {!!files.length && (
-          <Button variant="outlined" color="inherit" onClick={handleRemoveAllFiles}>
-            Remove all
-          </Button>
-        )}
-        {(onCreate || onUpdate) && (
-          <Stack direction="row" justifyContent="flex-end" flexGrow={1}>
-            <Button variant="soft" onClick={onCreate || onUpdate}>
-              {onUpdate ? 'Save' : 'Create'}
-            </Button>
-          </Stack>
-        )}
+        <Button
+          disabled={files.length === 0}
+          variant="contained"
+          startIcon={<Iconify icon="eva:cloud-upload-fill" />}
+          onClick={handleUpload}
+        >
+          Subir Reporte
+        </Button>
       </DialogActions>
     </Dialog>
   );

@@ -27,10 +27,8 @@ export default function FileNewFolderDialog({
   title = 'Upload Files',
   open,
   onClose,
-  //
   onCreate,
   onUpdate,
-  //
   folderName,
   onChangeFolderName,
   ...other

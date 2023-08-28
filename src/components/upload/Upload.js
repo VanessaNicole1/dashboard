@@ -32,6 +32,7 @@ const StyledDropZone = styled('div')(({ theme }) => ({
 }));
 
 Upload.propTypes = {
+  placeholderText: PropTypes.string,
   sx: PropTypes.object,
   error: PropTypes.bool,
   files: PropTypes.array,
@@ -50,6 +51,7 @@ Upload.propTypes = {
 };
 
 export default function Upload({
+  placeholderText = "Arrastre los archivos aquí",
   disabled,
   multiple = false,
   error,
@@ -78,11 +80,8 @@ export default function Upload({
     disabled,
     ...other,
   });
-
   const hasFile = !!file && !multiple;
-
-  const hasFiles = files && multiple && files.length > 0;
-
+  const hasFiles = files && files.length > 0;
   const isError = isDragReject || !!error;
 
   return (
@@ -111,6 +110,7 @@ export default function Upload({
           <input {...getInputProps()} />
 
           <Placeholder
+            placeholderText={placeholderText}
             sx={{
               ...(hasFile && {
                 opacity: 0,
@@ -190,10 +190,11 @@ export default function Upload({
 }
 
 Placeholder.propTypes = {
+  placeholderText: PropTypes.string,
   sx: PropTypes.object,
 };
 
-function Placeholder({ sx, ...other }) {
+function Placeholder({placeholderText, sx, ...other }) {
   return (
     <Stack
       spacing={5}
@@ -217,11 +218,11 @@ function Placeholder({ sx, ...other }) {
 
       <div>
         <Typography gutterBottom variant='h5'>
-          Drop or Select file
+          {placeholderText}
         </Typography>
 
         <Typography variant='body2' sx={{ color: 'text.secondary' }}>
-          Drop files here or click
+          Arrastre los archivos aquí o 
           <Typography
             variant='body2'
             component='span'
@@ -231,9 +232,9 @@ function Placeholder({ sx, ...other }) {
               textDecoration: 'underline',
             }}
           >
-            browse
+            busque
           </Typography>
-          thorough your machine
+          a través de su computadora
         </Typography>
       </div>
     </Stack>
