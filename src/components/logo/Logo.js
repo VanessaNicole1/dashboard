@@ -23,10 +23,8 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
   }
 
   return (
-    <div style={{display: "flex", justifyContent: "center"}}>
-      <Link component={RouterLink} to="/" sx={{ display: 'contents'}}>
-        {logo}
-      </Link>
+    <div style={{display: "flex", justifyContent: "flex-start"}}>
+      {logo}
     </div>
   );
 });
