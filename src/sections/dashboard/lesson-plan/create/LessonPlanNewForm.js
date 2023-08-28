@@ -90,6 +90,7 @@ export default function LessonPlanNewForm() {
     purposeOfClass: Yup.string().required(
       translate("lesson_plans_create_form.purpose_required")
     ),
+    results: Yup.string().required("Los resultados de aprendizaje son requeridos"),
     bibliography: Yup.string().required(
       translate("lesson_plans_create_form.biblio_required")
     ),
@@ -587,6 +588,11 @@ export default function LessonPlanNewForm() {
                   name="purposeOfClass"
                   disabled={fields}
                   label={translate("lesson_plans_create_form.purpose")}
+                />
+                <RHFTextField
+                  name="results"
+                  disabled={fields}
+                  label="Resultados de Aprendizaje"
                 />
                 <RHFTextField
                   name="bibliography"
