@@ -82,7 +82,7 @@ export default function LessonPlanListTeacherPage() {
     }
 
     const fetchLessonPlans = async () => {
-      const currentSchedules = await getLessonPlansByUser(user.id);
+      const currentSchedules = await getLessonPlansByUser(user.id, {type: 'NORMAL'});
       setTableData(currentSchedules);
     } 
     
@@ -150,7 +150,7 @@ export default function LessonPlanListTeacherPage() {
       enqueueSnackbar(response.errorMessage, manualHideErrorSnackbarOptions);
     }
     setSelected([]);
-    const currentLessons = await getLessonPlansByUser(user.id);
+    const currentLessons = await getLessonPlansByUser(user.id, {type: 'NORMAL'});
     setTableData(currentLessons);
     if (page > 0) {
       if (dataInPage.length < 2) {
@@ -316,7 +316,7 @@ async function applyFilter({ inputData, comparator, filterContent, filterStatus,
   }
 
   if ((filterStatus === 'validated' || filterStatus === 'validados')) {
-    inputData = await getLessonPlansByUser(user.id, {hasQualified: 'true'});
+    inputData = await getLessonPlansByUser(user.id, {hasQualified: 'true', type: 'NORMAL'});
   }
 
   if ((filterStatus === 'not validated' || filterStatus === 'no validados')) {
@@ -324,22 +324,22 @@ async function applyFilter({ inputData, comparator, filterContent, filterStatus,
   }
   
   if (filterPeriod !== '0') {
-    const lessonPlans = await getLessonPlansByUser(user.id, {periodId: filterPeriod});
+    const lessonPlans = await getLessonPlansByUser(user.id, {periodId: filterPeriod, type: 'NORMAL'});
     inputData = lessonPlans;
   }
 
   if ((filterStatus === 'validated' || filterStatus === 'validados') && filterPeriod !== '0') {
-    const test = await getLessonPlansByUser(user.id, {periodId: filterPeriod, hasQualified: 'true'});
+    const test = await getLessonPlansByUser(user.id, {periodId: filterPeriod, hasQualified: 'true', type: 'NORMAL'});
     inputData = test;
   }
 
   if ((filterStatus === 'not validated' || filterStatus === 'no validados') && filterPeriod !== '0') {
-    const test = await getLessonPlansByUser(user.id, {periodId: filterPeriod, hasQualified: 'false'});
+    const test = await getLessonPlansByUser(user.id, {periodId: filterPeriod, hasQualified: 'false', type: 'NORMAL'});
     inputData = test;
   }
 
   if (filterPeriod !== '0' && filterContent) {
-    const currentLessons = await getLessonPlansByUser(user.id, {periodId: filterPeriod});
+    const currentLessons = await getLessonPlansByUser(user.id, {periodId: filterPeriod, type: 'NORMAL'});
     inputData = currentLessons.filter((content) => {
       const {subject, grade} = content;
       return (

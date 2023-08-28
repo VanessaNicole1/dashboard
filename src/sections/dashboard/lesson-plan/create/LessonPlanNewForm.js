@@ -192,12 +192,19 @@ export default function LessonPlanNewForm() {
           selectedActivePeriod,
           user.id
         );
-        const validateSchedules = currentSchedules.filter(
-          (schedule) => schedule.metadata.days.length === 0
-        );
-        if (validateSchedules.length > 0) {
+        const validateMeta = [];
+        const validateMetadataDays = [];
+        for (const currentSchedule of currentSchedules) {
+          const { metadata } = currentSchedule;
+          if (!metadata) {
+            validateMeta.push(currentSchedule);
+          }else if (metadata.days.length === 0) {
+              validateMetadataDays.push(currentSchedule);
+            }
+        }
+        if (validateMeta.length > 0 || validateMetadataDays.length > 0) {
           setCanCreateLessonPlan(false);
-        } else {
+        }else {
           setCanCreateLessonPlan(true);
         }
         setSchedules(currentSchedules);
