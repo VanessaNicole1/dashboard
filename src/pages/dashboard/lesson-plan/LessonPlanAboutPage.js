@@ -1,6 +1,6 @@
-import { Container, Grid, TextField } from "@mui/material";
+import { Container, Grid, MenuItem, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from "@mui/material/styles";
 import { useAuthContext } from "../../../auth/useAuthContext";
 import { useSettingsContext } from "../../../components/settings";
 import { getAllUsers } from "../../../services/user";
@@ -8,21 +8,29 @@ import SubjectsTop from "../../../sections/dashboard/general/app/SubjectsTop";
 import { getSubjects } from "../../../services/subject";
 import AnalyticsLessonPlans from "../../../sections/dashboard/general/app/AnalyticsLessonPlans";
 import UsersTop from "../../../sections/dashboard/general/app/UsersTop";
-import { getLessonPlans } from "../../../services/lesson-plan";
+import { getLessonPlansTypes } from "../../../services/lesson-plan";
 import LessonPlanTypeTotal from "../../../sections/dashboard/general/app/LessonPlanTypeTotal";
+import { getActivePeriods } from "../../../services/period";
 
-export default function LessonPlanAboutPage () {
-
+export default function LessonPlanAboutPage() {
   const { themeStretch } = useSettingsContext();
   const theme = useTheme();
   const [users, setUsers] = useState([]);
   const [subjects, setSubjects] = useState([]);
-  const [periodId, setPeriodId] = useState("9deb297b-2b2b-4177-a590-85955dfa9d79");
   const [currentLessonPlans, setLessonPlans] = useState([]);
   const [totalLessonPlans, setTotalLessonPlans] = useState(0);
   const [lessonPlanTypes, setLessonPlanTypes] = useState([]);
+  const [activePeriods, setActivePeriods] = useState([]);
+  const [periodId, setPeriodId] = useState();
 
   useEffect(() => {
+    const fetchPeriods = async () => {
+      const periods = await getActivePeriods();
+      if (periods) {
+        setPeriodId(periods[0].id);
+      }
+      setActivePeriods(periods);
+    };
     const fetchUsers = async () => {
       const currentUsers = await getAllUsers();
       const currentTeachers = [];
@@ -31,164 +39,183 @@ export default function LessonPlanAboutPage () {
       for (const currentUser of currentUsers) {
         const { roles } = currentUser;
         const rolesName = roles.map((role) => role.name);
-        if (rolesName.includes('STUDENT')) {
+        if (rolesName.includes("STUDENT")) {
           currentStudents.push(currentUser);
         }
 
-        if (rolesName.includes('MANAGER')) {
+        if (rolesName.includes("MANAGER")) {
           currentManagers.push(currentUser);
         }
 
-        if (rolesName.includes('TEACHER')) {
+        if (rolesName.includes("TEACHER")) {
           currentTeachers.push(currentUser);
         }
       }
       const managers = {
-        name: 'Directores',
-        total: currentManagers.length
+        id: 1,
+        name: "Directores",
+        total: currentManagers.length,
       };
       const teachers = {
-        name: 'Docentes',
-        total: currentTeachers.length
+        id: 2,
+        name: "Docentes",
+        total: currentTeachers.length,
       };
       const students = {
-        name: 'Estudiantes',
-        total: currentStudents.length
+        id: 3,
+        name: "Estudiantes",
+        total: currentStudents.length,
       };
 
       const totalUsers = [managers, teachers, students];
       setUsers(totalUsers);
-    }
+    };
     fetchUsers();
+    fetchPeriods();
   }, []);
 
   useEffect(() => {
-   const fetchSubjects = async () => {
-    const currentSubjects = await getSubjects({periodId});
-    const subjectsToPresent = [];
-    for (const currentSubject of currentSubjects) {
-      const { id, name, schedules } = currentSubject;
-      let totalSchedule = 0;
-      for (const schedule of schedules) {
-        const { lessonPlans } = schedule;
-        totalSchedule += lessonPlans.length;
+    const fetchSubjects = async () => {
+      const currentSubjects = await getSubjects({ periodId });
+      const subjectsToPresent = [];
+      for (const currentSubject of currentSubjects) {
+        const { id, name, schedules } = currentSubject;
+        let totalSchedule = 0;
+        for (const schedule of schedules) {
+          const { lessonPlans } = schedule;
+          totalSchedule += lessonPlans.length;
+        }
+        const subjectToPresent = {
+          id,
+          name,
+          total: totalSchedule,
+        };
+        subjectsToPresent.push(subjectToPresent);
+        totalSchedule = 0;
       }
-      const subjectToPresent = {
-        id,
-        name,
-        total: totalSchedule,
-      }
-      subjectsToPresent.push(subjectToPresent);
-      totalSchedule = 0;
-    }
-    setSubjects(subjectsToPresent);
-   }
-   fetchSubjects();
-  }, [periodId]);
+      setSubjects(subjectsToPresent);
+    };
 
-  useEffect(() => {
     const fetchLessonPlans = async () => {
       const acceptedLessonPlans = [];
       const unacceptedLessonPlans = [];
-      const lessonPlansToPresent = await getLessonPlans();
+      const lessonPlansToPresent = await getLessonPlansTypes();
       for (const lessonPlanToPresent of lessonPlansToPresent) {
         const { hasQualified } = lessonPlanToPresent;
-        if ( hasQualified ) {
+        if (hasQualified) {
           acceptedLessonPlans.push(lessonPlanToPresent);
         } else {
           unacceptedLessonPlans.push(lessonPlanToPresent);
         }
       }
       const acceptedLessonPlansData = {
-        label: 'Aceptados',
-        value: acceptedLessonPlans.length
+        label: "Aceptados",
+        value: acceptedLessonPlans.length,
       };
       const unacceptedLessonPlansData = {
-        label: 'No Aceptados',
-        value: unacceptedLessonPlans.length
-      }
+        label: "No Aceptados",
+        value: unacceptedLessonPlans.length,
+      };
       setLessonPlans([acceptedLessonPlansData, unacceptedLessonPlansData]);
-      const normalLessonPlans = lessonPlansToPresent.filter((lessonPlan) => lessonPlan.type === 'NORMAL');
-      const remedialLessonPlans = lessonPlansToPresent.filter((lessonPlan) => lessonPlan.type === 'REMEDIAL');
+      const normalLessonPlans = lessonPlansToPresent.filter(
+        (lessonPlan) => lessonPlan.type === "NORMAL"
+      );
+      const remedialLessonPlans = lessonPlansToPresent.filter(
+        (lessonPlan) => lessonPlan.type === "REMEDIAL"
+      );
       const normalLessonPlansData = {
-        label: 'Plan de Clase',
+        label: "Plan de Clase",
         value: normalLessonPlans.length,
-      }
+      };
       const remedialLessonPlansData = {
-        label: 'Plan Remedial',
-        value: remedialLessonPlans.length
-      }
+        label: "Plan Remedial",
+        value: remedialLessonPlans.length,
+      };
       setTotalLessonPlans(lessonPlansToPresent.length);
-      setLessonPlanTypes([normalLessonPlansData, remedialLessonPlansData])
+      setLessonPlanTypes([normalLessonPlansData, remedialLessonPlansData]);
     };
+
     fetchLessonPlans();
+    fetchSubjects();
   }, [periodId]);
 
   const { user } = useAuthContext();
 
   const currentRoles = user.roles.map((role) => role.name);
 
+  const hanldeFilterPeriod = async (event) => {
+    console.log("EVENT", event.target.value);
+  };
+
   return (
-   <>
-   {
-      currentRoles.includes('MANAGER') &&  
-      <Container maxWidth={themeStretch ? false : 'xl'}>
-        <div style={{padding: 10}}>
-          <TextField
-            fullWidth
-            select
-            label="period"
-            value=""
-            onChange={() => {}}
-            SelectProps={{
-              MenuProps: {
-                PaperProps: {
-                  sx: {
-                    maxHeight: 260,
+    <>
+      {currentRoles.includes("MANAGER") && (
+        <Container maxWidth={themeStretch ? false : "xl"}>
+          <div style={{ padding: 10 }}>
+            <TextField
+              fullWidth
+              select
+              label="period"
+              value={periodId}
+              onChange={hanldeFilterPeriod}
+              SelectProps={{
+                MenuProps: {
+                  PaperProps: {
+                    sx: {
+                      maxHeight: 260,
+                    },
                   },
                 },
-              },
-            }}
-            sx={{
-              maxWidth: { sm: 460 },
-              textTransform: 'capitalize',
-            }}
-          />
-        </div>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6} lg={4}>
-            <UsersTop title="Top Users" list={users} />
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <SubjectsTop title="Subject List" list={subjects} />
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <SubjectsTop title="Subject List" list={subjects} />
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <AnalyticsLessonPlans
-              title="Planes de clases"
-              chart={{
-                series: currentLessonPlans,
-                colors: [
-                  theme.palette.primary.main,
-                  theme.palette.info.main,
-                ],
               }}
-            />
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <LessonPlanTypeTotal
-              title="Planes de Clases y Planes de Clases Remediales"
-              total={totalLessonPlans}
-              chart={{
-                series: lessonPlanTypes,
+              sx={{
+                maxWidth: { sm: 460 },
+                textTransform: "capitalize",
               }}
-            />
+            >
+              {activePeriods.map((option) => (
+                <MenuItem
+                  key={option}
+                  value=""
+                  sx={{
+                    mx: 1,
+                    borderRadius: 0.75,
+                    typography: "body2",
+                    textTransform: "capitalize",
+                  }}
+                >
+                  {option.displayName}
+                </MenuItem>
+              ))}
+            </TextField>
+          </div>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6} lg={4}>
+              <UsersTop title="Top Users" list={users} />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <LessonPlanTypeTotal
+                title="Planes de Clases y Planes de Clases Remediales"
+                total={totalLessonPlans}
+                chart={{
+                  series: lessonPlanTypes,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <AnalyticsLessonPlans
+                title="Planes de clases"
+                chart={{
+                  series: currentLessonPlans,
+                  colors: [theme.palette.primary.main, theme.palette.info.main],
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <SubjectsTop title="Subject List" list={subjects} />
+            </Grid>
           </Grid>
-        </Grid>
-    </Container>
-          }
-   </>
+        </Container>
+      )}
+    </>
   );
 }
