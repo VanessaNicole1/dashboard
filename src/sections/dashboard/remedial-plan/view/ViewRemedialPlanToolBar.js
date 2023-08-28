@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 
 import { useState } from "react";
+import { Chip, Tooltip } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -11,8 +12,8 @@ import { fDateTime } from "../../../../utils/formatTime";
 import Iconify from "../../../../components/iconify/Iconify";
 import SignedFileDialog from "./SignedFileDialog";
 
-// TODO: Add i18n
 export default function ViewRemedialPlanToolBar({
+  isSignedByTeacher,
   backLink,
   createdAt,
   topic,
@@ -63,7 +64,9 @@ export default function ViewRemedialPlanToolBar({
         alignItems="center"
         justifyContent="flex-end"
       >
-        <Button
+        {
+          !isSignedByTeacher ? (
+            <Button
           disabled={isValidatedByManager}
           color="inherit"
           variant="outlined"
@@ -72,6 +75,13 @@ export default function ViewRemedialPlanToolBar({
         >
           Firmar
         </Button>
+          ): (
+            <Tooltip title="Si en caso desea volver a subir el reporte, primero elimine el reporte que previamente subió">
+              <Chip variant="outlined" color="info" label="Usted ya ha firmado este Plan de Clase Remedial" />
+            </Tooltip>
+          )
+        }
+        
       </Stack>
       <SignedFileDialog onPrint={onPrint} isThePrintLoading={isThePrintLoading} remedialPlanId={remedialPlanId} open={openUploadFile} onClose={handleCloseUploadFile} />
     </Stack>
@@ -79,6 +89,7 @@ export default function ViewRemedialPlanToolBar({
 }
 
 ViewRemedialPlanToolBar.propTypes = {
+  isSignedByTeacher: PropTypes.bool,
   backLink: PropTypes.string,
   createdAt: PropTypes.instanceOf(Date),
   topic: PropTypes.string,

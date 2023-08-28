@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { Chip, Tooltip } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -9,15 +10,15 @@ import { fDateTime } from "../../../../utils/formatTime";
 import Iconify from "../../../../components/iconify/Iconify";
 import SignedFileManagerDialog from "./SignedFileManagerDialog";
 
-// TODO: Add i18n
 export default function RemedialPlanManagerToolBar({
+  reports,
+  isSignedByTeacher,
   backLink,
   createdAt,
   topic,
   remedialPlanId,
-  isValidatedByManager
+  isValidatedByManager,
 }) {
-
   const [openUploadFile, setOpenUploadFile] = useState(false);
 
   const handleOpenUploadFile = () => {
@@ -28,7 +29,7 @@ export default function RemedialPlanManagerToolBar({
     setOpenUploadFile(false);
   };
 
-  const handleValidateReport = () => {}
+  const handleValidateReport = () => {};
 
   return (
     <Stack
@@ -61,7 +62,9 @@ export default function RemedialPlanManagerToolBar({
         alignItems="center"
         justifyContent="flex-end"
       >
-        <Button
+
+        {isSignedByTeacher ? (
+          <Button
           disabled={isValidatedByManager}
           color="inherit"
           variant="outlined"
@@ -70,16 +73,32 @@ export default function RemedialPlanManagerToolBar({
         >
           Firmar
         </Button>
+        ): (
+          <Tooltip title="Una vez que el docente haya firmado el reporte, usted podrá validar el mismo.">
+            <Chip variant="filled" color="warning" label="El docente aún no ha firmado el reporte" />
+          </Tooltip>
+        )
+        }
+        
       </Stack>
-      <SignedFileManagerDialog onValidate={handleValidateReport} remedialPlanId={remedialPlanId} open={openUploadFile} onClose={handleCloseUploadFile} />
+    
+      <SignedFileManagerDialog
+        reports={reports}
+        onValidate={handleValidateReport}
+        remedialPlanId={remedialPlanId}
+        open={openUploadFile}
+        onClose={handleCloseUploadFile}
+      />
     </Stack>
   );
 }
 
 RemedialPlanManagerToolBar.propTypes = {
+  reports: PropTypes.any,
+  isSignedByTeacher: PropTypes.bool,
   backLink: PropTypes.string,
   createdAt: PropTypes.instanceOf(Date),
   topic: PropTypes.string,
   remedialPlanId: PropTypes.string,
-  isValidatedByManager: PropTypes.bool
+  isValidatedByManager: PropTypes.bool,
 };

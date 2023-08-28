@@ -7,9 +7,10 @@ ConfirmDialog.propTypes = {
   action: PropTypes.node,
   content: PropTypes.node,
   onClose: PropTypes.func,
+  onAccept: PropTypes.func,
 };
 
-export default function ConfirmDialog({ title, content, action, open, onClose, ...other }) {
+export default function ConfirmDialog({ title, content, action, open, onAccept, onClose, ...other }) {
   return (
     <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose} {...other}>
       <DialogTitle sx={{ pb: 2 }}>{title}</DialogTitle>
@@ -17,10 +18,12 @@ export default function ConfirmDialog({ title, content, action, open, onClose, .
       {content && <DialogContent sx={{ typography: 'body2' }}> {content} </DialogContent>}
 
       <DialogActions>
-        {action}
-
         <Button variant="outlined" color="inherit" onClick={onClose}>
-          Cancel
+          Cancelar
+        </Button>
+
+        <Button variant="contained" color="error" onClick={onAccept}>
+          Si, estoy de acuerdo
         </Button>
       </DialogActions>
     </Dialog>
