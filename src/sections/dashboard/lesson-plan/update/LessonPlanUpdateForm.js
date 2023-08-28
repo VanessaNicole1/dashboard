@@ -194,6 +194,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
     content: Yup.string().required(translate('lesson_plans_update_form.content_required')),
     students: Yup.array().min(totalStudentsValidate, `Must have at least ${totalStudentsValidate} students`),
     purposeOfClass: Yup.string().required(translate('lesson_plans_update_form.purpose_required')),
+    results: Yup.string().required("El resultado de aprendizaje es requerido"),
     bibliography: Yup.string().required(translate('lesson_plans_update_form.biblio_required')),
     materials: Yup.string().required(translate('lesson_plans_create_form.materials_required')),
     evaluation: Yup.string().required(translate('lesson_plans_create_form.evaluation_required')),
@@ -213,6 +214,7 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
       content: currentLessonlPlan?.content || '',
       students: currentSelectedStudents || [],
       purposeOfClass: currentLessonlPlan?.purposeOfClass || '',
+      results: currentLessonlPlan?.results,
       bibliography: currentLessonlPlan?.bibliography || '',
       materials: currentLessonlPlan.materials || '',
       evaluation: currentLessonlPlan.evaluation || '',
@@ -548,6 +550,8 @@ export default function LessonPlanUpdateForm({lessonPlanId}) {
                 ChipProps={{ size: "small" }}
               />
               <RHFTextField name="purposeOfClass" label={translate('lesson_plans_update_form.purpose')} />
+              <RHFTextField name="results" label="Resultado de Aprendizaje" />
+
               <RHFTextField
                 name="bibliography"
                 label={translate('lesson_plans_update_form.biblio')}

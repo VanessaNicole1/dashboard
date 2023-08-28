@@ -17,6 +17,9 @@ export default function LessonPlanTeacherInfo({ teacher, subject, grade, student
     remedialReports = [];
   }
 
+  const studentsWhoAccepted = studentsValidated.filter((studentValidated) => studentValidated.isValidated);
+  const studentsWhoHaveNotAccepted = studentsValidated.filter((studentValidated) => !studentValidated.isValidated);
+
   const renderTeacher = (
     <>
       <CardHeader
@@ -134,7 +137,15 @@ export default function LessonPlanTeacherInfo({ teacher, subject, grade, student
 
       <Divider sx={{ borderStyle: 'dashed' }} />
 
-      <StudentsWhoValidated title="Estudiantes" list={studentsValidated} />
+      {
+        studentsWhoAccepted.length > 0 &&
+        <StudentsWhoValidated title="Estudiantes que han aceptado" list={studentsWhoAccepted} />
+      }
+      {
+        studentsWhoHaveNotAccepted.length > 0 &&
+        <StudentsWhoValidated title="Estudiantes pendientes de aceptar" list={studentsWhoHaveNotAccepted} />
+      }
+
     </Card>
   );
 }
