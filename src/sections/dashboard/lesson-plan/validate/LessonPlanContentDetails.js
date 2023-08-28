@@ -87,7 +87,7 @@ export const LessonPlanContentDetails = ({ lessonPlan, lessonPlanValidationTrack
             )
           }
           <Typography variant="subtitle2">
-            Fecha máxima de calificación
+            Fecha máxima de aceptación
             <br/>
             <span>{fDate(new Date(lessonPlan.date))}</span>
           </Typography>

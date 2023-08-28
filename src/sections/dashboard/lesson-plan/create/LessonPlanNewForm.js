@@ -213,8 +213,6 @@ export default function LessonPlanNewForm() {
     }
   }, [selectedActivePeriod]);
 
-  console.log("canCreateLessonPlan", canCreateLessonPlan);
-
   useEffect(() => {
     if (selectedActivePeriod) {
       const fetchPeriod = async () => {

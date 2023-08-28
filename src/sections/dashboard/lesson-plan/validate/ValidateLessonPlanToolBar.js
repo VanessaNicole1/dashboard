@@ -19,7 +19,8 @@ export default function ValidateLessonPlanToolBar({
   enableValidateButton,
   onClickValidate,
   onPrint,
-  isPrinting
+  isPrinting,
+  validationExpired
 }) {
   return (
     <Stack
@@ -38,7 +39,7 @@ export default function ValidateLessonPlanToolBar({
           <Stack spacing={1} direction="row" alignItems="center">
             <Typography variant="h4">{topic}</Typography>
             <Label variant="soft" color={status ? "info" : "warning"}>
-              {status ? "Validado" : "Sin Validar"}
+              {status ? "Aceptado" : "Sin Aceptar"}
             </Label>
           </Stack>
 
@@ -71,8 +72,9 @@ export default function ValidateLessonPlanToolBar({
             variant="outlined"
             onClick={onClickValidate}
             startIcon={<Iconify icon="grommet-icons:validate" />}
+            disabled={validationExpired}
           >
-            Validar
+            Aceptar
           </Button>
         )}
       </Stack>
@@ -88,5 +90,6 @@ ValidateLessonPlanToolBar.propTypes = {
   enableValidateButton: PropTypes.bool,
   onClickValidate: PropTypes.func,
   onPrint: PropTypes.func,
-  isPrinting: PropTypes.bool
+  isPrinting: PropTypes.bool,
+  validationExpired: PropTypes.bool
 };
