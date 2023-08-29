@@ -24,6 +24,12 @@ const navConfig = [
     subheader: 'general',
     items: [
       { 
+        title: 'Dashboard',
+        path: PATH_DASHBOARD.dashboardApp,
+        icon: ICONS.file,
+        roles: [ROLES.manager, ROLES.teacher, ROLES.student]
+      },
+      { 
         title: 'Plan de Clase',
         path: PATH_DASHBOARD.lessonPlan.root,
         icon: ICONS.file,

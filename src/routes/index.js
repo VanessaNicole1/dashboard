@@ -40,6 +40,8 @@ import RemedialPlanCreatePage from "../pages/dashboard/remedial-plan/RemedialPla
 import { RemedialplanTeacherViewPage } from "../pages/dashboard/remedial-plan/RemedialPlanTeacherViewPage";
 import { RemedialplanManagerViewPage } from "../pages/dashboard/remedial-plan/RemedialPlanManagerViewPage";
 import { RemedialLessonPlanValidateStudentPage } from "../pages/dashboard/lesson-plan/remedial/RemedialLessonPlanValidateStudentPage";
+import { PATH_AFTER_LOGIN } from "../config-global";
+import GeneralPage from "../pages/dashboard/app/App";
 
 export default function Router() {
   const AuthRoutes = {
@@ -72,6 +74,8 @@ export default function Router() {
       </AuthGuard>
     ),
     children: [
+      { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
+      { path: 'app', element: <GeneralPage /> },
       {
         path: "lesson-plan",
         children: [

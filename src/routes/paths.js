@@ -33,9 +33,8 @@ export const PATH_PAGE = {
 
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
-  kanban: path(ROOTS_DASHBOARD, '/kanban'),
+  dashboardApp: path(ROOTS_DASHBOARD, '/app'),
   calendar: path(ROOTS_DASHBOARD, '/calendar'),
-  fileManager: path(ROOTS_DASHBOARD, '/files-manager'),
   permissionDenied: path(ROOTS_DASHBOARD, '/permission-denied'),
   blank: path(ROOTS_DASHBOARD, '/blank'),
   lessonPlan: {

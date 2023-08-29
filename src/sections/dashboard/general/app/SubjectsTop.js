@@ -13,7 +13,7 @@ export default function SubjectsTop({ title, subheader, list, ...other }) {
       <CardHeader title={title} subheader={subheader} />
 
       <Scrollbar>
-        <Stack spacing={3} sx={{ p: 3, pr: 0 }}>
+        <Stack spacing={1.5} sx={{ p: 3, pr: 0 }}>
           {list.map((subject, index) => (
             <ProductItem key={subject.id} subject={subject} index={index} />
           ))}
@@ -48,7 +48,7 @@ function ProductItem({ subject, index }) {
   }
 
   return (
-    <Stack direction="row" spacing={2}>
+    <Stack direction="row" alignItems="center" spacing={2}>
       <CustomAvatar src={name} alt={name} name={`${name} ${name}`} />
       <Box sx={{ flexGrow: 1, minWidth: 200 }}>
         <Link sx={{ color: 'text.primary', typography: 'subtitle2' }}>{name}</Link>
