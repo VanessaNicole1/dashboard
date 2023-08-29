@@ -46,7 +46,7 @@ export default function RemedialPlanViewManagerSection({ lessonPlan, lessonPlanT
         reports={remedialReports}
         isSignedByTeacher={signedByTeacherStep.status === RemedialLessonPlanStepStatus.COMPLETED}
         topic={lessonPlan.topic}
-        backLink={PATH_DASHBOARD.lessonPlan.listTeacherPlans}
+        backLink={PATH_DASHBOARD.remedialLessonPlan.listManagerRemedialPlans}
         createdAt={lessonPlanCreationDate}
         onPrint={handlePrint}
         isThePrintLoading={isPrintLoading}
