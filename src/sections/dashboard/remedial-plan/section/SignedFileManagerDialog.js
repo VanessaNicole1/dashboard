@@ -1,15 +1,12 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import {
-  Stack,
   Dialog,
   Button,
-  TextField,
   DialogTitle,
   DialogContent,
   DialogActions,
   Typography,
-  Paper
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Iconify from '../../../../components/iconify';
@@ -51,12 +48,12 @@ export default function SignedFileManagerDialog({
   onValidate,
   ...other
 }) {
+  console.log(reports, 'Reports>>>>')
   const isThePrintLoading = false;
   const [files, setFiles] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const [openConfirm, setOpenConfirm] = useState(false);
-  const [uploadReport, setUploadReport] = useState(false);
 
   useEffect(() => {
     if (!open) {

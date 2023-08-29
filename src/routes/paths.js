@@ -124,9 +124,5 @@ export const PATH_DASHBOARD = {
     account: path(ROOTS_DASHBOARD, '/user/account'),
     edit: (id) => path(ROOTS_DASHBOARD, `/user/${id}/edit`),
     demoEdit: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
-  },
-  remedialPlanTeacher: {
-    root: path(ROOTS_DASHBOARD, '/remedial-plan'),
-    create: path(ROOTS_DASHBOARD, '/remedial-plan/create'),
   }
 };

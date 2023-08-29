@@ -62,33 +62,36 @@ export default function RemedialPlanManagerToolBar({
         alignItems="center"
         justifyContent="flex-end"
       >
-
         {isSignedByTeacher ? (
           <Button
-          disabled={isValidatedByManager}
-          color="inherit"
-          variant="outlined"
-          startIcon={<Iconify icon="mdi:sign" />}
-          onClick={handleOpenUploadFile}
-        >
-          Firmar
-        </Button>
-        ): (
+            disabled={isValidatedByManager}
+            color="inherit"
+            variant="outlined"
+            startIcon={<Iconify icon="mdi:sign" />}
+            onClick={handleOpenUploadFile}
+          >
+            Firmar
+          </Button>
+        ) : (
           <Tooltip title="Una vez que el docente haya firmado el reporte, usted podrá validar el mismo.">
-            <Chip variant="filled" color="warning" label="El docente aún no ha firmado el reporte" />
+            <Chip
+              variant="filled"
+              color="warning"
+              label="El docente aún no ha firmado el reporte"
+            />
           </Tooltip>
-        )
-        }
-        
+        )}
       </Stack>
-    
-      <SignedFileManagerDialog
-        reports={reports}
-        onValidate={handleValidateReport}
-        remedialPlanId={remedialPlanId}
-        open={openUploadFile}
-        onClose={handleCloseUploadFile}
-      />
+
+      {isSignedByTeacher && (
+        <SignedFileManagerDialog
+          reports={reports}
+          onValidate={handleValidateReport}
+          remedialPlanId={remedialPlanId}
+          open={openUploadFile}
+          onClose={handleCloseUploadFile}
+        />
+      )}
     </Stack>
   );
 }

@@ -12,6 +12,7 @@ import LessonPlanContentTeacherDetails from "../../lesson-plan/view/LessonPlanCo
 import LessonPlanTeacherInfo from "../../lesson-plan/view/LessonPlanTeacherInfo";
 import ViewRemedialPlanToolBar from "./ViewRemedialPlanToolBar";
 import { RemedialLessonPlanStepStatus } from "../../../../common/remedialLessonPlanStepStatus";
+import { downloadFile } from "../../../../utils/file";
 
 const signedByTeacherStepId = 2;
 export default function RemedialPlanViewPage({
@@ -53,7 +54,7 @@ export default function RemedialPlanViewPage({
         manualHideErrorSnackbarOptions
       );
     } else {
-      window.open(teacherReportUrl, "_blank");
+      downloadFile(teacherReportUrl, 'Plan de Clase Remedial - Reporte.pdf');
     }
   };
 
@@ -62,7 +63,7 @@ export default function RemedialPlanViewPage({
       <ViewRemedialPlanToolBar
         isSignedByTeacher={signedByTeacherStep.status === RemedialLessonPlanStepStatus.COMPLETED}
         topic={lessonPlan.topic}
-        backLink={PATH_DASHBOARD.lessonPlan.listTeacherPlans}
+        backLink={PATH_DASHBOARD.remedialLessonPlan.listTeacherRemedialPlans}
         createdAt={lessonPlanCreationDate}
         onPrint={handlePrint}
         isThePrintLoading={isPrintLoading}
