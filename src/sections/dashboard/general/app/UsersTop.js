@@ -45,8 +45,7 @@ function AuthorItem({ user
 
   const handleRedirectUsers = () => {
     navigate(PATH_DASHBOARD.user.list);
-    console.log('Heeeeey handle');
-}
+  }
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
       <Iconify
