@@ -17,6 +17,7 @@ export default function UserEditPage() {
 
   const { id } = useParams();
 
+  // eslint-disable-next-line no-unused-vars
   const [currentUser, setCurrentUser] = useState({});
 
   const [simpleRoles, setSimpleRoles] = useState([]);

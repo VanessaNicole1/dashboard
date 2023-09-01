@@ -30,8 +30,7 @@ export default function EntityTableRow({
   };
 
   return (
-    <>
-      <TableRow hover selected={selected}>
+    <TableRow hover selected={selected}>
         <TableCell padding='checkbox'>
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
@@ -58,6 +57,5 @@ export default function EntityTableRow({
           </Tooltip>
         </TableCell>
       </TableRow>
-    </>
   );
 }

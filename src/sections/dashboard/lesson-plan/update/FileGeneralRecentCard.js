@@ -28,8 +28,7 @@ export default function FileGeneralRecentCard({ file, onDelete, onView, sx, ...o
   const filename = file.url;
   const fileExtension = filename.split('.').pop();
   return (
-    <>
-      <Stack
+    <Stack
         spacing={isDesktop ? 1.5 : 2}
         direction={isDesktop ? 'row' : 'column'}
         alignItems={isDesktop ? 'center' : 'flex-start'}
@@ -92,6 +91,5 @@ export default function FileGeneralRecentCard({ file, onDelete, onView, sx, ...o
         </IconButton>
       </Tooltip>
       </Stack>
-    </>
   );
 }

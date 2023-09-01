@@ -3,8 +3,7 @@ import { Stack, Typography } from '@mui/material';
 export default function CalendarToolbar() {
 
   return (
-    <>
-      <Stack
+    <Stack
         direction="row"
         alignItems="center"
         justifyContent="space-between"
@@ -14,6 +13,5 @@ export default function CalendarToolbar() {
           <Typography variant="h6">Plan de Clases</Typography>
         </Stack>
       </Stack>
-    </>
   );
 }

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useNavigate } from "react-router-dom";
 import {
   Card,
   Table,
@@ -57,7 +56,6 @@ const TABLE_HEADERS = [
 ];
 
 export default function ReportsPage() {
-  const navigate = useNavigate();
   const { themeStretch } = useSettingsContext();
   const [tableData, setTableData] = useState([]);
   const [filterContent, setFilterContent] = useState("");

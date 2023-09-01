@@ -11,7 +11,6 @@ import { useSettingsContext } from '../../../components/settings';
 import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
-import NotificationsPopover from './NotificationsPopover';
 
 Header.propTypes = {
   onOpenNav: PropTypes.func,

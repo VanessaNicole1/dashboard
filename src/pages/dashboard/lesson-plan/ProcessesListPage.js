@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { paramCase } from 'change-case';
 import { useNavigate } from 'react-router-dom';
 import {
   Tab,
