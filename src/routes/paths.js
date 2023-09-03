@@ -34,12 +34,12 @@ export const PATH_PAGE = {
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   dashboardApp: path(ROOTS_DASHBOARD, '/app'),
+  about: path(ROOTS_DASHBOARD, '/lesson-plan/about'),
   calendar: path(ROOTS_DASHBOARD, '/calendar'),
   permissionDenied: path(ROOTS_DASHBOARD, '/permission-denied'),
   blank: path(ROOTS_DASHBOARD, '/blank'),
   lessonPlan: {
     root: path(ROOTS_DASHBOARD, '/lesson-plan'),
-    purpose: path(ROOTS_DASHBOARD, '/lesson-plan/about'),
     startProcess: path(ROOTS_DASHBOARD, '/lesson-plan/start-process'),
     create: path(ROOTS_DASHBOARD, '/lesson-plan/create'),
     listAllPlans: path(ROOTS_DASHBOARD, '/lesson-plan/all'),

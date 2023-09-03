@@ -76,13 +76,15 @@ export default function Router() {
     children: [
       { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
       { path: 'app', element: <GeneralPage /> },
+      { path: 'information', children: [
+        {
+          element: <Navigate to="/dashboard/about" replace />,
+          index: true,
+        },
+      ] },
       {
         path: "lesson-plan",
         children: [
-          {
-            element: <Navigate to="/dashboard/lesson-plan/about" replace />,
-            index: true,
-          },
           { path: "about", element: <LessonPlanAboutPage /> },
           {
             path: "start-process",

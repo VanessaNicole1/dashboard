@@ -86,6 +86,10 @@ export default function AppManagerSection ({
       setSubjects(subjectsToPresent);
     };
 
+    fetchSubjects();
+  }, [periodId]);
+
+  useEffect(() => {
     const fetchLessonPlans = async () => {
       const acceptedLessonPlans = [];
       const unacceptedLessonPlans = [];
@@ -98,6 +102,7 @@ export default function AppManagerSection ({
           unacceptedLessonPlans.push(lessonPlanToPresent);
         }
       }
+      
       const acceptedLessonPlansData = {
         label: "Aceptados",
         value: acceptedLessonPlans.length,
@@ -124,10 +129,9 @@ export default function AppManagerSection ({
       setTotalLessonPlans(lessonPlansToPresent.length);
       setLessonPlanTypes([normalLessonPlansData, remedialLessonPlansData]);
     };
-
     fetchLessonPlans();
-    fetchSubjects();
   }, [periodId]);
+  
 
   return (
     <Grid container spacing={3}>
