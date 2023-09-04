@@ -10,9 +10,7 @@ import { getAllUsers } from "../../../services/user";
 import { getSubjects } from "../../../services/subject";
 import { getLessonPlansTypes } from "../../../services/lesson-plan";
 
-export default function AppManagerSection ({
-  periodId,
-}) {
+export default function AppManagerSection({ periodId }) {
   const theme = useTheme();
 
   const [users, setUsers] = useState([]);
@@ -66,24 +64,26 @@ export default function AppManagerSection ({
 
   useEffect(() => {
     const fetchSubjects = async () => {
-      const currentSubjects = await getSubjects({ periodId });
-      const subjectsToPresent = [];
-      for (const currentSubject of currentSubjects) {
-        const { id, name, schedules } = currentSubject;
-        let totalSchedule = 0;
-        for (const schedule of schedules) {
-          const { lessonPlans } = schedule;
-          totalSchedule += lessonPlans.length;
+      if (periodId.length > 0) {
+        const currentSubjects = await getSubjects({ periodId });
+        const subjectsToPresent = [];
+        for (const currentSubject of currentSubjects) {
+          const { id, name, schedules } = currentSubject;
+          let totalSchedule = 0;
+          for (const schedule of schedules) {
+            const { lessonPlans } = schedule;
+            totalSchedule += lessonPlans.length;
+          }
+          const subjectToPresent = {
+            id,
+            name,
+            total: totalSchedule,
+          };
+          subjectsToPresent.push(subjectToPresent);
+          totalSchedule = 0;
         }
-        const subjectToPresent = {
-          id,
-          name,
-          total: totalSchedule,
-        };
-        subjectsToPresent.push(subjectToPresent);
-        totalSchedule = 0;
+        setSubjects(subjectsToPresent);
       }
-      setSubjects(subjectsToPresent);
     };
 
     fetchSubjects();
@@ -102,7 +102,7 @@ export default function AppManagerSection ({
           unacceptedLessonPlans.push(lessonPlanToPresent);
         }
       }
-      
+
       const acceptedLessonPlansData = {
         label: "Aceptados",
         value: acceptedLessonPlans.length,
@@ -131,7 +131,6 @@ export default function AppManagerSection ({
     };
     fetchLessonPlans();
   }, [periodId]);
-  
 
   return (
     <Grid container spacing={3}>
@@ -152,7 +151,7 @@ export default function AppManagerSection ({
       </Grid>
       <Grid item xs={12} md={6} lg={6}>
         <AnalyticsLessonPlans
-          title="Planes de clases"
+          title="Planes de clases del Periodo"
           chart={{
             series: currentLessonPlans,
             colors: [theme.palette.primary.main, theme.palette.info.main],
@@ -160,9 +159,9 @@ export default function AppManagerSection ({
         />
       </Grid>
     </Grid>
-  )
+  );
 }
 
 AppManagerSection.propTypes = {
   periodId: PropTypes.string,
-}
+};
