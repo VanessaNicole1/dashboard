@@ -12,24 +12,28 @@ import { convertToSpanishDate, getFullYears, getMonth } from '../../period/list/
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 LessonPlanStudentTableRow.propTypes = {
-  row: PropTypes.object
+  row: PropTypes.object,
+  basePath: PropTypes.string
 };
 
-export default function LessonPlanStudentTableRow({ row }) {
+export default function LessonPlanStudentTableRow({ 
+  row,
+  basePath = `${PATH_DASHBOARD.lessonPlan.studentValidate}`
+}) {
   const getDateFormat = (date) => `${getMonth(date)} - ${getFullYears(date)}`;
 
   const { isValidated, period, grade, teacher, subject, creationDate, lessonPlanId } = row;
   const { startDate, endDate } = period;
 
   const convertedDate = convertToSpanishDate(creationDate);
-
   const startDateFormat = getDateFormat(startDate);
   const endDateFormat = getDateFormat(endDate);
 
   const navigate = useNavigate();
 
   const handleValidate = () => {
-    navigate(`${PATH_DASHBOARD.lessonPlan.studentValidate}/${lessonPlanId}`);
+    const path = `${basePath}/${lessonPlanId}`;
+    navigate(path);
   };
 
   return (
@@ -58,7 +62,7 @@ export default function LessonPlanStudentTableRow({ row }) {
           color={ isValidated ? 'success' : 'warning' }
           sx={{ textTransform: 'capitalize' }}
         >
-          { isValidated ? 'Validated' : 'Not Validated' }
+          { isValidated ? 'Aceptado' : 'Pendiente' }
         </Label>
       </TableCell>
 

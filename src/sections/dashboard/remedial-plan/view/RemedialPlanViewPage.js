@@ -7,7 +7,7 @@ import { PATH_DASHBOARD } from "../../../../routes/paths";
 import { useSettingsContext } from "../../../../components/settings";
 import { manualHideErrorSnackbarOptions } from "../../../../utils/snackBar";
 import { useSnackbar } from "../../../../components/snackbar";
-import { generateLessonPlanReport } from "../../../../services/lesson-plan";
+import { generateRemedialLessonPlanReport } from "../../../../services/lesson-plan";
 import LessonPlanContentTeacherDetails from "../../lesson-plan/view/LessonPlanContentTeacherDetails";
 import LessonPlanTeacherInfo from "../../lesson-plan/view/LessonPlanTeacherInfo";
 import ViewRemedialPlanToolBar from "./ViewRemedialPlanToolBar";
@@ -46,7 +46,7 @@ export default function RemedialPlanViewPage({
 
   const handlePrint = async () => {
     setIsPrintLoading(true);
-    const teacherReportUrl = await generateLessonPlanReport(lessonPlan.id);
+    const teacherReportUrl = await generateRemedialLessonPlanReport(lessonPlan.id);
     setIsPrintLoading(false);
     if (teacherReportUrl.errorMessage) {
       enqueueSnackbar(

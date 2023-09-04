@@ -6,7 +6,9 @@ export const getLessonPlans = async ({
   period,
   type = LessonPlanType.NORMAL,
   isValidatedByManager = undefined,
-  userId = undefined
+  userId = undefined,
+  studentUserId = undefined,
+  isValidatedByStudent = undefined
 }) => {
 
   const additionalParams = {}
@@ -17,6 +19,14 @@ export const getLessonPlans = async ({
 
   if (userId) {
     additionalParams.userId = userId;
+  }
+
+  if (studentUserId) {
+    additionalParams.studentId = studentUserId;
+
+    if (isValidatedByStudent !== undefined) {
+      additionalParams.isValidatedByStudent = isValidatedByStudent;
+    }
   }
 
   try  {
@@ -180,6 +190,21 @@ export const generateLessonPlanReport = async (lessonPlanId) => {
   }
 }
 
+export const generateRemedialLessonPlanReport = async (lessonPlanId) => {
+  try {
+    const response = await axios.get(`/lesson-plans/remedial/report/${lessonPlanId}`, {
+      responseType: 'blob',
+      headers: {
+        'Content-Type': 'application/pdf',
+      },
+    });
+    const pdfUrl = URL.createObjectURL(response.data);
+    return pdfUrl;
+  } catch (error) {
+    return { errorMessage: 'No existen planes de clases con los parámetros especificados' }
+  }
+}
+
 export const createRemedialPlan = async (data, resources) => {
   try {
     const studentIds = data.students.map((student) => student.id);
@@ -238,3 +263,15 @@ export const uploadSignedReportByManager = async (remedialPlanId, signedReport) 
     return { errorMessage: error.message }
   }
 }
+
+
+export const acceptRemedialLessonPlan = async (id, updatedData) => {
+  try {
+    const { data } = await axios.patch(`/lesson-plans/${id}/accept`, updatedData);
+    return data;
+  } catch (error) {
+    return {
+      message: 'Something was wrong trying to update the Teacher Configuration event.'
+    };
+  }
+};
