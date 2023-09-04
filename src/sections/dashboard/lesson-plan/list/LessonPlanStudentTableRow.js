@@ -21,8 +21,7 @@ export default function LessonPlanStudentTableRow({
   basePath = `${PATH_DASHBOARD.lessonPlan.studentValidate}`
 }) {
   const getDateFormat = (date) => `${getMonth(date)} - ${getFullYears(date)}`;
-
-  const { isValidated, period, grade, teacher, subject, creationDate, lessonPlanId } = row;
+  const { isValidated, period, grade, teacher, subject, creationDate, lessonPlanId, isAgree } = row;
   const { startDate, endDate } = period;
 
   const convertedDate = convertToSpanishDate(creationDate);
@@ -37,10 +36,10 @@ export default function LessonPlanStudentTableRow({
   };
 
   return (
-    <TableRow hover >
-      <TableCell align="center">{ `${startDateFormat} - ${endDateFormat}` }</TableCell>
+    <TableRow hover>
+      <TableCell align="center" size='medium'>{ `${startDateFormat} - ${endDateFormat}` }</TableCell>
 
-      <TableCell align="left">
+      <TableCell align="left" size='medium'>
         {convertedDate}
       </TableCell>
 
@@ -48,7 +47,7 @@ export default function LessonPlanStudentTableRow({
         { `${grade.number} "${grade.parallel}"` }
       </TableCell>
 
-      <TableCell align="left">
+      <TableCell align="center">
         {teacher.user.displayName}
       </TableCell>
 
@@ -56,17 +55,27 @@ export default function LessonPlanStudentTableRow({
         {subject.name}
       </TableCell>
 
-      <TableCell align="left">
+      <TableCell align="center">
         <Label
           variant="soft"
-          color={ isValidated ? 'success' : 'warning' }
+          color={ isValidated ? 'info' : 'warning' }
           sx={{ textTransform: 'capitalize' }}
         >
-          { isValidated ? 'Aceptado' : 'Pendiente' }
+          { isValidated ? 'Revisado' : 'Pendiente' }
         </Label>
       </TableCell>
 
       <TableCell align="center">
+        <Label
+          variant="soft"
+          color={ isAgree === true ? 'success' : isAgree === false ? 'error' : 'warning' }
+          sx={{ textTransform: 'capitalize' }}
+        >
+          { isAgree === true ? 'Aceptado' : isAgree === false ? 'No Aceptado' : 'Pendiente de aceptar' }
+        </Label>
+      </TableCell>
+
+      <TableCell align="center" size='10px'>
         <Tooltip title="Validar">
           <IconButton onClick={handleValidate}>
             <Iconify icon="ic:outline-rate-review" />

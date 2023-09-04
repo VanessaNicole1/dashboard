@@ -59,7 +59,7 @@ export default function RemedialLessonPlanManagerTableRow({ row }) {
           color={ isValidated ? 'success' : 'warning' }
           sx={{ textTransform: 'capitalize' }}
         >
-          { isValidated ? 'Validada' : 'Pendiente' }
+          { isValidated ? 'Validado' : 'Pendiente' }
         </Label>
       </TableCell>
 

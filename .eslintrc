@@ -20,6 +20,7 @@
     }
   },
   "rules": {
+    "no-nested-ternary": "off",
     "import/no-unresolved": "off",
     "consistent-return": "off",
     "react-hooks/exhaustive-deps": "off",

@@ -31,20 +31,24 @@ import {
 import LessonPlanStudentTableRow from "../../../sections/dashboard/lesson-plan/list/LessonPlanStudentTableRow";
 import { useLocales } from "../../../locales";
 
-// TODO: Add i18n.
 
 export default function LessonPlanListStudentPage() {
-
   const { translate } = useLocales();
-
-  const STATUS_OPTIONS = ["Pending", "Validated"];
+  const PENDING_STATUS = 'Pending';
+  const VALIDATED_STATUS = 'Validated';
+  const STATUS_OPTIONS = [PENDING_STATUS, VALIDATED_STATUS];
+  const STATUS_MAPPING = {
+    [PENDING_STATUS]: 'Pendientes',
+    [VALIDATED_STATUS]: 'Revisados'
+  }
   const TABLE_HEAD = [
-    { id: "period", label: translate('list_lesson_plans_student_page.period_label'), align: "center" },
-    { id: "creationDate", label: translate('list_lesson_plans_student_page.date_label'), align: "left" },
+    { id: "period", label: translate('list_lesson_plans_student_page.period_label'), align: "center", width: "20%" },
+    { id: "creationDate", label: translate('list_lesson_plans_student_page.date_label'), align: "left", width: "20%"},
     { id: "grade", label: translate('list_lesson_plans_student_page.grade_label'), align: "left" },
-    { id: "teacher", label: translate('list_lesson_plans_student_page.teacher_label'), align: "left" },
+    { id: "teacher", label: translate('list_lesson_plans_student_page.teacher_label'), align: "center" },
     { id: "subject", label: translate('list_lesson_plans_student_page.subject_label'), align: "left" },
-    { id: "status", label: translate('list_lesson_plans_student_page.status_label'), align: "left" },
+    { id: "status", label: "Estado de revisión", align: "center" },
+    { id: "accepted", label: 'Estado de Aceptación', align: "center" },
     { id: "Actions", label: translate('list_lesson_plans_student_page.actions'), align: "center" },
   ];
 
@@ -105,6 +109,7 @@ export default function LessonPlanListStudentPage() {
         return {
           id: index,
           isValidated: tracking.isValidated,
+          isAgree: tracking.isAgree,
           period: periods.find((period) => period.id === filterPeriod),
           grade,
           teacher,
@@ -187,7 +192,7 @@ export default function LessonPlanListStudentPage() {
               }}
             >
               {STATUS_OPTIONS.map((tab) => (
-                <Tab key={tab} label={tab} value={tab} />
+                <Tab key={tab} label={STATUS_MAPPING[tab]} value={tab} />
               ))}
             </Tabs>
 
@@ -285,6 +290,7 @@ async function applyFilter({
       const { grade, teacher, subject } = tracking.lessonPlan.schedule;
       return {
         id: index,
+        isAgree: tracking.isAgree,
         isValidated: tracking.isValidated,
         period: periods.find((period) => period.id === filterPeriod),
         grade,

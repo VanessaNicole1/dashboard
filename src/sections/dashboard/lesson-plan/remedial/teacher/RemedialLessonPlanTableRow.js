@@ -60,10 +60,10 @@ export default function RemedialLessonPlanTableRow({ row }) {
       <TableCell align="center">
         <Label
           variant="soft"
-          color={ hasQualified ? 'success' : 'warning' }
+          color={ hasQualified ? 'info' : 'warning' }
           sx={{ textTransform: 'capitalize' }}
         >
-          { hasQualified ? 'Aceptado' : 'Pendiente' }
+          { hasQualified ? 'Revisado' : 'Pendiente' }
         </Label>
       </TableCell>
 

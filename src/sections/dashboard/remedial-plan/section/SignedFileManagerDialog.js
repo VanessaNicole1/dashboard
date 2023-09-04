@@ -48,8 +48,6 @@ export default function SignedFileManagerDialog({
   onValidate,
   ...other
 }) {
-  console.log(reports, 'Reports>>>>')
-  const isThePrintLoading = false;
   const [files, setFiles] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();

@@ -710,10 +710,8 @@ export default function LessonPlanNewForm() {
                 />
               </Stack>
             </Card>
-            
-             {
-              validateDate && 
-              <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
+              
+            <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
               <LoadingButton
                 fullWidth
                 type="submit"
@@ -725,7 +723,6 @@ export default function LessonPlanNewForm() {
                 {translate("lesson_plans_create_form.save")}
               </LoadingButton>
             </Stack>
-             }
             
           </Grid>
           <FileNewFolderDialog

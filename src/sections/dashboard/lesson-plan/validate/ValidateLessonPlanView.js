@@ -34,10 +34,11 @@ export default function ValidateLessonPlanView({
     setOpenValidateDialog(false);
   };
 
-  const handleValidate = async (isAgree) => {
+  const handleValidate = async (isAgree, comment) => {
     const data = {
       isValidated: true,
       isAgree,
+      comment
     };
     const updateLessonPlanTrackingResponse = await updateLessonPlanTracking(
       lessonPlanTracking.id,
@@ -104,7 +105,12 @@ export default function ValidateLessonPlanView({
         </Grid>
 
         <Grid xs={12} md={4}>
-          <LessonPlanInfo teacher={teacher} grade={grade} subject={subject} />
+          <LessonPlanInfo
+            validationComment={lessonPlanTracking.comment}
+            teacher={teacher}
+            grade={grade}
+            subject={subject}
+          />
         </Grid>
       </Grid>
 

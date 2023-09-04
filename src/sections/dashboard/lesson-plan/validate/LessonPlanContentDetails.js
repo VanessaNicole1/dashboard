@@ -11,7 +11,6 @@ import Logo from "../../../../components/logo/Logo";
 import Label from '../../../../components/label';
 import FileRecentItem from "../../../file-manager/file-recent-item";
 
-// TODO: Add i18n
 export const LessonPlanContentDetails = ({ lessonPlan, lessonPlanValidationTracking }) => {
   const renderContent = (
     <Stack sx={{ marginTop: 2 }}>
@@ -81,7 +80,7 @@ export const LessonPlanContentDetails = ({ lessonPlan, lessonPlanValidationTrack
                 color={lessonPlanValidationTracking.isAgree ? "success" : "error"}
               >
                 {
-                  lessonPlanValidationTracking.isAgree ? "De acuerdo": "No de acuerdo"
+                  lessonPlanValidationTracking.isAgree ? "Aceptado": "No Aceptado"
                 }
               </Label>
             )
