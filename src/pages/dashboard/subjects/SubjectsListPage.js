@@ -46,7 +46,6 @@ export default function SubjectsListPage () {
     rowsPerPage,
     setPage,
     selected,
-    setSelected,
     onSelectRow,
     onSort,
     onChangeDense,
@@ -108,8 +107,6 @@ export default function SubjectsListPage () {
       fetchSubject();
     }
   }, [subjectId]);
-
-  const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const denseHeight = dense ? 52 : 72;
 

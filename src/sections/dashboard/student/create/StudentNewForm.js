@@ -15,7 +15,6 @@ import FormProvider, {
   RHFTextField,
 } from '../../../../components/hook-form';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-import { createStudent } from '../../../../services/student';
 import { getGrades } from '../../../../services/grade';
 import { useLocales } from '../../../../locales';
 
@@ -84,7 +83,6 @@ export default function StudentNewEditForm({ isEdit = false, currentUser }) {
 
   const onSubmit = async (data) => {
     try {
-      const message = await createStudent(data);
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');

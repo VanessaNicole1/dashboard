@@ -10,7 +10,8 @@ const ICONS = {
   file: icon('ic_file'),
   calendar: icon('ic_calendar'),
   reports: icon('ic_report'),
-  remedial: icon('ic_remedial')
+  remedial: icon('ic_remedial'),
+  information: icon('ic_info'),
 };
 
 export const ROLES = {
@@ -24,12 +25,24 @@ const navConfig = [
     subheader: 'general',
     items: [
       { 
+        title: 'Dashboard',
+        path: PATH_DASHBOARD.dashboardApp,
+        icon: ICONS.file,
+        roles: [ROLES.manager, ROLES.teacher, ROLES.student]
+      },
+      { 
+        title: 'Información',
+        path: PATH_DASHBOARD.about,
+        icon: ICONS.file,
+        roles: [ROLES.manager, ROLES.teacher, ROLES.student]
+      },
+      { 
         title: 'Plan de Clase',
         path: PATH_DASHBOARD.lessonPlan.root,
         icon: ICONS.file,
         roles: [ROLES.manager, ROLES.teacher, ROLES.student],
         children: [
-          { title: 'about', path: PATH_DASHBOARD.lessonPlan.purpose, roles: [ROLES.manager, ROLES.teacher, ROLES.student] },
+          // { title: 'about', path: PATH_DASHBOARD.lessonPlan.purpose, roles: [ROLES.manager, ROLES.teacher, ROLES.student] },
           { title: 'start_process', path: PATH_DASHBOARD.lessonPlan.startProcess, roles: [ROLES.manager] },
           { title: 'teacher_plans', path: PATH_DASHBOARD.lessonPlan.listTeacherPlans, roles: [ROLES.teacher] },
           { title: 'create', path: PATH_DASHBOARD.lessonPlan.create, roles: [ROLES.teacher] },
@@ -43,7 +56,7 @@ const navConfig = [
         icon: ICONS.remedial,
         roles: [ROLES.manager, ROLES.teacher, ROLES.student],
         children: [
-          { title: 'Información', path: PATH_DASHBOARD.remedialLessonPlan.information, roles: [ROLES.manager, ROLES.teacher, ROLES.student] },
+          // { title: 'Información', path: PATH_DASHBOARD.remedialLessonPlan.information, roles: [ROLES.manager, ROLES.teacher, ROLES.student] },
           { title: 'Listar', path: PATH_DASHBOARD.remedialLessonPlan.listStudentRemedialPlans, roles: [ROLES.student] },
           { title: 'Listar', path: PATH_DASHBOARD.remedialLessonPlan.listTeacherRemedialPlans, roles: [ROLES.teacher] },
           { title: 'Listar (Director)', path: PATH_DASHBOARD.remedialLessonPlan.listManagerRemedialPlans, roles: [ROLES.manager] },

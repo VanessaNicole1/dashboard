@@ -11,7 +11,6 @@ import FormProvider, { RHFTextField } from '../../../../components/hook-form';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { createStudent } from '../../../../services/student';
 import { useLocales } from '../../../../locales';
-import { useAuthContext } from '../../../../auth/useAuthContext';
 
 DegreeNewEditForm.propTypes = {
   isEdit: PropTypes.bool,
@@ -19,8 +18,6 @@ DegreeNewEditForm.propTypes = {
 };
 
 export default function DegreeNewEditForm({ isEdit = false, currentUser }) {
-  const { user } = useAuthContext();
-
   const { translate } = useLocales();
   const navigate = useNavigate();
 

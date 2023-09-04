@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { Card, Stack, Typography } from "@mui/material";
+import { Card, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import useResponsive from "../../hooks/useResponsive";
 
@@ -12,12 +12,6 @@ const StickyNoteCard = styled(Card)({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-});
-
-const CenteredWord = styled("span")({
-  display: "inline-block",
-  textAlign: "center",
-  fontWeight: "bold",
 });
 
 StickyNote.propTypes = {
