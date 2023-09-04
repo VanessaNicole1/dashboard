@@ -32,7 +32,7 @@ const TABLE_HEAD = [
   { id: "teacher", label: "Docente", align: "left" },
   { id: "subject", label: "Materia", align: "left" },
   { id: "managerStatus", label: "Validación Director", align: "left" },
-  { id: "studentsStatus", label: "Aceptación Estudiantes", align: "left" },
+  { id: "studentsStatus", label: "Revisión Estudiantes", align: "left" },
   { id: "Actions", label: "Acciones", align: "center" },
 ];
 

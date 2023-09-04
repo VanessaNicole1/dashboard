@@ -23,10 +23,8 @@ import CustomBreadcrumbs from "../../../../components/custom-breadcrumbs/CustomB
 import { useSettingsContext } from "../../../../components/settings";
 import { PATH_DASHBOARD } from "../../../../routes/paths";
 import LessonPlanToolbar from "../../../../sections/dashboard/lesson-plan/list/LessonPlanToolbar";
-import { getActivePeriods } from "../../../../services/period";
 import { getLessonPlans } from "../../../../services/lesson-plan";
 import { LessonPlanType } from "../../../../common/constants/lessonPlanType";
-import RemedialLessonPlanManagerTableRow from "../../../../sections/dashboard/lesson-plan/remedial/manager/RemedialLessonPlanTableRow";
 import { useAuthContext } from "../../../../auth/useAuthContext";
 import { findStudentActivePeriods } from "../../../../services/student";
 import LessonPlanStudentTableRow from "../../../../sections/dashboard/lesson-plan/list/LessonPlanStudentTableRow";
@@ -35,12 +33,13 @@ const PENDING_STATUS = "PENDING";
 const VALIDATED_STATUS = "VALIDATED";
 const STATUS_OPTIONS = [PENDING_STATUS, VALIDATED_STATUS];
 const TABLE_HEAD = [
-  { id: "period", label: "Periodo", align: "center" },
-  { id: "creationDate", label: "Fecha de Creación" , align: "left" },
-  { id: "grade", label: "Ciclo" , align: "left" },
+  { id: "period", label: "Periodo", align: "center", width: "20%" },
+  { id: "creationDate", label: "Fecha de Creación" , align: "left", width: "20%" },
+  { id: "grade", label: "Ciclo" , align: "left", minWidth: '70px' },
   { id: "teacher", label: "Docente", align: "left" },
   { id: "subject", label: "Materia", align: "left" },
-  { id: "status", label: "Estado", align: "left" },
+  { id: "status", label: "Estado de revisión", align: "center" },
+    { id: "accepted", label: 'Estado de Aceptación', align: "center" },
   { id: "Actions", label: "Acciones", align: "center" },
 ];
 
@@ -109,6 +108,7 @@ export const RemedialStudentPage = () => {
         return {
           lessonPlanId: lessonPlan.id,
           isValidated: lessonPlan.validationsTracking[0].isValidated,
+          isAgree: lessonPlan.validationsTracking[0].isAgree,
           period: periods.find((period) => period.id === filterPeriod),
           grade,
           teacher,
@@ -257,7 +257,6 @@ async function applyFilter({
   filterPeriod,
   periods
 }) {
-  console.log(filterStatus, 'Filter Status');
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -300,6 +299,7 @@ async function applyFilter({
       return {
         lessonPlanId: lessonPlan.id,
         isValidated: lessonPlan.validationsTracking[0].isValidated,
+        isAgree: lessonPlan.validationsTracking[0].isAgree,
         period: periods.find((period) => period.id === filterPeriod),
         grade,
         teacher,

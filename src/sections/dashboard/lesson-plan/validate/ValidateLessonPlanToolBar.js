@@ -10,7 +10,6 @@ import Label from "../../../../components/label/Label";
 import { fDateTime } from "../../../../utils/formatTime";
 import Iconify from "../../../../components/iconify/Iconify";
 
-// TODO: Add i18n
 export default function ValidateLessonPlanToolBar({
   status,
   backLink,
@@ -39,7 +38,7 @@ export default function ValidateLessonPlanToolBar({
           <Stack spacing={1} direction="row" alignItems="center">
             <Typography variant="h4">{topic}</Typography>
             <Label variant="soft" color={status ? "info" : "warning"}>
-              {status ? "Aceptado" : "Sin Aceptar"}
+              {status ? "Revisado" : "Pendiente"}
             </Label>
           </Stack>
 

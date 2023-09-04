@@ -90,7 +90,6 @@ export default function FileTableRow({ row, selected, onSelectRow, onDeleteRow }
         >
           <Checkbox
             checked={selected}
-            onDoubleClick={() => console.log('ON DOUBLE CLICK')}
             onClick={onSelectRow}
           />
         </TableCell>

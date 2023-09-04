@@ -5,62 +5,103 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import * as Yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { RHFTextField, RHFRadioGroup } from "../../../../components/hook-form";
+import FormProvider from "../../../../components/hook-form/FormProvider";
 
-// TODO: Add i18n
+const VALIDATION_OPTIONS = [
+  { label: "Si", value: 'true' },
+  { label: "No", value: 'false' },
+];
+
 export const LessonPlanValidateDialog = ({ open, onClose, onValidate }) => {
-  const [studentDecision, setStudentDecision] = useState(true);
+  const validationFormSchema = Yup.object().shape({
+    studentDecision: Yup.boolean(),
+    comment: Yup.string().when("studentDecision", {
+      is: false,
+      then: Yup.string().required("El comentario es necesario").min(10, "El comentario debe contener al menos 10 carácteres")
+    }),
+  });
 
-  const handleChange = () => {
-    setStudentDecision(!studentDecision);
-  }
+  const defaultValues = {
+    studentDecision: true,
+  };
+
+  const methods = useForm({
+    resolver: yupResolver(validationFormSchema),
+    defaultValues,
+  });
+
+  const {
+    watch,
+    control,
+    handleSubmit,
+    trigger
+  } = methods;
+
+  const values = watch();
+
+  const onSubmit = async ({studentDecision, comment}) => {
+    let didTheStudentAcceptTheLessonPlan = studentDecision;
+
+    if (typeof studentDecision === 'string') {
+      didTheStudentAcceptTheLessonPlan = studentDecision === "true";
+    }
+
+    const studentComment = didTheStudentAcceptTheLessonPlan ? '': comment;
+    await onValidate(didTheStudentAcceptTheLessonPlan, studentComment);
+  };
 
   return (
     <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
-      <DialogTitle> Validación del Plan de Clase </DialogTitle>
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+        <DialogTitle> Validación del Plan de Clase </DialogTitle>
 
-      <DialogContent sx={{ overflow: "unset" }}>
-        <Typography variant="subtitle1">
-          ¿Está de acuerdo con el contenido del Plan de Clase?
-        </Typography>
+        <DialogContent sx={{ overflow: "unset" }}>
+          <Typography variant="subtitle1">
+            ¿Está de acuerdo con el contenido del Plan de Clase?
+          </Typography>
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-          }}
-        >
-          <FormControl>
-            <RadioGroup
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+          >
+            <RHFRadioGroup
+              control={control}
               row
-              aria-labelledby="demo-controlled-radio-buttons-group"
-              name="controlled-radio-buttons-group"
-              value={studentDecision ? "yes" : "no"}
-              onChange={handleChange}
-            >
-              <FormControlLabel value="yes" control={<Radio />} label="Si" />
-              <FormControlLabel value="no" control={<Radio />} label="No" />
-            </RadioGroup>
-          </FormControl>
-        </div>
-      </DialogContent>
+              spacing={4}
+              name="studentDecision"
+              options={VALIDATION_OPTIONS}
+            />
+          </div>
 
-      <DialogActions sx={{ justifyContent: "flex-end" }}>
-        <Button variant="outlined" color="success" onClick={() => onValidate(studentDecision)}>
-          Aceptar Plan de Clase
-        </Button>
+          {values.studentDecision === 'false' && (
+            <RHFTextField
+              name="comment"
+              label="Comentario"
+              multiline
+              rows={3}
+            />
+          )}
+        </DialogContent>
 
-        <Button variant="outlined" color="inherit" onClick={onClose}>
-          Cancelar
-        </Button>
-      </DialogActions>
+        <DialogActions sx={{ justifyContent: "flex-end" }}>
+          <Button type="submit" variant="outlined" color="success">
+            Aceptar Plan de Clase
+          </Button>
+
+          <Button variant="outlined" color="inherit" onClick={onClose}>
+            Cancelar
+          </Button>
+        </DialogActions>
+      </FormProvider>
     </Dialog>
   );
 };

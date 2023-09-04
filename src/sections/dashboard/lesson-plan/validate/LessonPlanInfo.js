@@ -8,8 +8,7 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import useLocales from '../../../../locales/useLocales';
 
-// TODO: Add i18n
-export default function LessonPlanInfo({ teacher, subject, grade }) {
+export default function LessonPlanInfo({ teacher, subject, grade, validationComment }) {
   const { user } = teacher;
 
   const { translate } = useLocales();
@@ -74,6 +73,17 @@ export default function LessonPlanInfo({ teacher, subject, grade }) {
     </>
   );
 
+  const renderStudentComment = (
+    <>
+      <CardHeader
+        title="Comentario de la aceptación:"
+      />
+      <Stack spacing={1.5} sx={{ p: 3, typography: 'body2' }}>
+        {validationComment}
+      </Stack>
+    </>
+  )
+
   return (
     <Card>
       {renderTeacher}
@@ -86,6 +96,12 @@ export default function LessonPlanInfo({ teacher, subject, grade }) {
 
       {renderGrade}
 
+      <Divider sx={{ borderStyle: 'dashed' }} />
+
+      {
+        validationComment && renderStudentComment
+      }
+
     </Card>
   );
 }
@@ -94,4 +110,5 @@ LessonPlanInfo.propTypes = {
   teacher: PropTypes.object,
   subject: PropTypes.object,
   grade: PropTypes.object,
+  validationComment: PropTypes.string
 };

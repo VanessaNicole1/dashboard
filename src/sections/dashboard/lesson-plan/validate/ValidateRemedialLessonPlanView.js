@@ -102,7 +102,12 @@ export default function ValidateRemedialLessonPlanView({
         </Grid>
 
         <Grid xs={12} md={4}>
-          <LessonPlanInfo teacher={teacher} grade={grade} subject={subject} />
+          <LessonPlanInfo
+            teacher={teacher}
+            grade={grade}
+            subject={subject}
+            validationComment={lessonPlanTracking.comment}
+          />
         </Grid>
       </Grid>
 

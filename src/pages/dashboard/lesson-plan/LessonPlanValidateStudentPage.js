@@ -7,10 +7,7 @@ import { useAuthContext } from "../../../auth/useAuthContext";
 import { PATH_DASHBOARD } from "../../../routes/paths";
 import ValidateLessonPlanView from "../../../sections/dashboard/lesson-plan/validate/ValidateLessonPlanView";
 
-// TODO: Add i18n.
-
 export const LessonPlanValidateStudentPage = () => {
-  console.log('Anotheeer')
   const { user } = useAuthContext();
   const { lessonPlanId } = useParams();
   const navigate = useNavigate();
