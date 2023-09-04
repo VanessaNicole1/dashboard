@@ -27,7 +27,7 @@ export const LessonPlanValidateDialog = ({ open, onClose, onValidate }) => {
 
       <DialogContent sx={{ overflow: "unset" }}>
         <Typography variant="subtitle1">
-          Está de acuerdo con el contenido del Plan de Clase?
+          ¿Está de acuerdo con el contenido del Plan de Clase?
         </Typography>
 
         <div
@@ -54,7 +54,7 @@ export const LessonPlanValidateDialog = ({ open, onClose, onValidate }) => {
 
       <DialogActions sx={{ justifyContent: "flex-end" }}>
         <Button variant="outlined" color="success" onClick={() => onValidate(studentDecision)}>
-          Validar Plan de Clase
+          Aceptar Plan de Clase
         </Button>
 
         <Button variant="outlined" color="inherit" onClick={onClose}>
