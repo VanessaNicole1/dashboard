@@ -2,15 +2,12 @@ import { CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { getStudentLessonPlanToValidate } from "../../../services/student";
-import { useAuthContext } from "../../../auth/useAuthContext";
-import { PATH_DASHBOARD } from "../../../routes/paths";
-import ValidateLessonPlanView from "../../../sections/dashboard/lesson-plan/validate/ValidateLessonPlanView";
+import { useAuthContext } from "../../../../auth/useAuthContext";
+import { PATH_DASHBOARD } from "../../../../routes/paths";
+import ValidateRemedialLessonPlanView from "../../../../sections/dashboard/lesson-plan/validate/ValidateRemedialLessonPlanView";
+import { getStudentLessonPlanToValidate } from "../../../../services/student";
 
-// TODO: Add i18n.
-
-export const LessonPlanValidateStudentPage = () => {
-  console.log('Anotheeer')
+export const RemedialLessonPlanValidateStudentPage = () => {
   const { user } = useAuthContext();
   const { lessonPlanId } = useParams();
   const navigate = useNavigate();
@@ -55,7 +52,7 @@ export const LessonPlanValidateStudentPage = () => {
               <title> Dashboard: Validate Lesson Plan</title>
             </Helmet>
 
-            <ValidateLessonPlanView 
+            <ValidateRemedialLessonPlanView 
               lessonPlan={lessonPlan}
               lessonPlanTracking={lessonPlanTracking}
               onUpdateLessonPlanTracking={fecthLessonPlan}

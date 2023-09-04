@@ -21,10 +21,14 @@ export default function ConfirmDialog({ title, content, action, open, onAccept, 
         <Button variant="outlined" color="inherit" onClick={onClose}>
           Cancelar
         </Button>
+        
+        {action}
 
-        <Button variant="contained" color="error" onClick={onAccept}>
-          Si, estoy de acuerdo
-        </Button>
+        { (!action && onAccept)  && (
+          <Button variant="contained" color="error" onClick={onAccept}>
+            Si, estoy de acuerdo
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

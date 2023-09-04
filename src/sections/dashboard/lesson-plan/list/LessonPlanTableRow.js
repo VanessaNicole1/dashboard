@@ -74,10 +74,10 @@ export default function LessonPlanTableRow({ row, selected, onEditRow, onDeleteR
         <TableCell align="left">
           <Label
             variant="soft"
-            color={(hasQualified !== (true) && 'error') || 'success'}
+            color={!hasQualified ? 'error' : 'success'}
             sx={{ textTransform: 'capitalize' }}
           >
-            {hasQualified !== (true) ? 'Not validated' : 'Validated' }
+            {!hasQualified ? 'Pendiente' : 'Validado' }
           </Label>
         </TableCell>
 
