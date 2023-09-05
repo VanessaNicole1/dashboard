@@ -2,7 +2,7 @@ import { Card, CardContent, Typography } from "@mui/material";
 
 export default function A2Resolution() {
   return (
-    <Card sx={{ maxWidth: 900 }}>
+    <Card>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           Resolución para cumplimiento de Actividades de AD2

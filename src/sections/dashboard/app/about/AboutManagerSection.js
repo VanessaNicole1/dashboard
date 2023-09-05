@@ -17,8 +17,8 @@ export default function AboutManagerSection() {
   const { themeStretch } = useSettingsContext();
 
   const resourceTest = {
-    url: "CIS1693802147820.jpg",
-    name: "CIS.jpg",
+    url: "CIS1693802147820.pdf",
+    name: "CIS.pdf",
     size: 24326,
     createdDate: "2023-09-04T04:35:47.845Z",
   };
@@ -33,52 +33,32 @@ export default function AboutManagerSection() {
         ]}
       />
 
-      <Grid
-        container
-        spacing={1}
-        justifyContent="center"
-        alignItems="center"
-        flexDirection="row"
-      >
-        <Grid
-          container
-          direction="column"
-          alignItems="center"
-          spacing={4}
-          item
-          xs={12}
-          md={6}
-          lg={6}
-        >
-          <Grid item xs={12} md={6} lg={6}>
-            <Card>
-              <CardHeader title="Estudiantes" />
-              <Stack spacing={3} sx={{ p: 3, pr: 0 }}>
-                <FileRecentItem file={resourceTest} />
-              </Stack>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6} lg={6}>
-            <Card>
-              <CardHeader title="Docentes" />
-              <Stack spacing={3} sx={{ p: 3, pr: 0 }}>
-                <FileRecentItem file={resourceTest} />
-              </Stack>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6} lg={6}>
-            <Card>
-              <CardHeader title="Directores" />
-              <Stack spacing={3} sx={{ p: 3, pr: 0 }}>
-                <FileRecentItem file={resourceTest} />
-              </Stack>
-            </Card>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} md={6} lg={6}>
-          <A2Resolution />
-        </Grid>
-      </Grid>
+      <Stack direction='column' spacing={2}>
+        <Stack spacing={1} justifyContent="space-between" sx={{ flexDirection: { xs: 'column' , md: 'row'}}}>
+          <Card>
+            <CardHeader title="Estudiantes" />
+            <Stack spacing={3} sx={{ p: 3 }}>
+              <FileRecentItem file={resourceTest} />
+            </Stack>
+          </Card>
+
+          <Card>
+            <CardHeader title="Docentes" />
+            <Stack spacing={3} sx={{ p: 3 }}>
+              <FileRecentItem file={resourceTest} />
+            </Stack>
+          </Card>
+
+          <Card>
+            <CardHeader title="Directores" />
+            <Stack spacing={3} sx={{ p: 3 }}>
+              <FileRecentItem file={resourceTest} />
+            </Stack>
+          </Card>
+        </Stack>
+
+        <A2Resolution />
+      </Stack>
     </Container>
   );
 }
