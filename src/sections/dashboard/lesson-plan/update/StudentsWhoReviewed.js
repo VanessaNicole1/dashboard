@@ -5,13 +5,13 @@ import { Box, Stack, Card, CardHeader, Typography } from "@mui/material";
 import Iconify from "../../../../components/iconify";
 import CustomAvatar from "../../../../components/custom-avatar/CustomAvatar";
 
-StudentsWhoValidated.propTypes = {
+StudentsWhoReviewed.propTypes = {
   list: PropTypes.array,
   title: PropTypes.string,
   subheader: PropTypes.string,
 };
 
-export default function StudentsWhoValidated({
+export default function StudentsWhoReviewed({
   title,
   subheader,
   list,
@@ -50,7 +50,6 @@ AuthorItem.propTypes = {
 function AuthorItem({ author, index }) {
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
-      {/* <Avatar alt={author.name} src={author.avatar} /> */}
       <CustomAvatar
         src={author?.name}
         alt={author?.name}
@@ -77,37 +76,6 @@ function AuthorItem({ author, index }) {
           {author.email}
         </Typography>
       </Box>
-
-      {author.isValidated && (
-        <Iconify
-          icon="gg:check-o"
-          sx={{
-            p: 1,
-            width: 40,
-            height: 40,
-            borderRadius: "50%",
-            color: "primary.main",
-            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
-          }}
-        />
-      )}
-      {!author.isValidated && (
-        <Iconify
-          icon="tabler:xbox-x"
-          sx={{
-            p: 1,
-            width: 40,
-            height: 40,
-            borderRadius: "50%",
-            color: "error.main",
-            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
-            ...(index === 1 && {
-              color: "error.main",
-              bgcolor: (theme) => alpha(theme.palette.info.main, 0.08),
-            }),
-          }}
-        />
-      )}
     </Stack>
   );
 }

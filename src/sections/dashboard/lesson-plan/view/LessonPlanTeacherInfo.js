@@ -8,8 +8,8 @@ import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 import StudentsWhoValidated from "../update/StudentsWhoValidated";
 import RemedialPlanFileTeacherItem from "../../remedial-plan/section/file-recent-item-remedial-plan-teacher";
+import StudentsWhoReviewed from "../update/StudentsWhoReviewed";
 
-// TODO: Add i18n
 export default function LessonPlanTeacherInfo({
   teacher,
   subject,
@@ -24,9 +24,9 @@ export default function LessonPlanTeacherInfo({
   if (!remedialReports) {
     remedialReports = [];
   }
-
-  const studentsWhoAccepted = studentsValidated.filter((studentValidated) => studentValidated.isValidated);
-  const studentsWhoHaveNotAccepted = studentsValidated.filter((studentValidated) => !studentValidated.isValidated);
+  const studentsWhoValidated = studentsValidated.filter(
+    (studentValidated) => !studentValidated.isValidated
+  );
 
   const renderTeacher = (
     <>
@@ -110,9 +110,7 @@ export default function LessonPlanTeacherInfo({
                     Docente:
                   </Box>
                 </Stack>
-                <RemedialPlanFileTeacherItem
-                  file={remedialReports[0]}
-                />
+                <RemedialPlanFileTeacherItem file={remedialReports[0]} />
               </>
             )}
 
@@ -126,9 +124,7 @@ export default function LessonPlanTeacherInfo({
                     Director:
                   </Box>
                 </Stack>
-                <RemedialPlanFileTeacherItem
-                  file={remedialReports[1]}
-                />
+                <RemedialPlanFileTeacherItem file={remedialReports[1]} />
               </>
             )}
           </>
@@ -157,15 +153,19 @@ export default function LessonPlanTeacherInfo({
 
       <Divider sx={{ borderStyle: "dashed" }} />
 
-      {
-        studentsWhoAccepted.length > 0 &&
-        <StudentsWhoValidated title="Estudiantes que han aceptado" list={studentsWhoAccepted} />
-      }
-      {
-        studentsWhoHaveNotAccepted.length > 0 &&
-        <StudentsWhoValidated title="Estudiantes pendientes de aceptar" list={studentsWhoHaveNotAccepted} />
-      }
+      {studentsValidated.length > 0 && (
+        <StudentsWhoValidated
+          title="Estudiantes que han aceptado"
+          list={studentsValidated}
+        />
+      )}
 
+      {studentsWhoValidated.length > 0 && (
+        <StudentsWhoReviewed
+          title="Estudiantes que no han revisado"
+          list={studentsWhoValidated}
+        />
+      )}
     </Card>
   );
 }

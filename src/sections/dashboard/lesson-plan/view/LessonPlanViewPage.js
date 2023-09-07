@@ -1,21 +1,23 @@
-import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
-import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Unstable_Grid2';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
-import { useSettingsContext } from '../../../../components/settings';
-import { manualHideErrorSnackbarOptions } from '../../../../utils/snackBar';
-import { useSnackbar } from '../../../../components/snackbar';
-import { generateLessonPlanReport } from '../../../../services/lesson-plan';
-import ViewLessonPlanToolBar from './ViewLessonPlanToolBar';
-import LessonPlanTeacherInfo from './LessonPlanTeacherInfo';
-import LessonPlanContentTeacherDetails from './LessonPlanContentTeacherDetails';
+import Stack from "@mui/material/Stack";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Unstable_Grid2";
+import { PATH_DASHBOARD } from "../../../../routes/paths";
+import { useSettingsContext } from "../../../../components/settings";
+import { manualHideErrorSnackbarOptions } from "../../../../utils/snackBar";
+import { useSnackbar } from "../../../../components/snackbar";
+import { generateLessonPlanReport } from "../../../../services/lesson-plan";
+import ViewLessonPlanToolBar from "./ViewLessonPlanToolBar";
+import LessonPlanTeacherInfo from "./LessonPlanTeacherInfo";
+import LessonPlanContentTeacherDetails from "./LessonPlanContentTeacherDetails";
 
 // TODO: Add i18n
 export default function LessonPlanViewPage({ lessonPlan, lessonPlanTracking }) {
-  const { schedule: { teacher, grade, subject } } = lessonPlan;
+  const {
+    schedule: { teacher, grade, subject },
+  } = lessonPlan;
   const lessonPlanCreationDate = new Date(lessonPlan.createdAt);
   const settings = useSettingsContext();
   const [students, setStudents] = useState([]);
@@ -23,7 +25,13 @@ export default function LessonPlanViewPage({ lessonPlan, lessonPlanTracking }) {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    const currentStudents = lessonPlanTracking.map((tracking) => ({id: tracking.student.id, name: tracking.student.user.displayName, email: tracking.student.user.email, isValidated: tracking.isValidated}));
+    const currentStudents = lessonPlanTracking.map((tracking) => ({
+      id: tracking.student.id,
+      name: tracking.student.user.displayName,
+      email: tracking.student.user.email,
+      isValidated: tracking.isValidated,
+      isAgree: tracking.isAgree,
+    }));
     setStudents(currentStudents);
   }, [lessonPlanTracking]);
 
@@ -32,14 +40,17 @@ export default function LessonPlanViewPage({ lessonPlan, lessonPlanTracking }) {
     const teacherReportUrl = await generateLessonPlanReport(lessonPlan.id);
     setIsPrintLoading(false);
     if (teacherReportUrl.errorMessage) {
-      enqueueSnackbar(teacherReportUrl.errorMessage, manualHideErrorSnackbarOptions);
+      enqueueSnackbar(
+        teacherReportUrl.errorMessage,
+        manualHideErrorSnackbarOptions
+      );
     } else {
       window.open(teacherReportUrl, "_blank");
     }
-  }
+  };
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : "lg"}>
       <ViewLessonPlanToolBar
         topic={lessonPlan.topic}
         backLink={PATH_DASHBOARD.lessonPlan.listTeacherPlans}
@@ -50,10 +61,8 @@ export default function LessonPlanViewPage({ lessonPlan, lessonPlanTracking }) {
 
       <Grid container spacing={3}>
         <Grid xs={12} md={8}>
-          <Stack spacing={3} direction={{ xs: 'column-reverse', md: 'column' }}>
-            <LessonPlanContentTeacherDetails
-              lessonPlan={lessonPlan}
-            />
+          <Stack spacing={3} direction={{ xs: "column-reverse", md: "column" }}>
+            <LessonPlanContentTeacherDetails lessonPlan={lessonPlan} />
           </Stack>
         </Grid>
 
@@ -72,5 +81,5 @@ export default function LessonPlanViewPage({ lessonPlan, lessonPlanTracking }) {
 
 LessonPlanViewPage.propTypes = {
   lessonPlan: PropTypes.object,
-  lessonPlanTracking: PropTypes.array
+  lessonPlanTracking: PropTypes.array,
 };
