@@ -9,7 +9,6 @@ import { fDate } from "../../../../utils/formatTime";
 import Logo from "../../../../components/logo/Logo";
 import FileRecentItem from "../../../file-manager/file-recent-item";
 
-// TODO: Add i18n
 export default function LessonPlanContentTeacherDetails({ lessonPlan }) {
   const renderContent = (
     <Stack sx={{ marginTop: 2 }}>
@@ -17,7 +16,7 @@ export default function LessonPlanContentTeacherDetails({ lessonPlan }) {
         Contenido:
       </Typography>
       <Typography
-        variant="body1"
+        variant="body2"
         component="div"
         dangerouslySetInnerHTML={{ __html: lessonPlan.content }}
       />
@@ -25,41 +24,29 @@ export default function LessonPlanContentTeacherDetails({ lessonPlan }) {
   );
 
   const renderMaterials = (
-    <Stack sx={{ marginTop: 2 }}>
+    <Stack sx={{ typography: "body2", marginTop: 2 }}>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Materiales:
       </Typography>
-      <Typography
-        variant="body1"
-        component="div"
-        dangerouslySetInnerHTML={{ __html: lessonPlan.content }}
-      />
+      {lessonPlan.materials}
     </Stack>
   );
 
   const renderEvaluation = (
-    <Stack sx={{ marginTop: 2 }}>
+    <Stack sx={{ typography: "body2", marginTop: 2 }}>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Evaluación de actividades:
       </Typography>
-      <Typography
-        variant="body1"
-        component="div"
-        dangerouslySetInnerHTML={{ __html: lessonPlan.content }}
-      />
+      {lessonPlan.evaluation}
     </Stack>
   );
 
   const renderComments = (
-    <Stack sx={{ marginTop: 2 }}>
+    <Stack sx={{ typography: "body2", marginTop: 2 }}>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Observaciones:
       </Typography>
-      <Typography
-        variant="body1"
-        component="div"
-        dangerouslySetInnerHTML={{ __html: lessonPlan.content }}
-      />
+      {lessonPlan.comments}
     </Stack>
   );
 
@@ -84,7 +71,6 @@ export default function LessonPlanContentTeacherDetails({ lessonPlan }) {
         <FileRecentItem
           key={index}
           file={resource}
-          onDelete={() => console.info('DELETE', resource)}
         />
       ))}
     </Stack>

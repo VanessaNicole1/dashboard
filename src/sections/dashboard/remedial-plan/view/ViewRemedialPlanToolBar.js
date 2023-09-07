@@ -67,14 +67,14 @@ export default function ViewRemedialPlanToolBar({
         {
           !isSignedByTeacher ? (
             <Button
-          disabled={isValidatedByManager}
-          color="inherit"
-          variant="outlined"
-          startIcon={<Iconify icon="mdi:sign" />}
-          onClick={handleOpenUploadFile}
-        >
-          Firmar
-        </Button>
+              disabled={isValidatedByManager}
+              color="inherit"
+              variant="outlined"
+              startIcon={<Iconify icon="mdi:sign" />}
+              onClick={handleOpenUploadFile}
+            >
+              Firmar
+            </Button>
           ): (
             <Tooltip title="Si en caso desea volver a subir el reporte, primero elimine el reporte que previamente subió">
               <Chip variant="outlined" color="info" label="Usted ya ha firmado este Plan de Clase Remedial" />

@@ -8,9 +8,10 @@ import {
 } from "@mui/lab";
 import { Typography } from "@mui/material";
 import { TimeLineIcon } from "./TimeLineIcon";
+import { convertToSpanishDate } from '../../sections/dashboard/period/list/utils/date.utils';
 
 export const CustomTimeLineItem = ({ item, isFirst = false, isLast = false }) => {
-  const itemDate = new Date();
+  const dateInformation = item.date ? convertToSpanishDate(new Date(item.date)) : '';
   return (
     <TimelineItem>
       <TimelineOppositeContent
@@ -19,7 +20,7 @@ export const CustomTimeLineItem = ({ item, isFirst = false, isLast = false }) =>
         variant="body2"
         color="text.secondary"
       >
-        {itemDate.toLocaleDateString()}        
+        {dateInformation}        
       </TimelineOppositeContent>
       <TimelineSeparator>
         {!isFirst && <TimelineConnector />}

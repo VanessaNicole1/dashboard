@@ -13,7 +13,6 @@ import ViewLessonPlanToolBar from './ViewLessonPlanToolBar';
 import LessonPlanTeacherInfo from './LessonPlanTeacherInfo';
 import LessonPlanContentTeacherDetails from './LessonPlanContentTeacherDetails';
 
-// TODO: Add i18n
 export default function LessonPlanViewPage({ lessonPlan, lessonPlanTracking }) {
   const { schedule: { teacher, grade, subject } } = lessonPlan;
   const lessonPlanCreationDate = new Date(lessonPlan.createdAt);

@@ -32,7 +32,6 @@ export const LessonPlanValidateStudentPage = () => {
     fecthLessonPlan();
   }, []);
 
-  
   return (
     <>
       {
