@@ -18,10 +18,37 @@ export const LessonPlanContentDetails = ({ lessonPlan, lessonPlanValidationTrack
         Contenido:
       </Typography>
       <Typography
-        variant="body1"
+        variant="body2"
         component="div"
         dangerouslySetInnerHTML={{ __html: lessonPlan.content }}
       />
+    </Stack>
+  );
+
+  const renderMaterials = (
+    <Stack sx={{ typography: "body2", marginTop: 2 }}>
+      <Typography variant="subtitle2" sx={{ mb: 1 }}>
+        Materiales:
+      </Typography>
+      {lessonPlan.materials}
+    </Stack>
+  );
+
+  const renderEvaluation = (
+    <Stack sx={{ typography: "body2", marginTop: 2 }}>
+      <Typography variant="subtitle2" sx={{ mb: 1 }}>
+        Evaluación de actividades:
+      </Typography>
+      {lessonPlan.evaluation}
+    </Stack>
+  );
+
+  const renderComments = (
+    <Stack sx={{ typography: "body2", marginTop: 2 }}>
+      <Typography variant="subtitle2" sx={{ mb: 1 }}>
+        Observaciones:
+      </Typography>
+      {lessonPlan.comments}
     </Stack>
   );
 
@@ -117,7 +144,19 @@ export const LessonPlanContentDetails = ({ lessonPlan, lessonPlanValidationTrack
       <Divider sx={{ mt: 2, borderStyle: "dashed" }} />
 
       {renderContent}
-      
+
+      <Divider sx={{ my: 2, borderStyle: "dashed" }} />
+
+      {renderMaterials}
+
+      <Divider sx={{ my: 2, borderStyle: "dashed" }} />
+
+      {renderEvaluation}
+
+      <Divider sx={{ my: 2, borderStyle: "dashed" }} />
+
+      {renderComments}
+
       <Divider sx={{ my: 2, borderStyle: "dashed" }} />
       
       {renderResources}

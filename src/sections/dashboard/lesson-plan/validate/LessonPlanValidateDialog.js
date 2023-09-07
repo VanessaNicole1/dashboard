@@ -39,8 +39,7 @@ export const LessonPlanValidateDialog = ({ open, onClose, onValidate }) => {
   const {
     watch,
     control,
-    handleSubmit,
-    trigger
+    handleSubmit
   } = methods;
 
   const values = watch();
