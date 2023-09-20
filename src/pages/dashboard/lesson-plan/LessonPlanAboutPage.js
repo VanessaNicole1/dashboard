@@ -9,22 +9,20 @@ export default function LessonPlanAboutPage() {
 
   if (currentRoles.includes("MANAGER")) {
     currentRoles = [];
-    currentRoles.push('MANAGER');
+    currentRoles.push("MANAGER");
   }
 
   return (
     <>
-      {
-        currentRoles.length === 1 && currentRoles.includes("MANAGER") && <AboutManagerSection />
-      }
+      {currentRoles.length === 1 && currentRoles.includes("MANAGER") && (
+        <AboutManagerSection />
+      )}
 
-      {
-        currentRoles.length === 1 && currentRoles.includes("TEACHER") && <AboutTeacherSection />
-      }
+      {currentRoles.length === 1 && currentRoles.includes("TEACHER") && (
+        <AboutTeacherSection />
+      )}
 
-      {
-        currentRoles.includes("STUDENT") && <AboutStudentSection />
-      }
+      {currentRoles.includes("STUDENT") && <AboutStudentSection />}
     </>
   );
 }

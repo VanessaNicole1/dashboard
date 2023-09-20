@@ -72,9 +72,15 @@ export default function GeneralPage() {
         </TextField>
       </Box>
       {
+        currentRoles.includes("MANAGER") && <h1>Métricas como Director</h1>
+      }
+      {
         currentRoles.includes("MANAGER") && <AppManagerSection  periodId={periodId} />
       }
       <br />
+      {
+        currentRoles.includes("TEACHER") && <h1>Métricas como Docente</h1>
+      }
       {
         currentRoles.includes("TEACHER") && <AppTeacherSection periodId={periodId} />
       }

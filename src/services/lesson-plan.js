@@ -73,7 +73,7 @@ export const createLessonPlan = async (data, resources) => {
     }
     await axios.post('/lesson-plans', formData);
     return {
-      message: 'Lesson Plan created successfully'
+      message: 'El Plan de Clase se ha creado con éxito'
     };
   } catch (error) {
     return { errorMessage: error.message }

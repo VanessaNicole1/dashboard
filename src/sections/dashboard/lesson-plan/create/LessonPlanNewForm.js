@@ -90,7 +90,9 @@ export default function LessonPlanNewForm() {
     purposeOfClass: Yup.string().required(
       translate("lesson_plans_create_form.purpose_required")
     ),
-    results: Yup.string().required("Los resultados de aprendizaje son requeridos"),
+    results: Yup.string().required(
+      "Los resultados de aprendizaje son requeridos"
+    ),
     bibliography: Yup.string().required(
       translate("lesson_plans_create_form.biblio_required")
     ),
@@ -129,6 +131,7 @@ export default function LessonPlanNewForm() {
     content: "",
     students: [],
     purposeOfClass: "",
+    results: "",
     bibliography: "",
     materials: "",
     evaluation: "",
@@ -159,7 +162,6 @@ export default function LessonPlanNewForm() {
     return dayOfWeek === 0 || dayOfWeek === 6;
   };
 
-  // TODO: Validate the day
   useEffect(() => {
     const currentDate = new Date();
     const isWeekend = validateWeekend(currentDate);
@@ -199,13 +201,13 @@ export default function LessonPlanNewForm() {
           const { metadata } = currentSchedule;
           if (!metadata) {
             validateMeta.push(currentSchedule);
-          }else if (metadata.days.length === 0) {
-              validateMetadataDays.push(currentSchedule);
-            }
+          } else if (metadata.days.length === 0) {
+            validateMetadataDays.push(currentSchedule);
+          }
         }
         if (validateMeta.length > 0 || validateMetadataDays.length > 0) {
           setCanCreateLessonPlan(false);
-        }else {
+        } else {
           setCanCreateLessonPlan(true);
         }
         setSchedules(currentSchedules);
@@ -421,7 +423,7 @@ export default function LessonPlanNewForm() {
       if (notification === "no") {
         const formattedDate = formatDateSpanish(notificationDate);
         enqueueSnackbar(
-          `Students will be notified ${formattedDate} at 8:00 a.m.`,
+          `Los estudiantes serán notificados ${formattedDate} a las 8:00 a.m.`,
           { variant: "success", autoHideDuration: 5000 }
         );
       }
@@ -710,7 +712,7 @@ export default function LessonPlanNewForm() {
                 />
               </Stack>
             </Card>
-              
+
             <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
               <LoadingButton
                 fullWidth
@@ -723,7 +725,6 @@ export default function LessonPlanNewForm() {
                 {translate("lesson_plans_create_form.save")}
               </LoadingButton>
             </Stack>
-            
           </Grid>
           <FileNewFolderDialog
             open={openUploadFile}
