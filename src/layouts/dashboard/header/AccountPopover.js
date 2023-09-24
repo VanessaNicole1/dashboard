@@ -11,15 +11,11 @@ import { IconButtonAnimate } from '../../../components/animate';
 
 const OPTIONS = [
   {
-    label: 'Home',
+    label: 'Dashboard',
     linkTo: '/',
   },
   {
-    label: 'Profile',
-    linkTo: PATH_DASHBOARD.user.profile,
-  },
-  {
-    label: 'Settings',
+    label: 'Configuración',
     linkTo: PATH_DASHBOARD.user.account,
   },
 ];
@@ -100,7 +96,7 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
-          Logout
+          Cerrar Sesión
         </MenuItem>
       </MenuPopover>
     </>
