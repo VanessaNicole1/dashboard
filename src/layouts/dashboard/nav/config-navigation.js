@@ -11,7 +11,8 @@ const ICONS = {
   calendar: icon('ic_calendar'),
   reports: icon('ic_report'),
   remedial: icon('ic_remedial'),
-  information: icon('ic_info'),
+  information: icon('ic_info_nav'),
+  config: icon('ic_setting'),
 };
 
 export const ROLES = {
@@ -33,7 +34,7 @@ const navConfig = [
       { 
         title: 'Información',
         path: PATH_DASHBOARD.about,
-        icon: ICONS.file,
+        icon: ICONS.information,
         roles: [ROLES.manager, ROLES.teacher, ROLES.student]
       },
       { 
@@ -64,7 +65,7 @@ const navConfig = [
         ]
       },
       {
-        title: 'Users',
+        title: 'Usuarios',
         path: PATH_DASHBOARD.user.root,
         icon: ICONS.user,
         roles: [ROLES.manager],
@@ -73,18 +74,24 @@ const navConfig = [
         ]
       },
       {
-        title: 'Schedule',
+        title: 'Calendario',
         path: PATH_DASHBOARD.schedule.root,
         icon: ICONS.calendar,
         roles: [ROLES.teacher]
       },
       {
-        title: 'Reports',
+        title: 'Reportes',
         path: PATH_DASHBOARD.reports.root,
         icon: ICONS.reports,
         roles: [ROLES.manager]
+      },
+      {
+        title: 'Configuración',
+        path: PATH_DASHBOARD.settings.root,
+        icon: ICONS.config,
+        roles: [ROLES.manager]
       }
-    ] 
+    ]
   }
 ]
 

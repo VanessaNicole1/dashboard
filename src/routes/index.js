@@ -42,6 +42,7 @@ import { RemedialplanManagerViewPage } from "../pages/dashboard/remedial-plan/Re
 import { RemedialLessonPlanValidateStudentPage } from "../pages/dashboard/lesson-plan/remedial/RemedialLessonPlanValidateStudentPage";
 import { PATH_AFTER_LOGIN } from "../config-global";
 import GeneralPage from "../pages/dashboard/app/App";
+import SettingsPage from "../pages/dashboard/settings/SettingsPage";
 
 export default function Router() {
   const AuthRoutes = {
@@ -416,6 +417,19 @@ export default function Router() {
           },
         ],
       },
+      {
+        path: "settings",
+        children: [
+          {
+            path: "/dashboard/settings",
+            element: (
+              <RoleBasedGuard hasContent roles={[ROLES.manager]}>
+                <SettingsPage />
+              </RoleBasedGuard>
+            )
+          }
+        ]
+      }
     ],
   };
 
