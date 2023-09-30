@@ -101,7 +101,7 @@ export const updateLessonPlan = async (lessonPlanId, data, resources) => {
     }
     await axios.patch(`/lesson-plans/${lessonPlanId}`, formData);
     return {
-      message: 'Lesson Plan updated successfully'
+      message: 'El plan de clase de actualizó con éxito'
     }
   } catch (error) {
     return { errorMessage: error.message }
