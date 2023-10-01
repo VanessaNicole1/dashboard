@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import axios from '../utils/axios';
 import localStorageAvailable from '../utils/localStorageAvailable';
 import { isValidToken, setSession } from './utils';
+import keycloakClient from '../keycloak';
 
 const initialState = {
   isInitialized: false,
@@ -46,13 +47,10 @@ AuthProvider.propTypes = {
 
 export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
-
   const storageAvailable = localStorageAvailable();
-
   const initialize = useCallback(async () => {
     try {
       const accessToken = storageAvailable ? localStorage.getItem('accessToken') : '';
-
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
@@ -87,30 +85,44 @@ export function AuthProvider({ children }) {
   }, [storageAvailable]);
 
   useEffect(() => {
+    const initAuthClient = async () => {
+      try {
+        const authenticated = await keycloakClient.init({ checkLoginIframe: false });
+
+        if (authenticated) {
+          const accessToken = keycloakClient.token;
+          
+          setSession(accessToken);
+
+          const response = await axios.get('/users/my-account');
+          const user = response.data;
+
+          dispatch({
+            type: 'LOGIN',
+            payload: {
+              user,
+            },
+          });
+        }
+      } catch (error) {
+        console.error('Failed to initialize adapter:', error);
+      }
+    }
+
+    initAuthClient();
+  }, []);
+
+  
+  useEffect(() => {
     initialize();
   }, [initialize]);
 
-  // LOGIN
-  const login = useCallback(async (email, password) => {
-    const response = await axios.post('/auth', {
-      email,
-      password,
-    });
-    
-    const { accessToken, user } = response.data;
-
-    setSession(accessToken);
-
-    dispatch({
-      type: 'LOGIN',
-      payload: {
-        user,
-      },
-    });
+  const login = useCallback(() => {
+    keycloakClient.login();
   }, []);
 
-  // LOGOUT
   const logout = useCallback(() => {
+    keycloakClient.logout();
     setSession(null);
     dispatch({
       type: 'LOGOUT',
