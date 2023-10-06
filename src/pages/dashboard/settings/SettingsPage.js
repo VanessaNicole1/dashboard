@@ -45,7 +45,7 @@ export default function SettingsPage() {
     password: Yup.string().required("La contraseña es requerida"),
     confirPassword: Yup.string().required(
       "La confirmación de la contraseña es requerida"
-    ),
+    ).oneOf([Yup.ref('password')], 'La contraseña debe ser la misma')
   });
 
   const defaultValues = useMemo(
@@ -125,10 +125,11 @@ export default function SettingsPage() {
               <RHFTextField name="port" label="Puerto" />
               <RHFTextField name="user" label="Usuario" />
               <RHFTextField name="sender" label="Remitente" />
-              <RHFTextField name="password" label="Contraseña" />
+              <RHFTextField name="password" label="Contraseña" type="password" />
               <RHFTextField
                 name="confirPassword"
                 label="Confirmar Contraseña"
+                type="password"
               />
             </Box>
 
