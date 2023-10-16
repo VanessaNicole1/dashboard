@@ -64,15 +64,15 @@ const navConfig = [
           { title: 'Crear', path: PATH_DASHBOARD.remedialLessonPlan.create, roles: [ROLES.teacher] },
         ]
       },
-      {
-        title: 'Usuarios',
-        path: PATH_DASHBOARD.user.root,
-        icon: ICONS.user,
-        roles: [ROLES.manager],
-        children: [
-          { title: 'List', path: PATH_DASHBOARD.user.list, roles: [ROLES.manager] }
-        ]
-      },
+      // {
+      //   title: 'Usuarios',
+      //   path: PATH_DASHBOARD.user.root,
+      //   icon: ICONS.user,
+      //   roles: [ROLES.manager],
+      //   children: [
+      //     { title: 'List', path: PATH_DASHBOARD.user.list, roles: [ROLES.manager] }
+      //   ]
+      // },
       {
         title: 'Calendario',
         path: PATH_DASHBOARD.schedule.root,

@@ -9,7 +9,7 @@ export default function Login() {
   return (
     <LoginLayout title='Plan de Clases'>
       <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-        <Typography variant="h4">Iniciar Sesión</Typography>
+        <Typography variant="h4">Ingresar al Sistema</Typography>
 
         <Tooltip title={method} placement="left">
           <Box
