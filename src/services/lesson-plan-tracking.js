@@ -7,7 +7,7 @@ export const updateLessonPlanTracking = async (id, updatedData) => {
     return data;
   } catch (error) {
     return {
-      message: 'Something was wrong trying to update the Teacher Configuration event.'
+      message: 'Algo ha fallado al intentar actualizar el evento Configuración del docente.'
     };
   }
 };
