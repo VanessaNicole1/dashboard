@@ -50,18 +50,18 @@ export default function AuthRegisterForm({
   } = methods;
 
   const onSubmit = async (data) => {
-    const updatedUser = await updateUserPasswordByRegisteredToken(registeredToken, data.password); 
+    // const updatedUser = await updateUserPasswordByRegisteredToken(registeredToken, data.password); 
 
-    if (updatedUser.errorMessage) {
-      reset();
-      setError('afterSubmit', {
-        message: updatedUser.errorMessage
-      });
-    } else {
-      enqueueSnackbar('Contraseña actualizada con éxito', { variant: 'success', autoHideDuration: 5000 });
-      await updateRegisterToken(registeredToken);
-      navigate(PATH_AUTH.login);
-    };
+    // if (updatedUser.errorMessage) {
+    //   reset();
+    //   setError('afterSubmit', {
+    //     message: updatedUser.errorMessage
+    //   });
+    // } else {
+    //   enqueueSnackbar('Contraseña actualizada con éxito', { variant: 'success', autoHideDuration: 5000 });
+    //   await updateRegisterToken(registeredToken);
+    //   navigate(PATH_AUTH.login);
+    // };
   };
 
   return (
