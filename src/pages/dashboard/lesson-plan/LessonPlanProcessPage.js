@@ -114,8 +114,8 @@ export default function CreateLessonPlanProcessPage() {
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
-              name: translate(`${i18nStartProcess}.breadcrumbs.lesson_plan`),
-              href: PATH_DASHBOARD.lessonPlan.root,
+              name: "Procesos",
+              href: PATH_DASHBOARD.lessonPlan.listProcesses,
             },
             { name: translate(`${i18nStartProcess}.breadcrumbs.start_process`) },
           ]}
