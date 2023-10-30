@@ -38,30 +38,7 @@ export default function TeacherTableRow({ row, selected, onEditRow }) {
         <TableCell align="center">
           {user.email}
         </TableCell>
-
-        <TableCell align="center">
-          <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </TableCell>
       </TableRow>
-
-      <MenuPopover
-        open={openPopover}
-        onClose={handleClosePopover}
-        arrow="right-top"
-        sx={{ width: 140 }}
-      >
-        <MenuItem
-          onClick={() => {
-            onEditRow();
-            handleClosePopover();
-          }}
-        >
-          <Iconify icon="eva:edit-fill" />
-          Edit
-        </MenuItem>
-      </MenuPopover>
     </>
   );
 };

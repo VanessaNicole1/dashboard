@@ -34,7 +34,6 @@ export default function StudentsListPage () {
     { id: 'last name', label: translate('students_list_page.table.last'), align: 'center' },
     { id: 'email', label: translate('students_list_page.table.email'), align: 'center' },
     { id: 'grade', label: translate('students_list_page.table.grade'), align: 'center' },
-    { id: '', label: translate('students_list_page.table.actions'), align: 'center' },
   ];
 
   const {
@@ -189,8 +188,6 @@ export default function StudentsListPage () {
                         row={row}
                         selected={selected.includes(row.id)}
                         onSelectRow={() => onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.user.id)}
                       />
                     ))}
 

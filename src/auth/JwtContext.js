@@ -1,9 +1,16 @@
-import { createContext, useEffect, useReducer, useCallback, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import axios from '../utils/axios';
-import localStorageAvailable from '../utils/localStorageAvailable';
-import { isValidToken, setSession } from './utils';
-import keycloakClient from '../keycloak';
+import {
+  createContext,
+  useEffect,
+  useReducer,
+  useCallback,
+  useMemo,
+} from "react";
+import PropTypes from "prop-types";
+import axios from "../utils/axios";
+import localStorageAvailable from "../utils/localStorageAvailable";
+import { isValidToken, setSession } from "./utils";
+import keycloakClient from "../keycloak";
+import { PATH_DASHBOARD, PATH_PAGE } from "../routes/paths";
 
 const initialState = {
   isInitialized: false,
@@ -12,7 +19,7 @@ const initialState = {
 };
 
 const reducer = (state, action) => {
-  if (action.type === 'INITIAL') {
+  if (action.type === "INITIAL") {
     return {
       isInitialized: true,
       isAuthenticated: action.payload.isAuthenticated,
@@ -20,7 +27,7 @@ const reducer = (state, action) => {
     };
   }
 
-  if (action.type === 'LOGIN') {
+  if (action.type === "LOGIN") {
     return {
       ...state,
       isAuthenticated: true,
@@ -28,7 +35,7 @@ const reducer = (state, action) => {
     };
   }
 
-  if (action.type === 'LOGOUT') {
+  if (action.type === "LOGOUT") {
     return {
       ...state,
       isAuthenticated: false,
@@ -48,17 +55,20 @@ AuthProvider.propTypes = {
 export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const storageAvailable = localStorageAvailable();
+
   const initialize = useCallback(async () => {
     try {
-      const accessToken = storageAvailable ? localStorage.getItem('accessToken') : '';
+      const accessToken = storageAvailable
+        ? localStorage.getItem("accessToken")
+        : "";
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const response = await axios.get('/users/my-account');
+        const response = await axios.get("/users/my-account");
         const user = response.data;
 
         dispatch({
-          type: 'INITIAL',
+          type: "INITIAL",
           payload: {
             isAuthenticated: true,
             user,
@@ -66,7 +76,7 @@ export function AuthProvider({ children }) {
         });
       } else {
         dispatch({
-          type: 'INITIAL',
+          type: "INITIAL",
           payload: {
             isAuthenticated: false,
             user: null,
@@ -75,7 +85,7 @@ export function AuthProvider({ children }) {
       }
     } catch (error) {
       dispatch({
-        type: 'INITIAL',
+        type: "INITIAL",
         payload: {
           isAuthenticated: false,
           user: null,
@@ -87,32 +97,36 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const initAuthClient = async () => {
       try {
-        const authenticated = await keycloakClient.init({ checkLoginIframe: false });
+        const authenticated = await keycloakClient.init({
+          checkLoginIframe: false,
+        });
 
         if (authenticated) {
           const accessToken = keycloakClient.token;
-          
+
           setSession(accessToken);
 
-          const response = await axios.get('/users/my-account');
+          const response = await axios.get("/users/my-account");
           const user = response.data;
 
           dispatch({
-            type: 'LOGIN',
+            type: "LOGIN",
             payload: {
               user,
             },
           });
         }
       } catch (error) {
-        console.error('Failed to initialize adapter:', error);
+        if (error) {
+          alert("Usted no tiene acceso al sistema");
+        }
+        console.error("Failed to initialize adapter:", error);
       }
-    }
+    };
 
     initAuthClient();
   }, []);
 
-  
   useEffect(() => {
     initialize();
   }, [initialize]);
@@ -125,7 +139,7 @@ export function AuthProvider({ children }) {
     keycloakClient.logout();
     setSession(null);
     dispatch({
-      type: 'LOGOUT',
+      type: "LOGOUT",
     });
   }, []);
 
@@ -134,12 +148,16 @@ export function AuthProvider({ children }) {
       isInitialized: state.isInitialized,
       isAuthenticated: state.isAuthenticated,
       user: state.user,
-      method: 'jwt',
+      method: "jwt",
       login,
       logout,
     }),
     [state.isAuthenticated, state.isInitialized, state.user, login, logout]
   );
 
-  return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={memoizedValue}>
+      {children}
+    </AuthContext.Provider>
+  );
 }

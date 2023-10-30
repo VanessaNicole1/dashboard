@@ -56,11 +56,6 @@ export default function TeachersListPage() {
       label: translate("teachers_list_page.table.email"),
       align: "center",
     },
-    {
-      id: "",
-      label: translate("teachers_list_page.table.actions"),
-      align: "center",
-    },
   ];
 
   const {
