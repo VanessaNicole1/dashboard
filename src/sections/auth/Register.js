@@ -32,7 +32,7 @@ export default function Register({
         )}
       </Stack>
 
-      <AuthRegisterForm existsError={existsError} registeredToken={registeredToken} />
+      <AuthRegisterForm existsError={existsError} />
 
       <Typography
         component="div"

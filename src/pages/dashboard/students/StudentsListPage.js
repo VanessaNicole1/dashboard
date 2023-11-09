@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import {
   Card,
   Table,
@@ -44,7 +44,6 @@ export default function StudentsListPage () {
     rowsPerPage,
     setPage,
     selected,
-    setSelected,
     onSelectRow,
     onSort,
     onChangeDense,
@@ -53,8 +52,6 @@ export default function StudentsListPage () {
   } = useTable();
 
   const { themeStretch } = useSettingsContext();
-
-  const navigate = useNavigate();
 
   const location = useLocation();
 
@@ -103,8 +100,6 @@ export default function StudentsListPage () {
     fetchStudents();
   }, [location.state]);
 
-  const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
   const denseHeight = dense ? 52 : 72;
 
   const isFiltered = filterContent !== '';
@@ -118,22 +113,6 @@ export default function StudentsListPage () {
 
   const handleFilterPeriod = (event) => {
     setPage(0);
-  };
-
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
-
-    if (page > 0) {
-      if (dataInPage.length < 2) {
-        setPage(page - 1);
-      }
-    }
-  };
-
-  const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.user.edit(id), { state: currentState });
   };
 
   const handleResetFilter = () => {
