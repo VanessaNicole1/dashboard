@@ -44,6 +44,7 @@ export default function RemedialPlanNewForm() {
   const [selectedStudent, setSelectedStudent] = useState([]);
   const [fields, setFields] = useState(true);
   const [totalStudentsValidate, setTotalStudentsValidate] = useState(1);
+  // eslint-disable-next-line no-unused-vars
   const [validateDate, setValidateDate] = useState(true);
 
   const newLessonPlanSchema = Yup.object().shape({

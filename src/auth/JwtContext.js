@@ -10,7 +10,6 @@ import axios from "../utils/axios";
 import localStorageAvailable from "../utils/localStorageAvailable";
 import { isValidToken, setSession } from "./utils";
 import keycloakClient from "../keycloak";
-import { PATH_DASHBOARD, PATH_PAGE } from "../routes/paths";
 
 const initialState = {
   isInitialized: false,

@@ -1,29 +1,20 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Stack, IconButton, InputAdornment, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Iconify from '../../components/iconify';
 import FormProvider, { RHFTextField } from '../../components/hook-form';
-import { updateUserPasswordByRegisteredToken } from '../../services/user';
-import { PATH_AUTH } from '../../routes/paths';
-import { useSnackbar } from '../../components/snackbar';
-import { updateRegisterToken } from '../../services/register-config';
 
 AuthRegisterForm.propTypes = {
-  registeredToken: PropTypes.string,
   existsError: PropTypes.bool
 }
 
 export default function AuthRegisterForm({
-  registeredToken,
   existsError
 }) {
-  const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -43,8 +34,6 @@ export default function AuthRegisterForm({
   });
 
   const {
-    reset,
-    setError,
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = methods;

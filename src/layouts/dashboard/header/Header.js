@@ -8,9 +8,7 @@ import { HEADER, NAV } from '../../../config-global';
 import Logo from '../../../components/logo';
 import Iconify from '../../../components/iconify';
 import { useSettingsContext } from '../../../components/settings';
-import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
-import LanguagePopover from './LanguagePopover';
 
 Header.propTypes = {
   onOpenNav: PropTypes.func,

@@ -8,7 +8,6 @@ import {
   DialogActions,
   Typography,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import Iconify from "../../../../components/iconify";
 import { Upload } from "../../../../components/upload";
 import { uploadSignedReportByTeacher } from "../../../../services/lesson-plan";
@@ -39,7 +38,6 @@ export default function SignedFileDialog({
 }) {
   const [files, setFiles] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!open) {
