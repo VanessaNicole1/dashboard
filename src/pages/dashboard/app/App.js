@@ -17,7 +17,7 @@ export default function GeneralPage() {
   useEffect(() => {
     const fetchPeriods = async () => {
       const periods = await getActivePeriods();
-      if (periods) {
+      if (periods && periods.length > 0) {
         setPeriodId(periods[0].id);
       }
       setActivePeriods(periods);
@@ -72,14 +72,14 @@ export default function GeneralPage() {
         </TextField>
       </Box>
       {
-        currentRoles.includes("MANAGER") && <h1>Métricas como Director</h1>
+        currentRoles.includes("MANAGER") && <h2>Métricas como Director</h2>
       }
       {
         currentRoles.includes("MANAGER") && <AppManagerSection  periodId={periodId} />
       }
       <br />
       {
-        currentRoles.includes("TEACHER") && <h1>Métricas como Docente</h1>
+        currentRoles.includes("TEACHER") && <h2>Métricas como Docente</h2>
       }
       {
         currentRoles.includes("TEACHER") && <AppTeacherSection periodId={periodId} />

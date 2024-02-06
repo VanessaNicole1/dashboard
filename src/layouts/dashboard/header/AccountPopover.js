@@ -14,10 +14,10 @@ const OPTIONS = [
     label: 'Dashboard',
     linkTo: '/',
   },
-  {
-    label: 'Configuración',
-    linkTo: PATH_DASHBOARD.user.account,
-  },
+  // {
+  //   label: 'Configuración',
+  //   linkTo: PATH_DASHBOARD.root.settings,
+  // },
 ];
 
 export default function AccountPopover() {

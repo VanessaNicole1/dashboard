@@ -101,7 +101,9 @@ export default function ReportsPage() {
 
   const fetchPeriods = async () => {
     const fetchedPeriods = await getPeriods({ isActive: true });
-    setSelectedPeriod(fetchedPeriods[0].id);
+    if (fetchedPeriods.length > 0) {
+      setSelectedPeriod(fetchedPeriods[0].id);
+    }
     setPeriods(fetchedPeriods);
   };
 

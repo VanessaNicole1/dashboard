@@ -2,7 +2,9 @@ import { PATH_DASHBOARD } from './routes/paths';
 
 export const HOST_API_KEY = process.env.REACT_APP_HOST_API_KEY || '';
 
-export const PATH_AFTER_LOGIN = PATH_DASHBOARD.dashboardApp; 
+export const KEYCLOAK_AUTH_URL = process.env.KEYCLOAK_URL;
+
+export const PATH_AFTER_LOGIN = PATH_DASHBOARD.dashboardApp;
 
 export const NAV = {
   W_BASE: 260,

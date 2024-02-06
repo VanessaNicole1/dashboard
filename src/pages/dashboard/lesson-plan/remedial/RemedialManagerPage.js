@@ -84,7 +84,9 @@ export const RemedialManagerPage = () => {
         name: period.displayName,
       }));
       setCurrentPeriods(currentActivePeriods);
-      setFilterPeriod(currentActivePeriods[0].id);
+      if (fetchedPeriods.length > 0) {
+        setFilterPeriod(currentActivePeriods[0].id);
+      }
     };
 
   fetchPeriods();
