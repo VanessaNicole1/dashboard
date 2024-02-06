@@ -76,7 +76,7 @@ export default function LessonPlanStudentTableRow({
       </TableCell>
 
       <TableCell align="center" size='10px'>
-        <Tooltip title="Validar">
+        <Tooltip title="Aceptar">
           <IconButton onClick={handleValidate}>
             <Iconify icon="ic:outline-rate-review" />
           </IconButton>
