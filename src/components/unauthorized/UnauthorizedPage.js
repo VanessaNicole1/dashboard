@@ -1,6 +1,6 @@
 import { m } from "framer-motion";
 import { Container, Typography } from "@mui/material";
-import { ForbiddenIllustration } from "../.../assets/illustrations";
+import { ForbiddenIllustration } from "../../assets/illustrations";
 import { MotionContainer, varBounce } from "../animate";
 
 export default function UnauthorizedPage() {
