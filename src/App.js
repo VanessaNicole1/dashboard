@@ -44,7 +44,7 @@ export default function App() {
           <PersistGate loading={null} persistor={persistor}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <SettingsProvider>
-                <BrowserRouter>
+                <BrowserRouter basename='/apps/planes'>
                   <ScrollToTop />
                   <MotionLazyContainer>
                     <ThemeProvider>

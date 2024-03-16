@@ -24,7 +24,7 @@ function OrderCompleteIllustration({ ...other }) {
         <BackgroundIllustration />
 
         <image
-          href="/assets/illustrations/characters/character_10.png"
+          href="./assets/illustrations/characters/character_10.png"
           height="300"
           x="300"
           y="30"

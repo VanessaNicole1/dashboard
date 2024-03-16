@@ -5,7 +5,7 @@ import { useSettingsContext } from '../settings';
 
 const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
   const { themeMode } = useSettingsContext();
-  const baseLogoPath = "/assets/logo/unl";
+  const baseLogoPath = "./assets/logo/unl";
   const logoPath = `${baseLogoPath}-${themeMode === 'light' ? 'black': 'white'}.png`;
 
   const logo = (
