@@ -14,7 +14,7 @@ export default function ContrastOptions() {
         {OPTIONS.map((contrast) => (
           <StyledCard key={contrast} selected={themeContrast === contrast}>
             <SvgColor
-              src={`/assets/icons/setting/${
+              src={`./assets/icons/setting/${
                 contrast === 'bold' ? 'ic_contrast_bold' : 'ic_contrast'
               }.svg`}
             />

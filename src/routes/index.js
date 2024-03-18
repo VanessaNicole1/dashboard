@@ -44,7 +44,16 @@ import { PATH_AFTER_LOGIN } from "../config-global";
 import GeneralPage from "../pages/dashboard/app/App";
 import SettingsPage from "../pages/dashboard/settings/SettingsPage";
 
+const Test = () => <h1>Test</h1>;
+
 export default function Router() {
+  const TestRoutes = {
+    path: "test",
+    element: (
+      <Test />
+    )
+  }
+  
   const AuthRoutes = {
     path: "auth",
     children: [
@@ -438,5 +447,5 @@ export default function Router() {
     element: <Navigate to="/dashboard/" replace />,
   };
 
-  return useRoutes([AuthRoutes, DashboardRoutes, DefaultRoute]);
+  return useRoutes([TestRoutes, AuthRoutes, DashboardRoutes, DefaultRoute]);
 }

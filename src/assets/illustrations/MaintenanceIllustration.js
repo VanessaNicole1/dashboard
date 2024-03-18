@@ -202,7 +202,7 @@ function MaintenanceIllustration({ ...other }) {
         </defs>
 
         <image
-          href="/assets/illustrations/characters/character_5.png"
+          href="./assets/illustrations/characters/character_5.png"
           height="300"
           x="245"
           y="30"

@@ -32,7 +32,7 @@ export default function FullScreenOptions() {
       {fullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
 
       <SvgColor
-        src={`/assets/icons/setting/${fullscreen ? 'ic_exit_full_screen' : 'ic_full_screen'}.svg`}
+        src={`./assets/icons/setting/${fullscreen ? 'ic_exit_full_screen' : 'ic_full_screen'}.svg`}
       />
     </StyledCard>
   );
