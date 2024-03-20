@@ -45,10 +45,9 @@ export const tokenExpired = (exp) => {
 
     localStorage.removeItem('accessToken');
 
-    window.location.href = PATH_AUTH.login;
+    window.location.href = 'https://computacion.unl.edu.ec/apps/planes';
   }, timeLeft);
 };
-
 
 export const setSession = (accessToken) => {
   if (accessToken) {
