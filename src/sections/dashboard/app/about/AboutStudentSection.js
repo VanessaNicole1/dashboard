@@ -9,7 +9,7 @@ export default function AboutStudentSection() {
   const { themeStretch } = useSettingsContext();
 
   const studentManual = {
-    url: "student-manual.pdf",
+    url: "./assets/manuals/MANUAL-ESTUDIANTE.pdf",
     name: "Manual de Plan de Clase.pdf",
     size: 24326,
     createdDate: "2023-09-04T04:35:47.845Z",
