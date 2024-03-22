@@ -1,4 +1,5 @@
 // TODO check this variable.
+import { LESSON_PLAN_BASE_URL } from 'src/config-global';
 import { PATH_AUTH } from '../routes/paths';
 import axios from '../utils/axios';
 
@@ -42,10 +43,8 @@ export const tokenExpired = (exp) => {
 
   expiredTimer = setTimeout(() => {
     // alert('Token expired');
-
     localStorage.removeItem('accessToken');
-
-    window.location.href = 'https://computacion.unl.edu.ec/apps/planes';
+    window.location.href = LESSON_PLAN_BASE_URL;
   }, timeLeft);
 };
 

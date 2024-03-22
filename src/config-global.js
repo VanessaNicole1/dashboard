@@ -1,8 +1,10 @@
 import { PATH_DASHBOARD } from './routes/paths';
 
 export const HOST_API_KEY = process.env.REACT_APP_HOST_API_KEY || '';
-
-export const KEYCLOAK_AUTH_URL = process.env.KEYCLOAK_URL;
+export const KEYCLOAK_AUTH_URL = process.env.REACT_APP_KEYCLOAK_AUTH_URL;
+export const KEYCLOAK_REALM = process.env.REACT_APP_KEYCLOAK_REALM;
+export const KEYCLOAK_CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+export const LESSON_PLAN_BASE_URL = process.env.REACT_APP_LESSON_PLAN_BASE_URL;
 
 export const PATH_AFTER_LOGIN = PATH_DASHBOARD.dashboardApp;
 
