@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import { alpha, useTheme } from '@mui/material/styles';
-import { Tooltip, Box } from '@mui/material';
+import { Tooltip, Box, SvgIcon } from '@mui/material';
 import { bgBlur } from '../../../utils/cssStyles';
 import { IconButtonAnimate } from '../../animate';
-import SvgColor from '../../svg-color';
 import BadgeDot from './BadgeDot';
+import { ICSetting } from '../../../assets/icons/setting/ic_setting';
 
 ToggleButton.propTypes = {
   open: PropTypes.bool,
@@ -42,7 +42,7 @@ export default function ToggleButton({ notDefault, open, onToggle }) {
 
       <Tooltip title="Configuración">
         <IconButtonAnimate color="primary" onClick={onToggle} sx={{ p: 1.25 }}>
-          <SvgColor src="./assets/icons/setting/ic_setting.svg" />
+          <ICSetting />
         </IconButtonAnimate>
       </Tooltip>
     </Box>

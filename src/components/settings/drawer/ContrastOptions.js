@@ -2,6 +2,8 @@ import { RadioGroup } from '@mui/material';
 import SvgColor from '../../svg-color';
 import { useSettingsContext } from '../SettingsContext';
 import { StyledCard, StyledWrap, MaskControl } from '../styles';
+import { ICContrastBold } from '../../../assets/icons/setting/ic_contrast_bold';
+import { ICContrast } from '../../../assets/icons/setting/ic_contrast';
 
 const OPTIONS = ['default', 'bold'];
 
@@ -13,11 +15,16 @@ export default function ContrastOptions() {
       <StyledWrap>
         {OPTIONS.map((contrast) => (
           <StyledCard key={contrast} selected={themeContrast === contrast}>
-            <SvgColor
-              src={`./assets/icons/setting/${
-                contrast === 'bold' ? 'ic_contrast_bold' : 'ic_contrast'
+
+            {
+              contrast === 'bold' ? <ICContrastBold /> : <ICContrast />
+            }
+
+            {/* <SvgColor
+              src={`assets/icons/setting/${
+                contrast === 'bold' ? ICContrastBold : 'ic_contrast'
               }.svg`}
-            />
+            /> */}
 
             <MaskControl value={contrast} />
           </StyledCard>

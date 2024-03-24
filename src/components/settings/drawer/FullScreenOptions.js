@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import SvgColor from '../../svg-color';
-import { StyledCard } from '../styles';
+import { useState } from "react";
+import { StyledCard } from "../styles";
 
 export default function FullScreenOptions() {
   const [fullscreen, setFullscreen] = useState(false);
@@ -21,19 +20,15 @@ export default function FullScreenOptions() {
       onClick={onToggleFullScreen}
       sx={{
         height: 48,
-        typography: 'subtitle2',
-        '& .svg-color': {
+        typography: "subtitle2",
+        "& .svg-color": {
           ml: 1,
           width: 16,
           height: 16,
         },
       }}
     >
-      {fullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
-
-      <SvgColor
-        src={`./assets/icons/setting/${fullscreen ? 'ic_exit_full_screen' : 'ic_full_screen'}.svg`}
-      />
+      {fullscreen ? "Exit Fullscreen" : "Fullscreen"}
     </StyledCard>
   );
 }
